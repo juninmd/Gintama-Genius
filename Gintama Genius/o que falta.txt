@@ -1,0 +1,3 @@
+- Adicionar sistema de Ranking via .ini ou .txt
+- Colocar música de fundo ao iniciar jogo
+- Pedir E-mail para enviar download do jogo
