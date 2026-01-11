@@ -28,11 +28,19 @@ interface UseGameLogicReturn {
 const SOUNDS = {
   1: '/assets/sounds/vermelho.wav',
   2: '/assets/sounds/verde.wav',
-  3: '/assets/sounds/azul.wav',
-  4: '/assets/sounds/amarelo.wav',
+  3: '/assets/sounds/vermelho.wav', // Blue uses Red sound (pitch shifted later)
+  4: '/assets/sounds/verde.wav',    // Yellow uses Green sound (pitch shifted later)
   gameOver: '/assets/sounds/fimdejogo.wav',
   vapo: '/assets/sounds/uow.wav',
   novo: '/assets/sounds/novo.wav',
+};
+
+// Playback rates for distinct sounds
+const PLAYBACK_RATES: { [key: string]: number } = {
+  1: 1.0, // Red
+  2: 1.0, // Green
+  3: 0.8, // Blue (Lower pitch Red)
+  4: 1.5, // Yellow (Higher pitch Green)
 };
 
 export const useGameLogic = (): UseGameLogicReturn => {
@@ -65,6 +73,20 @@ export const useGameLogic = (): UseGameLogicReturn => {
     const audio = audioRefs.current[key];
     if (audio) {
       audio.currentTime = 0;
+
+      // Apply pitch shift if defined
+      if (PLAYBACK_RATES[key]) {
+        audio.playbackRate = PLAYBACK_RATES[key];
+        // For browsers that require it for pitch preservation (optional, but good for "chipmunk" effect)
+        // @ts-ignore
+        if (audio.preservesPitch !== undefined) {
+             // @ts-ignore
+             audio.preservesPitch = false;
+        }
+      } else {
+        audio.playbackRate = 1.0;
+      }
+
       audio.play().catch(e => console.error("Error playing sound", e));
     }
   }, []);
@@ -161,55 +183,41 @@ export const useGameLogic = (): UseGameLogicReturn => {
         // Completed sequence
         setScore(prev => prev + 1);
         setLevel(prev => prev + 1);
-        setKaguraCount(prev => prev + 1);
 
-        // Kagura Bonus Check
-        if (settings.difficulty !== 'BERSERK') {
-             // In VB code: If Contador = 30 Then ...
-             // We use kaguraCount + 1 because we just incremented it logically but state updates are async/batched.
-             // Actually better to just check the updated val if we used a ref, but let's just check current + 1 logic or simpler:
-             // Let's use the update function for reliability
-             setKaguraCount(prev => {
-                 const newVal = prev;
-                 // Wait, I already called setKaguraCount(prev => prev + 1) above.
-                 // React batching means I don't have the new value yet here.
-                 // So I should check against the *expected* value or put this logic in an effect.
-                 // Or just use the prev value logic:
-                 if ((newVal) === 30) { // If it WAS 29 (now 30)
-                     // Trigger bonus
-                     // But wait, the VB code resets Contador to 0.
-                     return 0;
-                 }
-                 return newVal;
-             });
-        }
+        // Kagura Bonus Check logic
+        setKaguraCount(prev => {
+          const newCount = prev + 1;
+          if (newCount === 30 && settings.difficulty !== 'BERSERK') {
+             // Bonus Trigger
+             setTimeLeft(t => (settings.timeMode === 'INFINITE' ? t : t + 30));
+             setScore(s => s + 10);
+             playSound('vapo');
+             setKaguraActive(true);
+             setTimeout(() => setKaguraActive(false), 2000);
+             return 0;
+          }
+          return newCount;
+        });
 
         setTimeout(() => {
           setGameState('PLAYING_SEQUENCE');
           addToSequence();
         }, 1000);
       } else {
-         // Correct input, but sequence not finished.
-         // Just waiting for next input.
-         setScore(prev => prev + 1); // VB adds point for every correct click?
-         // VB Code:
-         // If Correct:
-         //    If Sequence Finished: Pts += 1, Level += 1, Contador += 1, Sortear()
-         //    Else: N += 1, Pts += 1, Contador += 1
-         // So yes, points for every click.
+         // Correct input, incomplete sequence
          setScore(prev => prev + 1);
          setKaguraCount(prev => {
-             const newVal = prev + 1;
-             if (newVal === 30 && settings.difficulty !== 'BERSERK') {
-                 // Trigger Bonus
-                 setTimeLeft(t => (settings.timeMode === 'INFINITE' ? t : t + 30));
-                 setScore(s => s + 10);
-                 playSound('vapo');
-                 setKaguraActive(true);
-                 setTimeout(() => setKaguraActive(false), 2000); // Hide after 2s (VB uses TimerKagura)
-                 return 0;
-             }
-             return newVal;
+           const newCount = prev + 1;
+           if (newCount === 30 && settings.difficulty !== 'BERSERK') {
+             // Bonus Trigger
+             setTimeLeft(t => (settings.timeMode === 'INFINITE' ? t : t + 30));
+             setScore(s => s + 10);
+             playSound('vapo');
+             setKaguraActive(true);
+             setTimeout(() => setKaguraActive(false), 2000);
+             return 0;
+           }
+           return newCount;
          });
       }
 

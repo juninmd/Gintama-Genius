@@ -196,8 +196,8 @@ select option {
 /* Button Positioning */
 .btn-vermelho { top: 0; left: 0; border-radius: 100% 0 0 0; background-color: #ff0000; }
 .btn-verde { top: 0; right: 0; border-radius: 0 100% 0 0; background-color: #00ff00; }
-.btn-azul { bottom: 0; left: 0; border-radius: 0 0 0 100%; background-color: #0000ff; }
-.btn-amarelo { bottom: 0; right: 0; border-radius: 0 0 100% 0; background-color: #ffff00; }
+.btn-azul { bottom: 0; right: 0; border-radius: 0 0 100% 0; background-color: #0000ff; }
+.btn-amarelo { bottom: 0; left: 0; border-radius: 0 0 0 100%; background-color: #ffff00; }
 
 /* Active State (Glow) */
 .game-btn.active {

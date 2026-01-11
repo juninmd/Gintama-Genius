@@ -67,6 +67,7 @@ const GameButton: React.FC<{
         setIsPressed(false);
     };
 
+    // Note: onTouchStart is already handled in the button props below but defined here
     const handleTouchStart = (e: React.TouchEvent) => {
         if (!disabled) {
             e.preventDefault(); // Prevent ghost clicks
