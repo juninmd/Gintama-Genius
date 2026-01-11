@@ -20,7 +20,7 @@ function App() {
   } = useGameLogic();
 
   return (
-    <div className="app-container" style={{ backgroundImage: `url(/assets/images/fundo.png)` }}>
+    <div className="app-container" style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/fundo.png')` }}>
       {gameState === 'IDLE' && (
         <Menu onStart={startGame} />
       )}
