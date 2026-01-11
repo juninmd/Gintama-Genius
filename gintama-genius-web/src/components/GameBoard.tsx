@@ -18,6 +18,9 @@ const GameBoard: React.FC<GameBoardProps> = ({ activeColor, onColorClick, disabl
   return (
     <div className="game-board">
       <div className="simon-circle">
+        <div className="center-circle">
+            <img src="/assets/images/genius.ico" alt="Logo" className="center-logo" />
+        </div>
         {COLORS.map((color) => {
           const colorName = colorMap[color];
           const isActive = activeColor === color;
@@ -79,7 +82,7 @@ const GameButton: React.FC<{
 
     return (
         <button
-            className={`game-btn btn-${colorName}`}
+            className={`game-btn btn-${colorName} ${showActive ? 'active' : ''}`}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}

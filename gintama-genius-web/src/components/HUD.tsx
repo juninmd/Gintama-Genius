@@ -10,10 +10,10 @@ interface HUDProps {
 const HUD: React.FC<HUDProps> = ({ score, level, timeLeft, difficulty }) => {
   return (
     <div className="hud">
-      <div className="hud-item">Points: {score}</div>
-      <div className="hud-item">Level: {level}</div>
-      <div className="hud-item">Time: {timeLeft === Infinity ? '∞' : timeLeft}</div>
-      <div className="hud-item">Mode: {difficulty}</div>
+      <div className="hud-item"><span>🏆</span> {score}</div>
+      <div className="hud-item"><span>🆙</span> {level}</div>
+      <div className="hud-item"><span>⏳</span> {timeLeft === Infinity ? '∞' : timeLeft}s</div>
+      <div className="hud-item"><span>⚙️</span> {difficulty}</div>
     </div>
   );
 };
