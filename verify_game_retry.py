@@ -6,8 +6,8 @@ def run():
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         try:
-            print("Navigating to localhost:5174...")
-            page.goto("http://localhost:5174", timeout=10000)
+            print("Navigating to localhost:5173...")
+            page.goto("http://localhost:5173", timeout=10000)
 
             # Wait for Start Button (Menu)
             print("Waiting for .start-button...")
