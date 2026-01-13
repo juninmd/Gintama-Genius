@@ -1,13 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { Difficulty, TimeMode } from '../hooks/useGameLogic';
 
 interface MenuProps {
   onStart: (difficulty: Difficulty, timeMode: TimeMode) => void;
+  speakIntro: () => void;
 }
 
-const Menu: React.FC<MenuProps> = ({ onStart }) => {
+const Menu: React.FC<MenuProps> = ({ onStart, speakIntro }) => {
   const [difficulty, setDifficulty] = React.useState<Difficulty>('NORMAL');
   const [timeMode, setTimeMode] = React.useState<TimeMode>('60s');
+
+  useEffect(() => {
+    // Try to speak immediately, but also attach to first interaction if blocked
+    const handleInteraction = () => {
+        speakIntro();
+        window.removeEventListener('click', handleInteraction);
+        window.removeEventListener('touchstart', handleInteraction);
+    };
+
+    window.addEventListener('click', handleInteraction);
+    window.addEventListener('touchstart', handleInteraction);
+
+    return () => {
+        window.removeEventListener('click', handleInteraction);
+        window.removeEventListener('touchstart', handleInteraction);
+    };
+  }, [speakIntro]);
 
   return (
     <div className="menu-container">
