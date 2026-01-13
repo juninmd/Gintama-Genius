@@ -14,6 +14,8 @@ function App() {
     activeColor,
     settings,
     kaguraActive,
+    message,
+    speakIntro,
     startGame,
     handleColorClick,
     resetGame,
@@ -22,7 +24,7 @@ function App() {
   return (
     <div className="app-container" style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/fundo.png')` }}>
       {gameState === 'IDLE' && (
-        <Menu onStart={startGame} />
+        <Menu onStart={startGame} speakIntro={speakIntro} />
       )}
 
       {gameState !== 'IDLE' && (
@@ -32,6 +34,7 @@ function App() {
             level={level}
             timeLeft={timeLeft}
             difficulty={settings.difficulty}
+            message={message}
           />
 
           <div className="game-area">
