@@ -25,12 +25,11 @@ body {
   position: relative;
 }
 
-/* Fallback if image missing or for overlay effect */
 .app-container::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%);
+  background: radial-gradient(circle at center, rgba(26, 26, 46, 0.4) 0%, rgba(0,0,0,0.85) 100%);
   pointer-events: none;
 }
 
@@ -39,116 +38,176 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(255, 255, 255, 0.1); /* Glassmorphism */
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  padding: 2.5rem;
-  border-radius: 1.5rem;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(20, 20, 30, 0.65); /* Darker, more elegant glass */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 3rem;
+  border-radius: 24px;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
   text-align: center;
-  animation: fadeIn 0.5s ease-out;
   max-width: 90%;
-  width: 400px;
+  width: 380px;
+  z-index: 10;
 }
 
 .splash-image {
   max-width: 100%;
   height: auto;
-  margin-bottom: 2rem;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+  margin-bottom: 2.5rem;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+  transform: translateZ(0);
 }
 
 .menu-controls {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
   width: 100%;
 }
 
-.setting-group {
+/* Setting Groups */
+.setting-wrapper {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #fff;
-}
-
-select {
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  border: none;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  font-family: inherit;
-  font-weight: bold;
-  cursor: pointer;
+  flex-direction: column;
+  gap: 0.5rem;
   transition: background 0.2s;
 }
 
-select:hover {
-  background: rgba(255, 255, 255, 0.3);
+.setting-wrapper:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 
-select option {
-  background: #333;
+.setting-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.select-container {
+  position: relative;
+  width: 100%;
+}
+
+select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
   color: white;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: all 0.2s;
 }
 
-.start-button {
+select:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+select:focus {
+  outline: none;
+  border-color: #646cff;
+  box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.2);
+}
+
+.select-arrow {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Custom colors for difficulty select text if supported by browser */
+.difficulty-select.easy { color: #4ade80; }
+.difficulty-select.normal { color: #60a5fa; }
+.difficulty-select.berserk { color: #f87171; }
+
+/* Modern Start Button */
+.start-button-modern {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
   width: 100%;
   padding: 1rem;
   margin-top: 1rem;
-  background: linear-gradient(45deg, #FF512F 0%, #DD2476 100%); /* Vibrant gradient */
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
   border: none;
-  border-radius: 2rem;
+  border-radius: 12px;
   color: white;
-  font-size: 1.5rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(221, 36, 118, 0.5);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+  position: relative;
+  overflow: hidden;
 }
 
-.start-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(221, 36, 118, 0.6);
+.start-button-modern::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: 0.5s;
 }
 
-.start-button:active {
-  transform: translateY(1px);
+.start-button-modern:hover::before {
+  left: 100%;
 }
 
 /* HUD Modernization */
 .hud {
   position: absolute;
-  top: 20px;
+  top: 30px;
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
   padding: 0 20px;
-  z-index: 10;
+  z-index: 20;
   pointer-events: none;
 }
 
 .hud-item {
-  background: rgba(0, 0, 0, 0.6);
-  padding: 0.5rem 1.5rem;
-  border-radius: 2rem;
-  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(20, 20, 30, 0.75);
+  padding: 0.6rem 1.25rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.1);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   color: #fff;
   font-weight: 600;
-  font-size: 1.2rem;
-  backdrop-filter: blur(4px);
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  font-size: 1rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  min-width: 80px;
+  justify-content: center;
+}
+
+.hud-icon {
+  opacity: 0.9;
 }
 
 /* Game Board Modernization */
@@ -159,16 +218,19 @@ select option {
   justify-content: center;
   width: 100%;
   perspective: 1000px;
+  margin-top: 60px; /* Space for HUD */
 }
 
 .game-board {
   position: relative;
-  width: 320px;
-  height: 320px;
+  width: 340px;
+  height: 340px;
   border-radius: 50%;
-  background: #222;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  padding: 10px; /* Gap between buttons and outer edge */
+  background: #151520;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.6),
+    inset 0 0 0 2px rgba(255,255,255,0.05);
+  padding: 12px;
 }
 
 .simon-circle {
@@ -177,6 +239,7 @@ select option {
   height: 100%;
   border-radius: 50%;
   overflow: hidden;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
 }
 
 /* Common button styles */
@@ -186,32 +249,26 @@ select option {
   height: 50%;
   border: none;
   cursor: pointer;
-  opacity: 0.6;
-  transition: opacity 0.1s, filter 0.1s, transform 0.1s;
-  /* Ensure images cover the button area */
+  opacity: 0.75;
+  transition: opacity 0.15s, filter 0.15s, transform 0.1s;
   background-size: cover !important;
   background-position: center !important;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Button Positioning */
-.btn-vermelho { top: 0; left: 0; border-radius: 100% 0 0 0; background-color: #ff0000; }
-.btn-verde { top: 0; right: 0; border-radius: 0 100% 0 0; background-color: #00ff00; }
-.btn-azul { bottom: 0; left: 0; border-radius: 0 0 0 100%; background-color: #0000ff; }
-.btn-amarelo { bottom: 0; right: 0; border-radius: 0 0 100% 0; background-color: #ffff00; }
+.btn-vermelho { top: 0; left: 0; border-radius: 100% 0 0 0; background-color: #ff0000; border-right: 2px solid #151520; border-bottom: 2px solid #151520; }
+.btn-verde { top: 0; right: 0; border-radius: 0 100% 0 0; background-color: #00ff00; border-left: 2px solid #151520; border-bottom: 2px solid #151520; }
+.btn-azul { bottom: 0; left: 0; border-radius: 0 0 0 100%; background-color: #0000ff; border-right: 2px solid #151520; border-top: 2px solid #151520; }
+.btn-amarelo { bottom: 0; right: 0; border-radius: 0 0 100% 0; background-color: #ffff00; border-left: 2px solid #151520; border-top: 2px solid #151520; }
 
 /* Active State (Glow) */
 .game-btn.active {
   opacity: 1;
-  filter: brightness(1.5) drop-shadow(0 0 20px currentColor);
+  filter: brightness(1.3) contrast(1.1);
+  box-shadow: inset 0 0 30px rgba(255,255,255,0.4);
   z-index: 2;
 }
-
-/* Specific colors for shadow matching if using CSS colors alongside images */
-.btn-vermelho.active { color: #ff0000; }
-.btn-verde.active { color: #00ff00; }
-.btn-azul.active { color: #0000ff; }
-.btn-amarelo.active { color: #ffff00; }
-
 
 .game-btn:active {
   transform: scale(0.98);
@@ -222,22 +279,25 @@ select option {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
   background: #1a1a2e;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   z-index: 5;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+  box-shadow:
+    0 0 0 8px #151520,
+    inset 0 0 20px rgba(0,0,0,0.8);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .center-logo {
-  width: 60px;
+  width: 70px;
   height: auto;
-  opacity: 0.8;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
 }
 
 /* Kagura Bonus */
@@ -246,15 +306,15 @@ select option {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 20;
+  z-index: 25;
   pointer-events: none;
   animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .kagura-bonus img {
-    max-width: 80vw;
-    max-height: 80vh;
-    filter: drop-shadow(0 0 20px rgba(255,255,255,0.5));
+    max-width: 90vw;
+    max-height: 50vh;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
 }
 
 @keyframes popIn {
@@ -262,70 +322,87 @@ select option {
   to { transform: translate(-50%, -50%) scale(1) rotate(0); }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 /* Game Over */
 .game-over-overlay {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 50;
-  animation: fadeIn 0.5s;
+  animation: fadeIn 0.4s ease-out;
 }
 
 .game-over-content {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(30, 30, 40, 0.9);
   padding: 3rem;
-  border-radius: 2rem;
+  border-radius: 24px;
   text-align: center;
   color: white;
   border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  max-width: 90%;
+  width: 400px;
 }
 
 .game-over-content h2 {
     font-size: 3rem;
-    margin: 0 0 1rem 0;
-    color: #FF512F;
+    margin: 0 0 1.5rem 0;
+    background: linear-gradient(to right, #FF512F, #DD2476);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .restart-button {
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  background: #fff;
-  color: #333;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  background: white;
+  color: #1a1a2e;
   border: none;
-  border-radius: 2rem;
+  border-radius: 12px;
   cursor: pointer;
   margin-top: 2rem;
   font-weight: 800;
-  transition: transform 0.2s;
+  box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .restart-button:hover {
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255,255,255,0.4);
 }
 
 /* Mobile Adjustments */
 @media (max-width: 600px) {
   .game-board {
-    width: 280px;
-    height: 280px;
+    width: 290px;
+    height: 290px;
   }
   .menu-container {
-    padding: 1.5rem;
+    padding: 2rem;
     width: 85%;
   }
   .hud {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    top: 15px;
+  }
+  .hud-item {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    min-width: auto;
   }
 }
+
+/* Utility Classes */
+.text-green-400 { color: #4ade80; }
+.text-blue-400 { color: #60a5fa; }
+.text-red-500 { color: #ef4444; }
+.text-yellow-400 { color: #facc15; }
+.text-purple-400 { color: #c084fc; }
+
+.w-5 { width: 1.25rem; }
+.h-5 { height: 1.25rem; }
+.w-6 { width: 1.5rem; }
+.h-6 { height: 1.5rem; }

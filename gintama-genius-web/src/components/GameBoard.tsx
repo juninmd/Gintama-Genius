@@ -1,5 +1,6 @@
 import React from 'react';
 import { COLORS } from '../hooks/useGameLogic';
+import { motion } from 'framer-motion';
 
 interface GameBoardProps {
   activeColor: number | null;
@@ -16,7 +17,12 @@ const colorMap: { [key: number]: string } = {
 
 const GameBoard: React.FC<GameBoardProps> = ({ activeColor, onColorClick, disabled }) => {
   return (
-    <div className="game-board">
+    <motion.div
+        className="game-board"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       <div className="simon-circle">
         <div className="center-circle">
             <img src="/assets/images/genius.ico" alt="Logo" className="center-logo" />
@@ -24,12 +30,6 @@ const GameBoard: React.FC<GameBoardProps> = ({ activeColor, onColorClick, disabl
         {COLORS.map((color) => {
           const colorName = colorMap[color];
           const isActive = activeColor === color;
-          // Determine image source: normal or 'on' version
-          // If the button is currently being pressed by user or lit by game
-          // For user feedback, we might want to handle mouseDown/Up locally or pass 'pressed' state,
-          // but for simplicity we rely on activeColor which is mainly for playback.
-          // We can use CSS :active for user feedback or local state.
-          // Let's use a local state for click feedback to be snappy.
 
           return (
              <GameButton
@@ -43,7 +43,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ activeColor, onColorClick, disabl
           );
         })}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -69,7 +69,7 @@ const GameButton: React.FC<{
 
     const handleTouchStart = (e: React.TouchEvent) => {
         if (!disabled) {
-            e.preventDefault(); // Prevent ghost clicks
+            e.preventDefault();
             setIsPressed(true);
             onClick();
         }
@@ -81,7 +81,7 @@ const GameButton: React.FC<{
         : `/assets/images/${colorName}.png`;
 
     return (
-        <button
+        <motion.button
             className={`game-btn btn-${colorName} ${showActive ? 'active' : ''}`}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
@@ -92,8 +92,11 @@ const GameButton: React.FC<{
                 backgroundImage: `url(${imgSrc})`,
                 cursor: disabled ? 'default' : 'pointer'
             }}
+            whileTap={!disabled ? { scale: 0.95 } : {}}
+            animate={isActive ? { scale: [1, 1.05, 1], filter: "brightness(1.5)" } : { scale: 1, filter: "brightness(1)" }}
+            transition={{ duration: 0.2 }}
         >
-        </button>
+        </motion.button>
     );
 }
 
