@@ -23,6 +23,15 @@ interface UseGameLogicReturn {
   startGame: (difficulty: Difficulty, timeMode: TimeMode) => void;
   handleColorClick: (color: number) => void;
   resetGame: () => void;
+  debugActions: {
+    isDebug: boolean;
+    toggleDebug: () => void;
+    addScore: (amount: number) => void;
+    triggerBonus: () => void;
+    setGameOver: () => void;
+    setTimer: (seconds: number) => void;
+    winLevel: () => void;
+  };
 }
 
 const SOUNDS = {
@@ -49,6 +58,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
   });
   const [, setKaguraCount] = useState(0);
   const [kaguraActive, setKaguraActive] = useState(false);
+  const [debugMode, setDebugMode] = useState(false);
 
   // Audio refs
   const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
@@ -102,7 +112,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
 
   // Timer Effect
   useEffect(() => {
-    let timer: any;
+    let timer: ReturnType<typeof setInterval>;
     if (gameState !== 'IDLE' && gameState !== 'GAME_OVER' && settings.timeMode !== 'INFINITE') {
       timer = setInterval(() => {
         setTimeLeft(prev => {
@@ -116,7 +126,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
       }, 1000);
     }
     return () => clearInterval(timer);
-  }, [gameState, settings.timeMode]);
+  }, [gameState, settings.timeMode, playSound]);
 
   // Sequence Playback Effect
   useEffect(() => {
@@ -227,6 +237,34 @@ export const useGameLogic = (): UseGameLogicReturn => {
     setSequence([]);
   };
 
+  // Debug Actions
+  const debugActions = {
+    isDebug: debugMode,
+    toggleDebug: () => setDebugMode(prev => !prev),
+    addScore: (amount: number) => setScore(prev => prev + amount),
+    triggerBonus: () => {
+      setKaguraActive(true);
+      playSound('vapo');
+      setTimeout(() => setKaguraActive(false), 2000);
+    },
+    setGameOver: () => {
+      setGameState('GAME_OVER');
+      playSound('gameOver');
+    },
+    setTimer: (seconds: number) => setTimeLeft(seconds),
+    winLevel: () => {
+        if (gameState !== 'IDLE' && gameState !== 'GAME_OVER') {
+            setScore(prev => prev + 10);
+            setLevel(prev => prev + 1);
+            setKaguraCount(prev => prev + 1);
+            setTimeout(() => {
+                setGameState('PLAYING_SEQUENCE');
+                addToSequence();
+            }, 500);
+        }
+    }
+  };
+
   return {
     gameState,
     score,
@@ -240,5 +278,6 @@ export const useGameLogic = (): UseGameLogicReturn => {
     startGame,
     handleColorClick,
     resetGame,
+    debugActions,
   };
 };

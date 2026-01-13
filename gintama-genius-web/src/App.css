@@ -329,3 +329,55 @@ select option {
     gap: 0.5rem;
   }
 }
+
+/* Debug Panel */
+.debug-panel {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid #444;
+  padding: 10px;
+  border-radius: 5px;
+  color: #0f0;
+  font-family: monospace;
+  font-size: 12px;
+  z-index: 1001;
+  width: 240px;
+  pointer-events: auto;
+}
+
+.debug-panel h3 {
+  margin: 0 0 5px 0;
+  color: #fff;
+  border-bottom: 1px solid #555;
+  padding-bottom: 2px;
+}
+
+.debug-info {
+  margin-bottom: 10px;
+}
+
+.debug-info div {
+  margin-bottom: 2px;
+}
+
+.debug-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.debug-controls button {
+  background: #333;
+  color: #fff;
+  border: 1px solid #555;
+  padding: 2px 5px;
+  cursor: pointer;
+  font-size: 10px;
+  flex: 1 0 40%;
+}
+
+.debug-controls button:hover {
+  background: #555;
+}
