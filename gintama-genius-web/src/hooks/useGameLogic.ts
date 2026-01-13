@@ -20,6 +20,8 @@ interface UseGameLogicReturn {
     timeMode: TimeMode;
   };
   kaguraActive: boolean;
+  message: string | null;
+  speakIntro: () => void;
   startGame: (difficulty: Difficulty, timeMode: TimeMode) => void;
   handleColorClick: (color: number) => void;
   resetGame: () => void;
@@ -49,6 +51,8 @@ export const useGameLogic = (): UseGameLogicReturn => {
   });
   const [, setKaguraCount] = useState(0);
   const [kaguraActive, setKaguraActive] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [, setStreak] = useState(0);
 
   // Audio refs
   const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
@@ -69,6 +73,20 @@ export const useGameLogic = (): UseGameLogicReturn => {
     }
   }, []);
 
+  const speakIntro = useCallback(() => {
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance("Gintama, the genius game");
+      utterance.lang = 'en-US'; // Or pt-BR if preferred, but user requested specific phrase which is English
+      utterance.rate = 1.0;
+      window.speechSynthesis.speak(utterance);
+    }
+  }, []);
+
+  const showMessage = (msg: string, duration = 2000) => {
+    setMessage(msg);
+    setTimeout(() => setMessage(null), duration);
+  };
+
   const getInitialTime = (mode: TimeMode): number => {
     switch (mode) {
       case '30s': return 30;
@@ -85,11 +103,14 @@ export const useGameLogic = (): UseGameLogicReturn => {
     setGameState('PLAYING_SEQUENCE');
     setScore(0);
     setLevel(0);
+    setStreak(0);
     setSequence([]);
     setUserInputIndex(0);
     setKaguraCount(0);
     setKaguraActive(false);
     setTimeLeft(getInitialTime(timeMode));
+    setMessage("Nova Rodada!");
+    setTimeout(() => setMessage(null), 2000);
 
     playSound('novo');
     addToSequence();
@@ -109,7 +130,11 @@ export const useGameLogic = (): UseGameLogicReturn => {
           if (prev <= 1) {
             setGameState('GAME_OVER');
             playSound('gameOver');
+            showMessage("Você errou! O tempo acabou.");
             return 0;
+          }
+          if (prev === 11) { // Will become 10 next tick
+             showMessage("Corra!", 2000);
           }
           return prev - 1;
         });
@@ -162,6 +187,15 @@ export const useGameLogic = (): UseGameLogicReturn => {
         setScore(prev => prev + 1);
         setLevel(prev => prev + 1);
         setKaguraCount(prev => prev + 1);
+        setStreak(prev => {
+            const newStreak = prev + 1;
+            if (newStreak > 0 && newStreak % 5 === 0) {
+                showMessage("Sequência de acertos!", 3000);
+            } else {
+                showMessage("Você acertou!", 1500);
+            }
+            return newStreak;
+        });
 
         // Kagura Bonus Check
         if (settings.difficulty !== 'BERSERK') {
@@ -217,6 +251,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
       // Wrong
       setGameState('GAME_OVER');
       playSound('gameOver');
+      showMessage("Você errou!", 3000);
     }
   };
 
@@ -237,6 +272,8 @@ export const useGameLogic = (): UseGameLogicReturn => {
     userInputIndex,
     settings,
     kaguraActive,
+    message,
+    speakIntro,
     startGame,
     handleColorClick,
     resetGame,
