@@ -147,6 +147,9 @@ export const useGameLogic = (): UseGameLogicReturn => {
   useEffect(() => {
     if (gameState === 'PLAYING_SEQUENCE' && sequence.length > 0) {
       let i = 0;
+      const speed = Math.max(200, 800 - (level * 50));
+      const lightDuration = Math.max(100, 500 - (level * 30));
+
       const interval = setInterval(() => {
         if (i >= sequence.length) {
           clearInterval(interval);
@@ -162,14 +165,14 @@ export const useGameLogic = (): UseGameLogicReturn => {
 
         setTimeout(() => {
           setActiveColor(null);
-        }, 500); // Light up duration
+        }, lightDuration); // Light up duration
 
         i++;
-      }, 800); // Time between sequence items
+      }, speed); // Time between sequence items
 
       return () => clearInterval(interval);
     }
-  }, [gameState, sequence, playSound]);
+  }, [gameState, sequence, playSound, level]);
 
   const handleColorClick = (color: number) => {
     if (gameState !== 'WAITING_FOR_INPUT') return;
@@ -190,9 +193,13 @@ export const useGameLogic = (): UseGameLogicReturn => {
         setStreak(prev => {
             const newStreak = prev + 1;
             if (newStreak > 0 && newStreak % 5 === 0) {
-                showMessage("Sequência de acertos!", 3000);
+                const messages = ["Incrível!", "Imparável!", "Gênio!", "Supremo!"];
+                const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+                showMessage(randomMsg, 3000);
             } else {
-                showMessage("Você acertou!", 1500);
+                const messages = ["Boa!", "Isso aí!", "Continue assim!"];
+                const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+                showMessage(randomMsg, 1500);
             }
             return newStreak;
         });

@@ -279,7 +279,8 @@ select option {
 /* Active State (Glow) */
 .game-btn.active {
   opacity: 1;
-  filter: brightness(1.5) drop-shadow(0 0 20px currentColor);
+  filter: brightness(1.5) drop-shadow(0 0 30px currentColor);
+  box-shadow: 0 0 20px currentColor;
   z-index: 2;
   /* Transform is handled in specific classes to preserve rotation */
 }
