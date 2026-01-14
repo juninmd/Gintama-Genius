@@ -175,19 +175,9 @@ export const useGameLogic = (): UseGameLogicReturn => {
 
         // Kagura Bonus Check
         if (settings.difficulty !== 'BERSERK') {
-             // In VB code: If Contador = 30 Then ...
-             // We use kaguraCount + 1 because we just incremented it logically but state updates are async/batched.
-             // Actually better to just check the updated val if we used a ref, but let's just check current + 1 logic or simpler:
-             // Let's use the update function for reliability
              setKaguraCount(prev => {
                  const newVal = prev;
-                 // Wait, I already called setKaguraCount(prev => prev + 1) above.
-                 // React batching means I don't have the new value yet here.
-                 // So I should check against the *expected* value or put this logic in an effect.
-                 // Or just use the prev value logic:
-                 if ((newVal) === 30) { // If it WAS 29 (now 30)
-                     // Trigger bonus
-                     // But wait, the VB code resets Contador to 0.
+                 if ((newVal) === 30) {
                      return 0;
                  }
                  return newVal;
@@ -200,13 +190,6 @@ export const useGameLogic = (): UseGameLogicReturn => {
         }, 1000);
       } else {
          // Correct input, but sequence not finished.
-         // Just waiting for next input.
-         setScore(prev => prev + 1); // VB adds point for every correct click?
-         // VB Code:
-         // If Correct:
-         //    If Sequence Finished: Pts += 1, Level += 1, Contador += 1, Sortear()
-         //    Else: N += 1, Pts += 1, Contador += 1
-         // So yes, points for every click.
          setScore(prev => prev + 1);
          setKaguraCount(prev => {
              const newVal = prev + 1;
