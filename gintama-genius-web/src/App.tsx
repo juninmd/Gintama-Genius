@@ -29,7 +29,7 @@ function App() {
       <button
         className="debug-toggle"
         onClick={debugActions.toggleDebug}
-        style={{ position: 'absolute', top: 5, right: 5, zIndex: 1000, opacity: 0.3, background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}
+        style={{ position: 'absolute', top: 5, right: 5, zIndex: 1000, opacity: 0.3, background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '24px' }}
       >
         🐞
       </button>
