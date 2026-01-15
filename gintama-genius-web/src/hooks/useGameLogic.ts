@@ -21,6 +21,7 @@ interface UseGameLogicReturn {
   };
   kaguraActive: boolean;
   message: string | null;
+  streak: number;
   speakIntro: () => void;
   startGame: (difficulty: Difficulty, timeMode: TimeMode) => void;
   handleColorClick: (color: number) => void;
@@ -52,7 +53,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
   const [, setKaguraCount] = useState(0);
   const [kaguraActive, setKaguraActive] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-  const [, setStreak] = useState(0);
+  const [streak, setStreak] = useState(0);
 
   // Audio refs
   const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
@@ -110,6 +111,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
     setKaguraActive(false);
     setTimeLeft(getInitialTime(timeMode));
     setMessage("Nova Rodada!");
+    // setMessage handled by HUD auto-dismiss if needed, but keeping timeout for safety
     setTimeout(() => setMessage(null), 2000);
 
     playSound('novo');
@@ -280,6 +282,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
     settings,
     kaguraActive,
     message,
+    streak,
     speakIntro,
     startGame,
     handleColorClick,
