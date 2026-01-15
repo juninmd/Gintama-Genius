@@ -2,7 +2,7 @@ import './App.css';
 import { useGameLogic } from './hooks/useGameLogic';
 import Menu from './components/Menu';
 import GameBoard from './components/GameBoard';
-import HUD from './components/HUD';
+import GameHUD from './components/GameHUD';
 import GameOver from './components/GameOver';
 
 function App() {
@@ -15,6 +15,7 @@ function App() {
     settings,
     kaguraActive,
     message,
+    streak,
     speakIntro,
     startGame,
     handleColorClick,
@@ -29,12 +30,14 @@ function App() {
 
       {gameState !== 'IDLE' && (
         <>
-          <HUD
+          <GameHUD
             score={score}
             level={level}
             timeLeft={timeLeft}
             difficulty={settings.difficulty}
             message={message}
+            streak={streak}
+            gameState={gameState}
           />
 
           <div className="game-area">
