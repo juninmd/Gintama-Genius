@@ -2,8 +2,9 @@ import './App.css';
 import { useGameLogic } from './hooks/useGameLogic';
 import Menu from './components/Menu';
 import GameBoard from './components/GameBoard';
-import GameHUD from './components/GameHUD';
+import HUD from './components/HUD';
 import GameOver from './components/GameOver';
+import DebugPanel from './components/DebugPanel';
 
 function App() {
   const {
@@ -14,9 +15,9 @@ function App() {
     activeColor,
     settings,
     kaguraActive,
-    message,
-    streak,
-    speakIntro,
+    sequence,
+    userInputIndex,
+    debugActions,
     startGame,
     handleColorClick,
     resetGame,
@@ -24,20 +25,33 @@ function App() {
 
   return (
     <div className="app-container" style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/fundo.png')` }}>
+
+      <button
+        className="debug-toggle"
+        onClick={debugActions.toggleDebug}
+        style={{ position: 'absolute', top: 5, right: 5, zIndex: 1000, opacity: 0.3, background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '24px' }}
+      >
+        🐞
+      </button>
+
+      {debugActions.isDebug && (
+        <DebugPanel
+          state={{ gameState, score, level, timeLeft, sequence, userInputIndex, activeColor }}
+          actions={debugActions}
+        />
+      )}
+
       {gameState === 'IDLE' && (
-        <Menu onStart={startGame} speakIntro={speakIntro} />
+        <Menu onStart={startGame} />
       )}
 
       {gameState !== 'IDLE' && (
         <>
-          <GameHUD
+          <HUD
             score={score}
             level={level}
             timeLeft={timeLeft}
             difficulty={settings.difficulty}
-            message={message}
-            streak={streak}
-            gameState={gameState}
           />
 
           <div className="game-area">
