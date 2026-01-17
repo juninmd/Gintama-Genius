@@ -372,6 +372,11 @@ select option {
   to { transform: translate(-50%, -50%) scale(1) rotate(0); }
 }
 
+@keyframes popInStatic {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -423,6 +428,37 @@ select option {
   transform: scale(1.05);
 }
 
+/* Rank Display */
+.rank-display {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: popInStatic 0.5s 0.2s backwards;
+}
+
+.rank-title {
+  font-size: 2rem;
+  margin: 0 0 0.5rem 0;
+  color: #FFD700;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.rank-desc {
+  font-size: 1.1rem;
+  color: #ccc;
+  font-style: italic;
+  margin: 0;
+}
+
+.final-score {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
 /* Mobile Adjustments */
 @media (max-width: 600px) {
   .game-board {
@@ -454,6 +490,13 @@ select option {
   .glow-text {
       font-size: 1.8rem;
       padding: 1rem 2rem;
+  }
+  .game-over-content {
+      padding: 1.5rem;
+      width: 85%;
+  }
+  .rank-title {
+      font-size: 1.5rem;
   }
 }
 
