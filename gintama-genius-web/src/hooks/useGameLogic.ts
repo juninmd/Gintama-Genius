@@ -22,11 +22,20 @@ interface UseGameLogicReturn {
   kaguraActive: boolean;
   message: string | null;
   streak: number;
+  rank: { title: string; description: string };
   speakIntro: () => void;
   startGame: (difficulty: Difficulty, timeMode: TimeMode) => void;
   handleColorClick: (color: number) => void;
   resetGame: () => void;
 }
+
+export const getRank = (score: number) => {
+  if (score < 5) return { title: "Madao", description: "Um completo inútil..." };
+  if (score < 15) return { title: "Shinpachi", description: "Você é basicamente um par de óculos." };
+  if (score < 30) return { title: "Kagura", description: "Yato poderoso! Mas cuidado com a fome." };
+  if (score < 50) return { title: "Gintoki", description: "O Lendário Shiroyasha!" };
+  return { title: "Neo Armstrong Cyclone Jet Armstrong", description: "Uma lenda com um acabamento perfeito!" };
+};
 
 const SOUNDS = {
   1: '/assets/sounds/vermelho.wav',
@@ -55,6 +64,9 @@ export const useGameLogic = (): UseGameLogicReturn => {
   const [message, setMessage] = useState<string | null>(null);
   const [streak, setStreak] = useState(0);
 
+  // Derived rank
+  const rank = getRank(score);
+
   // Audio refs
   const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
 
@@ -76,8 +88,8 @@ export const useGameLogic = (): UseGameLogicReturn => {
 
   const speakIntro = useCallback(() => {
     if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance("Gintama, the genius game");
-      utterance.lang = 'en-US'; // Or pt-BR if preferred, but user requested specific phrase which is English
+      const utterance = new SpeechSynthesisUtterance("Gintama, o jogo genial");
+      utterance.lang = 'pt-BR';
       utterance.rate = 1.0;
       window.speechSynthesis.speak(utterance);
     }
@@ -125,7 +137,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
 
   // Timer Effect
   useEffect(() => {
-    let timer: any;
+    let timer: ReturnType<typeof setInterval>;
     if (gameState !== 'IDLE' && gameState !== 'GAME_OVER' && settings.timeMode !== 'INFINITE') {
       timer = setInterval(() => {
         setTimeLeft(prev => {
@@ -143,7 +155,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
       }, 1000);
     }
     return () => clearInterval(timer);
-  }, [gameState, settings.timeMode]);
+  }, [gameState, settings.timeMode, playSound]);
 
   // Sequence Playback Effect
   useEffect(() => {
@@ -195,11 +207,11 @@ export const useGameLogic = (): UseGameLogicReturn => {
         setStreak(prev => {
             const newStreak = prev + 1;
             if (newStreak > 0 && newStreak % 5 === 0) {
-                const messages = ["Incrível!", "Imparável!", "Gênio!", "Supremo!"];
+                const messages = ["Incrível!", "Imparável!", "Gênio!", "Supremo!", "Sequência Monstra!"];
                 const randomMsg = messages[Math.floor(Math.random() * messages.length)];
                 showMessage(randomMsg, 3000);
             } else {
-                const messages = ["Boa!", "Isso aí!", "Continue assim!"];
+                const messages = ["Você acertou!", "Boa!", "Isso aí!", "Na mosca!"];
                 const randomMsg = messages[Math.floor(Math.random() * messages.length)];
                 showMessage(randomMsg, 1500);
             }
@@ -283,6 +295,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
     kaguraActive,
     message,
     streak,
+    rank,
     speakIntro,
     startGame,
     handleColorClick,
