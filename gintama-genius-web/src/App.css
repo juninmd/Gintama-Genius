@@ -134,19 +134,11 @@ select option {
   padding: 0 20px;
   z-index: 10;
   pointer-events: none;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.hud-group {
-    display: flex;
-    gap: 1.5rem;
-    align-items: center;
 }
 
 .hud-item {
   background: rgba(0, 0, 0, 0.6);
-  padding: 0.5rem 1.2rem;
+  padding: 0.5rem 1.5rem;
   border-radius: 2rem;
   border: 1px solid rgba(255,255,255,0.2);
   display: flex;
@@ -154,71 +146,9 @@ select option {
   gap: 0.5rem;
   color: #fff;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   backdrop-filter: blur(4px);
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  white-space: nowrap;
-}
-
-.hud-streak {
-    background: linear-gradient(135deg, rgba(255, 69, 0, 0.7), rgba(255, 140, 0, 0.7));
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 0 15px rgba(255, 69, 0, 0.5);
-    transform-origin: center;
-}
-
-.urgent-pulse {
-    animation: urgentPulse 1s infinite;
-    background: rgba(220, 20, 60, 0.4);
-    border-color: rgba(255, 0, 0, 0.6);
-}
-
-@keyframes urgentPulse {
-    0% { box-shadow: 0 0 0 0 rgba(220, 20, 60, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(220, 20, 60, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(220, 20, 60, 0); }
-}
-
-.urgency-border {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    box-shadow: inset 0 0 50px rgba(255, 0, 0, 0.8);
-    pointer-events: none;
-    z-index: 5;
-}
-
-/* Message Overlay */
-.message-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Start centered */
-    z-index: 100;
-    pointer-events: none;
-    width: 100%;
-    text-align: center;
-    /* Animation handled by Framer Motion now */
-}
-
-.glow-text {
-    font-size: 3rem;
-    color: #fff;
-    text-shadow:
-        0 0 5px #fff,
-        0 0 10px #fff,
-        0 0 20px #ff00de,
-        0 0 30px #ff00de,
-        0 0 40px #ff00de,
-        0 0 55px #ff00de,
-        0 0 75px #ff00de;
-    margin: 0;
-    padding: 1.5rem 3rem;
-    background: rgba(0,0,0,0.6);
-    display: inline-block;
-    border-radius: 2rem;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 /* Game Board Modernization */
@@ -264,49 +194,16 @@ select option {
 }
 
 /* Button Positioning */
-/* Red: Top Right */
-.btn-vermelho {
-  top: 0; right: 0;
-  border-radius: 0 100% 0 0;
-  background-color: #ff0000;
-  transform-origin: bottom left; /* Pivot for TR button is bottom-left (center of board) */
-  transform: rotate(90deg); /* Rotate image to fit */
-}
-
-/* Green: Top Left */
-.btn-verde {
-  top: 0; left: 0;
-  border-radius: 100% 0 0 0;
-  background-color: #00ff00;
-  transform-origin: bottom right; /* Pivot for TL button is bottom-right (center of board) */
-  transform: rotate(-90deg); /* Rotate image to fit */
-}
-
-/* Blue: Bottom Right */
-.btn-azul {
-  bottom: 0; right: 0;
-  border-radius: 0 0 100% 0;
-  background-color: #0000ff;
-  transform-origin: top left; /* Pivot for BR button is top-left (center of board) */
-  transform: rotate(-90deg); /* Rotate image to fit */
-}
-
-/* Yellow: Bottom Left */
-.btn-amarelo {
-  bottom: 0; left: 0;
-  border-radius: 0 0 0 100%;
-  background-color: #ffff00;
-  transform-origin: top right; /* Pivot for BL button is top-right (center of board) */
-  transform: rotate(90deg); /* Rotate image to fit */
-}
+.btn-vermelho { top: 0; left: 0; border-radius: 100% 0 0 0; background-color: #ff0000; }
+.btn-verde { top: 0; right: 0; border-radius: 0 100% 0 0; background-color: #00ff00; }
+.btn-azul { bottom: 0; left: 0; border-radius: 0 0 0 100%; background-color: #0000ff; }
+.btn-amarelo { bottom: 0; right: 0; border-radius: 0 0 100% 0; background-color: #ffff00; }
 
 /* Active State (Glow) */
 .game-btn.active {
   opacity: 1;
-  filter: brightness(1.5) drop-shadow(0 0 30px currentColor);
-  box-shadow: 0 0 20px currentColor;
+  filter: brightness(1.5) drop-shadow(0 0 20px currentColor);
   z-index: 2;
-  /* Transform is handled in specific classes to preserve rotation */
 }
 
 /* Specific colors for shadow matching if using CSS colors alongside images */
@@ -316,16 +213,9 @@ select option {
 .btn-amarelo.active { color: #ffff00; }
 
 
-/* Generic active removed/overridden by specific ones to avoid conflict */
 .game-btn:active {
-  /* transform: scale(0.98); -- handled specifically */
+  transform: scale(0.98);
 }
-
-/* Combined Rotation + Scale for Active States (Both .active class and :active pseudo) */
-.btn-vermelho.active, .btn-vermelho:active { transform: rotate(90deg) scale(0.98); }
-.btn-verde.active, .btn-verde:active { transform: rotate(-90deg) scale(0.98); }
-.btn-azul.active, .btn-azul:active { transform: rotate(-90deg) scale(0.98); }
-.btn-amarelo.active, .btn-amarelo:active { transform: rotate(90deg) scale(0.98); }
 
 /* Center circle (decoration) */
 .center-circle {
@@ -370,11 +260,6 @@ select option {
 @keyframes popIn {
   from { transform: translate(-50%, -50%) scale(0) rotate(-10deg); }
   to { transform: translate(-50%, -50%) scale(1) rotate(0); }
-}
-
-@keyframes popInStatic {
-  from { transform: scale(0); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
 }
 
 @keyframes fadeIn {
@@ -428,37 +313,6 @@ select option {
   transform: scale(1.05);
 }
 
-/* Rank Display */
-.rank-display {
-  margin: 1.5rem 0;
-  padding: 1.5rem;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  animation: popInStatic 0.5s 0.2s backwards;
-}
-
-.rank-title {
-  font-size: 2rem;
-  margin: 0 0 0.5rem 0;
-  color: #FFD700;
-  text-transform: uppercase;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-}
-
-.rank-desc {
-  font-size: 1.1rem;
-  color: #ccc;
-  font-style: italic;
-  margin: 0;
-}
-
-.final-score {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
 /* Mobile Adjustments */
 @media (max-width: 600px) {
   .game-board {
@@ -470,49 +324,10 @@ select option {
     width: 85%;
   }
   .hud {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    top: 10px;
   }
-  .hud-group {
-      width: auto;
-      justify-content: center;
-      gap: 0.5rem;
-  }
-  .hud-item {
-      font-size: 0.9rem;
-      padding: 0.3rem 0.8rem;
-      flex: 0 1 auto;
-  }
-  .glow-text {
-      font-size: 1.8rem;
-      padding: 1rem 2rem;
-  }
-  .game-over-content {
-      padding: 1.5rem;
-      width: 85%;
-  }
-  .rank-title {
-      font-size: 1.5rem;
-  }
-}
-
-@media (max-height: 600px) {
-    /* Landspace or small height phones */
-    .game-board {
-        width: 240px;
-        height: 240px;
-    }
-    .hud {
-        top: 5px;
-        padding: 0 10px;
-    }
-    .hud-item {
-        padding: 0.2rem 0.8rem;
-    }
 }
 
 /* Debug Panel */
