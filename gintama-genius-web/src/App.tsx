@@ -2,7 +2,7 @@ import './App.css';
 import { useGameLogic } from './hooks/useGameLogic';
 import Menu from './components/Menu';
 import GameBoard from './components/GameBoard';
-import GameHUD from './components/GameHUD';
+import HUD from './components/HUD';
 import GameOver from './components/GameOver';
 import DebugPanel from './components/DebugPanel';
 
@@ -18,9 +18,6 @@ function App() {
     sequence,
     userInputIndex,
     debugActions,
-    message,
-    streak,
-    speakIntro,
     startGame,
     handleColorClick,
     resetGame,
@@ -45,19 +42,16 @@ function App() {
       )}
 
       {gameState === 'IDLE' && (
-        <Menu onStart={startGame} speakIntro={speakIntro} />
+        <Menu onStart={startGame} />
       )}
 
       {gameState !== 'IDLE' && (
         <>
-          <GameHUD
+          <HUD
             score={score}
             level={level}
             timeLeft={timeLeft}
             difficulty={settings.difficulty}
-            message={message}
-            streak={streak}
-            gameState={gameState}
           />
 
           <div className="game-area">
