@@ -36,11 +36,23 @@ export default function GameHUD({
         <div className="hud-group">
           <div className="hud-item">
             <Trophy size={20} className="text-yellow-400" />
-            <span>{score}</span>
+            <motion.span
+               key={score}
+               initial={{ scale: 1.5, color: '#FFD700' }}
+               animate={{ scale: 1, color: '#ffffff' }}
+            >
+              {score}
+            </motion.span>
           </div>
           <div className="hud-item">
             <Zap size={20} className="text-blue-400" />
-            <span>Lvl {level}</span>
+            <motion.span
+               key={level}
+               initial={{ scale: 1.5, color: '#00BFFF' }}
+               animate={{ scale: 1, color: '#ffffff' }}
+            >
+              Lvl {level}
+            </motion.span>
           </div>
         </div>
 
