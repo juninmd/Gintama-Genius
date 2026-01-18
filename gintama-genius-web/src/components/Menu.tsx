@@ -34,7 +34,13 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
         <button
           className="start-button"
           onClick={() => onStart(difficulty, timeMode)}
-          style={{ backgroundImage: 'url(/assets/images/iniciar.jpg)' }}
+          style={{
+            backgroundImage: 'url(/assets/images/iniciar.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            minHeight: '60px' // Ensure enough height for the image
+          }}
         >
         </button>
       </div>

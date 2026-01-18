@@ -17,6 +17,8 @@ function App() {
     kaguraActive,
     sequence,
     userInputIndex,
+    streak,
+    feedback,
     debugActions,
     startGame,
     handleColorClick,
@@ -52,6 +54,8 @@ function App() {
             level={level}
             timeLeft={timeLeft}
             difficulty={settings.difficulty}
+            streak={streak}
+            feedback={feedback}
           />
 
           <div className="game-area">

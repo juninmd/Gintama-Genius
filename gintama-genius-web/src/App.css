@@ -125,30 +125,124 @@ select option {
 /* HUD Modernization */
 .hud {
   position: absolute;
-  top: 20px;
+  top: 0;
   left: 0;
   right: 0;
+  padding: 1rem;
   display: flex;
-  justify-content: center;
-  gap: 2rem;
-  padding: 0 20px;
-  z-index: 10;
+  justify-content: space-between;
+  align-items: flex-start;
   pointer-events: none;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.hud-group {
+  display: flex;
+  gap: 1rem;
 }
 
 .hud-item {
-  background: rgba(0, 0, 0, 0.6);
-  padding: 0.5rem 1.5rem;
-  border-radius: 2rem;
-  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
   font-weight: 600;
   font-size: 1.2rem;
-  backdrop-filter: blur(4px);
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.hud-item.urgent {
+    border-color: #ff4500;
+    box-shadow: 0 0 15px rgba(255, 69, 0, 0.5);
+    animation: pulseRed 1s infinite;
+}
+
+@keyframes pulseRed {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Streak Display */
+.streak-display {
+    position: absolute;
+    top: 80px; /* Below HUD */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    z-index: 15;
+}
+
+.streak-count {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #ff4500;
+    text-shadow: 0 0 10px rgba(255, 69, 0, 0.8), 2px 2px 0px black;
+    line-height: 1;
+}
+
+.streak-label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffd700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 0px black;
+}
+
+/* Feedback Overlay */
+.feedback-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    font-weight: 900;
+    text-align: center;
+    z-index: 100;
+    pointer-events: none;
+    white-space: nowrap;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    padding: 2rem;
+}
+
+.feedback-success {
+    color: #00ff00;
+    text-shadow: 0 0 20px #00ff00, 3px 3px 0 #000;
+}
+
+.feedback-error {
+    color: #ff0000;
+    text-shadow: 0 0 20px #ff0000, 3px 3px 0 #000;
+}
+
+.feedback-warning {
+    color: #ff8800;
+    text-shadow: 0 0 20px #ff8800, 3px 3px 0 #000;
+    animation: shake 0.5s infinite;
+}
+
+.feedback-info {
+    color: #00bfff;
+    text-shadow: 0 0 20px #00bfff, 3px 3px 0 #000;
+}
+
+@keyframes shake {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  25% { transform: translate(-52%, -50%) rotate(-5deg); }
+  75% { transform: translate(-48%, -50%) rotate(5deg); }
+  100% { transform: translate(-50%, -50%) rotate(0deg); }
 }
 
 /* Game Board Modernization */
@@ -325,8 +419,27 @@ select option {
   }
   .hud {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     gap: 0.5rem;
+  }
+
+  .hud-group {
+      justify-content: space-between;
+  }
+
+  .hud-item {
+      flex: 1;
+      justify-content: center;
+      font-size: 0.9rem;
+      padding: 0.4rem;
+  }
+
+  .feedback-message {
+      font-size: 2.5rem;
+  }
+
+  .streak-display {
+      top: 130px; /* Adjust for taller HUD */
   }
 }
 
