@@ -7,6 +7,11 @@ export type TimeMode = '30s' | '60s' | '120s' | '240s' | 'INFINITE';
 
 export const COLORS = [1, 2, 3, 4] as const; // Red, Green, Blue, Yellow
 
+export interface Feedback {
+  message: string;
+  type: 'success' | 'error' | 'warning' | 'info';
+}
+
 interface UseGameLogicReturn {
   gameState: GameState;
   score: number;
@@ -20,6 +25,8 @@ interface UseGameLogicReturn {
     timeMode: TimeMode;
   };
   kaguraActive: boolean;
+  streak: number;
+  feedback: Feedback | null;
   startGame: (difficulty: Difficulty, timeMode: TimeMode) => void;
   handleColorClick: (color: number) => void;
   resetGame: () => void;
@@ -59,6 +66,8 @@ export const useGameLogic = (): UseGameLogicReturn => {
   const [, setKaguraCount] = useState(0);
   const [kaguraActive, setKaguraActive] = useState(false);
   const [debugMode, setDebugMode] = useState(false);
+  const [streak, setStreak] = useState(0);
+  const [feedback, setFeedback] = useState<Feedback | null>(null);
 
   // Audio refs
   const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
@@ -99,6 +108,8 @@ export const useGameLogic = (): UseGameLogicReturn => {
     setUserInputIndex(0);
     setKaguraCount(0);
     setKaguraActive(false);
+    setStreak(0);
+    setFeedback(null);
     setTimeLeft(getInitialTime(timeMode));
 
     playSound('novo');
@@ -108,6 +119,10 @@ export const useGameLogic = (): UseGameLogicReturn => {
   const addToSequence = () => {
     const nextColor = Math.floor(Math.random() * 4) + 1;
     setSequence(prev => [...prev, nextColor]);
+    if (sequence.length > 0) {
+      setFeedback({ message: "Nova Rodada!", type: 'info' });
+      setTimeout(() => setFeedback(null), 1500);
+    }
   };
 
   // Timer Effect
@@ -116,6 +131,10 @@ export const useGameLogic = (): UseGameLogicReturn => {
     if (gameState !== 'IDLE' && gameState !== 'GAME_OVER' && settings.timeMode !== 'INFINITE') {
       timer = setInterval(() => {
         setTimeLeft(prev => {
+          if (prev <= 10 && prev > 1) {
+            setFeedback({ message: "Corra!", type: 'warning' });
+          }
+
           if (prev <= 1) {
             setGameState('GAME_OVER');
             playSound('gameOver');
@@ -172,6 +191,9 @@ export const useGameLogic = (): UseGameLogicReturn => {
         setScore(prev => prev + 1);
         setLevel(prev => prev + 1);
         setKaguraCount(prev => prev + 1);
+        setStreak(prev => prev + 1);
+        setFeedback({ message: "Você acertou!", type: 'success' });
+        setTimeout(() => setFeedback(null), 1000);
 
         // Kagura Bonus Check
         if (settings.difficulty !== 'BERSERK') {
@@ -191,6 +213,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
       } else {
          // Correct input, but sequence not finished.
          setScore(prev => prev + 1);
+         setStreak(prev => prev + 1);
          setKaguraCount(prev => {
              const newVal = prev + 1;
              if (newVal === 30 && settings.difficulty !== 'BERSERK') {
@@ -210,6 +233,8 @@ export const useGameLogic = (): UseGameLogicReturn => {
       // Wrong
       setGameState('GAME_OVER');
       playSound('gameOver');
+      setStreak(0);
+      setFeedback({ message: "Você errou!", type: 'error' });
     }
   };
 
@@ -218,6 +243,8 @@ export const useGameLogic = (): UseGameLogicReturn => {
     setScore(0);
     setLevel(0);
     setSequence([]);
+    setStreak(0);
+    setFeedback(null);
   };
 
   // Debug Actions
@@ -258,6 +285,8 @@ export const useGameLogic = (): UseGameLogicReturn => {
     userInputIndex,
     settings,
     kaguraActive,
+    streak,
+    feedback,
     startGame,
     handleColorClick,
     resetGame,
