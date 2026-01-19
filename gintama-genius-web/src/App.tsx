@@ -50,6 +50,7 @@ function App() {
       {gameState !== 'IDLE' && (
         <>
           <HUD
+            gameState={gameState}
             score={score}
             level={level}
             timeLeft={timeLeft}

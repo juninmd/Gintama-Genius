@@ -51,6 +51,12 @@ const SOUNDS = {
   novo: '/assets/sounds/novo.wav',
 };
 
+const MESSAGES_SUCCESS = ["Boa!", "Isso!", "Genial!", "Segura!", "Vapo!", "Acertou!", "Incrível!", "Mito!"];
+const MESSAGES_ERROR = ["Errou!", "Puts!", "Já era!", "Fim!", "Não foi dessa vez!", "Que azar!", "Errou feio!"];
+const MESSAGES_NEW_ROUND = ["Nova Rodada!", "Atenção!", "Lá vem!", "Prepare-se!", "Olho no Lance!"];
+
+const getRandomMessage = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
+
 export const useGameLogic = (): UseGameLogicReturn => {
   const [gameState, setGameState] = useState<GameState>('IDLE');
   const [sequence, setSequence] = useState<number[]>([]);
@@ -120,7 +126,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
     const nextColor = Math.floor(Math.random() * 4) + 1;
     setSequence(prev => [...prev, nextColor]);
     if (sequence.length > 0) {
-      setFeedback({ message: "Nova Rodada!", type: 'info' });
+      setFeedback({ message: getRandomMessage(MESSAGES_NEW_ROUND), type: 'info' });
       setTimeout(() => setFeedback(null), 1500);
     }
   };
@@ -192,7 +198,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
         setLevel(prev => prev + 1);
         setKaguraCount(prev => prev + 1);
         setStreak(prev => prev + 1);
-        setFeedback({ message: "Você acertou!", type: 'success' });
+        setFeedback({ message: getRandomMessage(MESSAGES_SUCCESS), type: 'success' });
         setTimeout(() => setFeedback(null), 1000);
 
         // Kagura Bonus Check
@@ -234,7 +240,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
       setGameState('GAME_OVER');
       playSound('gameOver');
       setStreak(0);
-      setFeedback({ message: "Você errou!", type: 'error' });
+      setFeedback({ message: getRandomMessage(MESSAGES_ERROR), type: 'error' });
     }
   };
 

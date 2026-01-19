@@ -171,29 +171,79 @@ select option {
     100% { transform: scale(1); }
 }
 
+/* Turn Indicator */
+.turn-indicator-wrapper {
+  position: absolute;
+  top: 80px; /* Default below HUD */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 12;
+  pointer-events: none;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.turn-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  letter-spacing: 1px;
+}
+
+.turn-badge.watch {
+  background: #FFD700;
+  color: #000;
+  border: 3px solid #fff;
+}
+
+.turn-badge.play {
+  background: #00FF00;
+  color: #000;
+  border: 3px solid #fff;
+}
+
 /* Streak Display */
 .streak-display {
     position: absolute;
-    top: 80px; /* Below HUD */
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 20px; /* Moved to bottom for better mobile view or keep it floating */
+    right: 20px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    gap: 0.5rem;
     pointer-events: none;
     z-index: 15;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 0.5rem 1.2rem;
+    border-radius: 1rem;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 69, 0, 0.3);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.streak-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
 }
 
 .streak-count {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 900;
     color: #ff4500;
     text-shadow: 0 0 10px rgba(255, 69, 0, 0.8), 2px 2px 0px black;
-    line-height: 1;
+    line-height: 0.9;
 }
 
 .streak-label {
-    font-size: 1rem;
+    font-size: 0.8rem;
     font-weight: bold;
     color: #ffd700;
     text-transform: uppercase;
@@ -207,7 +257,7 @@ select option {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 4rem;
+    font-size: 3.5rem;
     font-weight: 900;
     text-align: center;
     z-index: 100;
@@ -215,16 +265,22 @@ select option {
     white-space: nowrap;
     text-shadow: 0 4px 20px rgba(0,0,0,0.5);
     padding: 2rem;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(5px);
+    border-radius: 20px;
+    border: 2px solid rgba(255,255,255,0.1);
 }
 
 .feedback-success {
     color: #00ff00;
     text-shadow: 0 0 20px #00ff00, 3px 3px 0 #000;
+    border-color: #00ff00;
 }
 
 .feedback-error {
     color: #ff0000;
     text-shadow: 0 0 20px #ff0000, 3px 3px 0 #000;
+    border-color: #ff0000;
 }
 
 .feedback-warning {
@@ -253,15 +309,17 @@ select option {
   justify-content: center;
   width: 100%;
   perspective: 1000px;
+  margin-top: 60px; /* Space for HUD */
 }
 
 .game-board {
   position: relative;
-  width: 320px;
-  height: 320px;
+  /* Responsive sizing: max 320px, but shrink on smaller screens */
+  width: min(320px, 85vw);
+  height: min(320px, 85vw);
   border-radius: 50%;
   background: #222;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 50px rgba(0,0,0,0.6);
   padding: 10px; /* Gap between buttons and outer edge */
 }
 
@@ -296,7 +354,7 @@ select option {
 /* Active State (Glow) */
 .game-btn.active {
   opacity: 1;
-  filter: brightness(1.5) drop-shadow(0 0 20px currentColor);
+  filter: brightness(1.5) drop-shadow(0 0 30px currentColor);
   z-index: 2;
 }
 
@@ -308,7 +366,7 @@ select option {
 
 
 .game-btn:active {
-  transform: scale(0.98);
+  transform: scale(0.96);
 }
 
 /* Center circle (decoration) */
@@ -316,8 +374,8 @@ select option {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 80px;
-  height: 80px;
+  width: 25%;
+  height: 25%;
   background: #1a1a2e;
   border-radius: 50%;
   transform: translate(-50%, -50%);
@@ -329,7 +387,7 @@ select option {
 }
 
 .center-logo {
-  width: 60px;
+  width: 70%;
   height: auto;
   opacity: 0.8;
 }
@@ -415,12 +473,14 @@ select option {
   }
   .menu-container {
     padding: 1.5rem;
-    width: 85%;
+    width: 90%;
   }
   .hud {
     flex-direction: column;
     align-items: stretch;
     gap: 0.5rem;
+    background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+    padding-bottom: 2rem;
   }
 
   .hud-group {
@@ -430,16 +490,29 @@ select option {
   .hud-item {
       flex: 1;
       justify-content: center;
-      font-size: 0.9rem;
-      padding: 0.4rem;
+      font-size: 0.85rem;
+      padding: 0.3rem;
+  }
+
+  .hud-value {
+    font-size: 1rem;
+  }
+
+  .turn-indicator-wrapper {
+      top: 130px; /* Push down below HUD stack */
   }
 
   .feedback-message {
-      font-size: 2.5rem;
+      font-size: 2rem;
+      padding: 1rem;
+      width: 80%;
   }
 
   .streak-display {
-      top: 130px; /* Adjust for taller HUD */
+      bottom: 10px;
+      right: 50%;
+      transform: translateX(50%);
+      width: max-content;
   }
 }
 
