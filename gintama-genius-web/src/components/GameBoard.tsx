@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { COLORS } from '../hooks/useGameLogic';
 
 interface GameBoardProps {
@@ -18,18 +19,16 @@ const GameBoard: React.FC<GameBoardProps> = ({ activeColor, onColorClick, disabl
   return (
     <div className="game-board">
       <div className="simon-circle">
-        <div className="center-circle">
+        <motion.div
+            className="center-circle"
+            animate={{ rotate: activeColor ? 360 : 0 }}
+            transition={{ duration: 0.5 }}
+        >
             <img src="/assets/images/genius.ico" alt="Logo" className="center-logo" />
-        </div>
+        </motion.div>
         {COLORS.map((color) => {
           const colorName = colorMap[color];
           const isActive = activeColor === color;
-          // Determine image source: normal or 'on' version
-          // If the button is currently being pressed by user or lit by game
-          // For user feedback, we might want to handle mouseDown/Up locally or pass 'pressed' state,
-          // but for simplicity we rely on activeColor which is mainly for playback.
-          // We can use CSS :active for user feedback or local state.
-          // Let's use a local state for click feedback to be snappy.
 
           return (
              <GameButton
@@ -81,7 +80,7 @@ const GameButton: React.FC<{
         : `/assets/images/${colorName}.png`;
 
     return (
-        <button
+        <motion.button
             className={`game-btn btn-${colorName} ${showActive ? 'active' : ''}`}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
@@ -90,10 +89,19 @@ const GameButton: React.FC<{
             onTouchEnd={handleMouseUp}
             style={{
                 backgroundImage: `url(${imgSrc})`,
-                cursor: disabled ? 'default' : 'pointer'
+                cursor: disabled ? 'default' : 'pointer',
+                // Explicitly set background size again to be safe with motion override quirks
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
             }}
+            animate={{
+                scale: showActive ? 1.05 : 1,
+                filter: showActive ? 'brightness(1.3)' : 'brightness(1)'
+            }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
         >
-        </button>
+        </motion.button>
     );
 }
 
