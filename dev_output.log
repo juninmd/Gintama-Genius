@@ -1,0 +1,10 @@
+
+> gintama-genius-web@0.0.0 dev
+> vite
+
+
+  VITE v7.3.1  ready in 363 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+10:00:24 AM [vite] (client) hmr update /src/components/HUD.tsx
