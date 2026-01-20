@@ -11,24 +11,24 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
 
   return (
     <div className="menu-container">
-      <img src="/assets/images/splash.png" alt="Splash" className="splash-image" />
+      <img src="/assets/images/splash.png" alt="Gintama Genius" className="splash-image" />
       <div className="menu-controls">
         <div className="setting-group">
-          <label>Difficulty:</label>
+          <label>Dificuldade:</label>
           <select value={difficulty} onChange={(e) => setDifficulty(e.target.value as Difficulty)}>
-            <option value="BERSERK">Berserk (Hard)</option>
+            <option value="BERSERK">Berserk (Difícil)</option>
             <option value="NORMAL">Normal</option>
-            <option value="EASY">Easy</option>
+            <option value="EASY">Fácil</option>
           </select>
         </div>
         <div className="setting-group">
-          <label>Time:</label>
+          <label>Tempo:</label>
           <select value={timeMode} onChange={(e) => setTimeMode(e.target.value as TimeMode)}>
             <option value="30s">30s</option>
             <option value="60s">60s</option>
             <option value="120s">120s</option>
             <option value="240s">240s</option>
-            <option value="INFINITE">Infinite</option>
+            <option value="INFINITE">Infinito</option>
           </select>
         </div>
         <button
@@ -39,8 +39,10 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
-            minHeight: '60px' // Ensure enough height for the image
+            minHeight: '60px', // Ensure enough height for the image
+            color: 'transparent' // Hide text if image has text, or we can overlay text if needed. Image likely has "Iniciar" text.
           }}
+          aria-label="Iniciar Jogo"
         >
         </button>
       </div>

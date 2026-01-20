@@ -13,9 +13,9 @@ const GameOver: React.FC<GameOverProps> = ({ score, onRestart }) => {
         backgroundPosition: 'center'
     }}>
       <div className="game-over-content">
-        <h1>Game Over</h1>
-        <p>You scored {score} points!</p>
-        <button onClick={onRestart} className="restart-button">Play Again</button>
+        <h1>Fim de Jogo</h1>
+        <p>Você fez {score} pontos!</p>
+        <button onClick={onRestart} className="restart-button">Jogar Novamente</button>
       </div>
     </div>
   );

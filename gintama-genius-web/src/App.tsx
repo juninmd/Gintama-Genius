@@ -25,8 +25,11 @@ function App() {
     resetGame,
   } = useGameLogic();
 
+  const isUrgent = timeLeft <= 10 && gameState !== 'IDLE' && gameState !== 'GAME_OVER' && settings.timeMode !== 'INFINITE';
+  const isError = feedback?.type === 'error';
+
   return (
-    <div className="app-container" style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/fundo.png')` }}>
+    <div className={`app-container ${isUrgent ? 'urgent-pulse' : ''} ${isError ? 'shake-screen' : ''}`} style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/fundo.png')` }}>
 
       <button
         className="debug-toggle"
