@@ -51,9 +51,9 @@ const SOUNDS = {
   novo: '/assets/sounds/novo.wav',
 };
 
-const MESSAGES_SUCCESS = ["Boa!", "Isso!", "Genial!", "Segura!", "Vapo!", "Acertou!", "Incrível!", "Mito!"];
-const MESSAGES_ERROR = ["Errou!", "Puts!", "Já era!", "Fim!", "Não foi dessa vez!", "Que azar!", "Errou feio!"];
-const MESSAGES_NEW_ROUND = ["Nova Rodada!", "Atenção!", "Lá vem!", "Prepare-se!", "Olho no Lance!"];
+const MESSAGES_SUCCESS = ["Boa!", "Isso!", "Genial!", "Segura!", "Vapo!", "Você acertou!", "Incrível!", "Mito!"];
+const MESSAGES_ERROR = ["Você errou!", "Puts!", "Já era!", "Fim!", "Não foi dessa vez!", "Que azar!", "Errou feio!"];
+const MESSAGES_NEW_ROUND = ["Nova rodada!", "Atenção!", "Lá vem!", "Prepare-se!", "Olho no Lance!"];
 
 const getRandomMessage = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
 
@@ -197,8 +197,15 @@ export const useGameLogic = (): UseGameLogicReturn => {
         setScore(prev => prev + 1);
         setLevel(prev => prev + 1);
         setKaguraCount(prev => prev + 1);
-        setStreak(prev => prev + 1);
-        setFeedback({ message: getRandomMessage(MESSAGES_SUCCESS), type: 'success' });
+        setStreak(prev => {
+          const newStreak = prev + 1;
+          if (newStreak % 5 === 0) {
+             setFeedback({ message: "Sequência de acertos!", type: 'success' });
+          } else {
+             setFeedback({ message: getRandomMessage(MESSAGES_SUCCESS), type: 'success' });
+          }
+          return newStreak;
+        });
         setTimeout(() => setFeedback(null), 1000);
 
         // Kagura Bonus Check
@@ -219,7 +226,15 @@ export const useGameLogic = (): UseGameLogicReturn => {
       } else {
          // Correct input, but sequence not finished.
          setScore(prev => prev + 1);
-         setStreak(prev => prev + 1);
+         setStreak(prev => {
+            const newStreak = prev + 1;
+            if (newStreak % 5 === 0) {
+              setFeedback({ message: "Sequência de acertos!", type: 'success' });
+              setTimeout(() => setFeedback(null), 1000);
+            }
+            return newStreak;
+         });
+
          setKaguraCount(prev => {
              const newVal = prev + 1;
              if (newVal === 30 && settings.difficulty !== 'BERSERK') {
