@@ -23,6 +23,12 @@ body {
   align-items: center;
   justify-content: center;
   position: relative;
+  animation: bgBreathe 30s ease-in-out infinite alternate;
+}
+
+@keyframes bgBreathe {
+    0% { background-size: 110%; }
+    100% { background-size: 125%; }
 }
 
 /* Fallback if image missing or for overlay effect */
@@ -32,9 +38,58 @@ body {
   top: 0; left: 0; right: 0; bottom: 0;
   background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%);
   pointer-events: none;
+  z-index: 0;
 }
 
-/* Menu Modernization */
+/* --- Layout Structure --- */
+
+/* The header stays fixed at top */
+.hud-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 20; /* High z-index */
+}
+
+/* Main flexible area for game content */
+.game-layout {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    z-index: 5;
+    /* Add padding top to account for HUD */
+    padding-top: 60px;
+    box-sizing: border-box;
+}
+
+.indicator-area {
+    margin-bottom: 2rem;
+    height: 40px; /* reserve space */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.board-area {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- Menu --- */
 .menu-container {
   display: flex;
   flex-direction: column;
@@ -50,6 +105,7 @@ body {
   animation: fadeIn 0.5s ease-out;
   max-width: 90%;
   width: 400px;
+  z-index: 30;
 }
 
 .splash-image {
@@ -122,21 +178,7 @@ select option {
   transform: translateY(1px);
 }
 
-/* HUD Modernization */
-.hud {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  pointer-events: none;
-  width: 100%;
-  box-sizing: border-box;
-  z-index: 10;
-}
+/* --- HUD Elements --- */
 
 .hud-group {
   display: flex;
@@ -171,15 +213,9 @@ select option {
     100% { transform: scale(1); }
 }
 
-/* Turn Indicator */
+/* Turn Indicator (Now flexible) */
 .turn-indicator-wrapper {
-  position: absolute;
-  top: 80px; /* Default below HUD */
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 12;
-  pointer-events: none;
-  width: 100%;
+  /* No longer absolute */
   display: flex;
   justify-content: center;
 }
@@ -212,20 +248,21 @@ select option {
 /* Streak Display */
 .streak-display {
     position: absolute;
-    bottom: 20px; /* Moved to bottom for better mobile view or keep it floating */
-    right: 20px;
+    bottom: 30px;
+    right: 30px;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 0.5rem;
     pointer-events: none;
     z-index: 15;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 0.5rem 1.2rem;
-    border-radius: 1rem;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 0.5rem 1.5rem;
+    border-radius: 1.5rem;
     backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 69, 0, 0.3);
+    border: 1px solid rgba(255, 69, 0, 0.5);
     box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    transform-origin: bottom right;
 }
 
 .streak-text {
@@ -235,15 +272,15 @@ select option {
 }
 
 .streak-count {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     font-weight: 900;
     color: #ff4500;
-    text-shadow: 0 0 10px rgba(255, 69, 0, 0.8), 2px 2px 0px black;
+    text-shadow: 0 0 15px rgba(255, 69, 0, 0.8), 2px 2px 0px black;
     line-height: 0.9;
 }
 
 .streak-label {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: bold;
     color: #ffd700;
     text-transform: uppercase;
@@ -257,41 +294,41 @@ select option {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 3.5rem;
+    font-size: 4rem; /* Bigger for fun */
     font-weight: 900;
     text-align: center;
     z-index: 100;
     pointer-events: none;
     white-space: nowrap;
     text-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    padding: 2rem;
-    background: rgba(0,0,0,0.4);
-    backdrop-filter: blur(5px);
-    border-radius: 20px;
-    border: 2px solid rgba(255,255,255,0.1);
+    padding: 2.5rem;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(8px);
+    border-radius: 30px;
+    border: 3px solid rgba(255,255,255,0.2);
 }
 
 .feedback-success {
     color: #00ff00;
-    text-shadow: 0 0 20px #00ff00, 3px 3px 0 #000;
+    text-shadow: 0 0 25px #00ff00, 3px 3px 0 #000;
     border-color: #00ff00;
 }
 
 .feedback-error {
     color: #ff0000;
-    text-shadow: 0 0 20px #ff0000, 3px 3px 0 #000;
+    text-shadow: 0 0 25px #ff0000, 3px 3px 0 #000;
     border-color: #ff0000;
 }
 
 .feedback-warning {
     color: #ff8800;
-    text-shadow: 0 0 20px #ff8800, 3px 3px 0 #000;
+    text-shadow: 0 0 25px #ff8800, 3px 3px 0 #000;
     animation: shake 0.5s infinite;
 }
 
 .feedback-info {
     color: #00bfff;
-    text-shadow: 0 0 20px #00bfff, 3px 3px 0 #000;
+    text-shadow: 0 0 25px #00bfff, 3px 3px 0 #000;
 }
 
 @keyframes shake {
@@ -302,25 +339,15 @@ select option {
 }
 
 /* Game Board Modernization */
-.game-area {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  perspective: 1000px;
-  margin-top: 60px; /* Space for HUD */
-}
-
 .game-board {
   position: relative;
   /* Responsive sizing: max 320px, but shrink on smaller screens */
-  width: min(320px, 85vw);
-  height: min(320px, 85vw);
+  width: min(340px, 85vw);
+  height: min(340px, 85vw);
   border-radius: 50%;
   background: #222;
-  box-shadow: 0 10px 50px rgba(0,0,0,0.6);
-  padding: 10px; /* Gap between buttons and outer edge */
+  box-shadow: 0 15px 60px rgba(0,0,0,0.7);
+  padding: 12px;
 }
 
 .simon-circle {
@@ -340,7 +367,6 @@ select option {
   cursor: pointer;
   opacity: 0.6;
   transition: opacity 0.1s, filter 0.1s, transform 0.1s;
-  /* Ensure images cover the button area */
   background-size: cover !important;
   background-position: center !important;
 }
@@ -354,16 +380,14 @@ select option {
 /* Active State (Glow) */
 .game-btn.active {
   opacity: 1;
-  filter: brightness(1.5) drop-shadow(0 0 30px currentColor);
+  filter: brightness(1.5) drop-shadow(0 0 40px currentColor);
   z-index: 2;
 }
 
-/* Specific colors for shadow matching if using CSS colors alongside images */
 .btn-vermelho.active { color: #ff0000; }
 .btn-verde.active { color: #00ff00; }
 .btn-azul.active { color: #0000ff; }
 .btn-amarelo.active { color: #ffff00; }
-
 
 .game-btn:active {
   transform: scale(0.96);
@@ -432,6 +456,7 @@ select option {
   animation: fadeIn 0.5s;
 }
 
+/* Glitch Effect for Game Over text? Maybe later. For now just standard */
 .game-over-content {
   background: rgba(255, 255, 255, 0.1);
   padding: 3rem;
@@ -467,7 +492,7 @@ select option {
 
 /* Urgency Pulse */
 .urgent-pulse {
-  animation: screenPulse 1s infinite;
+  animation: screenPulse 0.8s infinite;
   box-shadow: inset 0 0 50px rgba(255, 0, 0, 0.5);
 }
 
@@ -491,56 +516,61 @@ select option {
 
 /* Mobile Adjustments */
 @media (max-width: 600px) {
-  .game-board {
-    width: 280px;
-    height: 280px;
-  }
-  .menu-container {
-    padding: 1.5rem;
-    width: 90%;
-  }
-  .hud {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.5rem;
-    background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
-    padding-bottom: 2rem;
+  /* Smaller Header */
+  .hud-header {
+      padding: 0.5rem;
+      flex-direction: column;
+      gap: 0.5rem;
+      background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, transparent 100%);
   }
 
   .hud-group {
+      width: 100%;
       justify-content: space-between;
   }
 
+  /* Compact HUD items */
   .hud-item {
-      flex: 1;
-      justify-content: center;
-      font-size: 0.85rem;
-      padding: 0.3rem;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.9rem;
+      border-radius: 8px;
   }
 
-  .hud-value {
-    font-size: 1rem;
+  /* Hide difficulty label on mobile to save space if needed, or keep it */
+  .hud-value-small {
+      font-size: 0.8rem;
   }
 
-  .turn-indicator-wrapper {
-      top: 150px; /* Push down below HUD stack */
+  /* Game Layout */
+  .game-layout {
+      /* Less top padding needed because HUD is tighter */
+      padding-top: 100px;
+      justify-content: flex-start; /* Move game board up */
   }
 
-  .game-area {
-      margin-top: 100px;
+  .indicator-area {
+      margin-bottom: 1rem;
   }
 
-  .feedback-message {
-      font-size: 2rem;
-      padding: 1rem;
-      width: 80%;
+  .game-board {
+      width: min(300px, 85vw);
+      height: min(300px, 85vw);
   }
 
   .streak-display {
-      bottom: 10px;
-      right: 50%;
-      transform: translateX(50%);
+      position: absolute;
+      bottom: 20px;
+      right: auto;
+      left: 50%;
+      transform: translateX(-50%);
       width: max-content;
+      transform-origin: bottom center;
+  }
+
+  .feedback-message {
+      font-size: 2.5rem;
+      padding: 1.5rem;
+      width: 85%;
   }
 }
 

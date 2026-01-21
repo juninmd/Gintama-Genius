@@ -2,7 +2,7 @@ import './App.css';
 import { useGameLogic } from './hooks/useGameLogic';
 import Menu from './components/Menu';
 import GameBoard from './components/GameBoard';
-import HUD from './components/HUD';
+import { HUDHeader, TurnIndicator, StreakBadge, FeedbackOverlay } from './components/HUD';
 import GameOver from './components/GameOver';
 import DebugPanel from './components/DebugPanel';
 
@@ -29,7 +29,7 @@ function App() {
   const isError = feedback?.type === 'error';
 
   return (
-    <div className={`app-container ${isUrgent ? 'urgent-pulse' : ''} ${isError ? 'shake-screen' : ''}`} style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/fundo.png')` }}>
+    <div className={`app-container ${isUrgent ? 'urgent-pulse' : ''} ${isError ? 'shake-screen' : ''}`} style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/assets/images/fundo.png')` }}>
 
       <button
         className="debug-toggle"
@@ -46,35 +46,52 @@ function App() {
         />
       )}
 
-      {gameState === 'IDLE' && (
-        <Menu onStart={startGame} />
+      {/* Header (Score/Time) - Fixed at top */}
+      {gameState !== 'IDLE' && (
+        <HUDHeader
+          score={score}
+          level={level}
+          timeLeft={timeLeft}
+          difficulty={settings.difficulty}
+        />
       )}
 
+      {/* Main Game Area */}
+      <div className="game-layout">
+        {gameState === 'IDLE' ? (
+          <Menu onStart={startGame} />
+        ) : (
+          <>
+            {/* Turn Indicator sits physically above the board now */}
+            <div className="indicator-area">
+                <TurnIndicator gameState={gameState} />
+            </div>
+
+            <div className="board-area">
+               <GameBoard
+                 activeColor={activeColor}
+                 onColorClick={handleColorClick}
+                 disabled={gameState !== 'WAITING_FOR_INPUT'}
+               />
+            </div>
+
+             {/* Spacer for bottom area if needed */}
+             <div className="bottom-spacer" style={{ height: '60px' }}></div>
+          </>
+        )}
+      </div>
+
+      {/* Overlays */}
       {gameState !== 'IDLE' && (
         <>
-          <HUD
-            gameState={gameState}
-            score={score}
-            level={level}
-            timeLeft={timeLeft}
-            difficulty={settings.difficulty}
-            streak={streak}
-            feedback={feedback}
-          />
+            <StreakBadge streak={streak} />
+            <FeedbackOverlay feedback={feedback} streak={streak} />
 
-          <div className="game-area">
-             <GameBoard
-               activeColor={activeColor}
-               onColorClick={handleColorClick}
-               disabled={gameState !== 'WAITING_FOR_INPUT'}
-             />
-          </div>
-
-          {kaguraActive && (
-            <div className="kagura-bonus">
-               <img src="/assets/images/uow.png" alt="Bonus!" />
-            </div>
-          )}
+            {kaguraActive && (
+                <div className="kagura-bonus">
+                   <img src="/assets/images/uow.png" alt="Bonus!" />
+                </div>
+            )}
         </>
       )}
 

@@ -14,33 +14,11 @@ interface HUDProps {
   feedback: Feedback | null;
 }
 
-const HUD: React.FC<HUDProps> = ({ gameState, score, level, timeLeft, difficulty, streak, feedback }) => {
-
-  useEffect(() => {
-    if (feedback?.type === 'info') {
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#FFD700', '#FF4500', '#00BFFF', '#32CD32']
-      });
-    }
-    // Celebrate every 5 streak
-    if (feedback?.type === 'success' && streak % 5 === 0 && streak > 0) {
-        confetti({
-            particleCount: 30,
-            spread: 50,
-            origin: { y: 0.8 },
-            scalar: 0.7,
-            shapes: ['star']
-        });
-    }
-  }, [feedback, streak]);
-
+// 1. Top Bar (Score, Level, Time, Difficulty)
+export const HUDHeader: React.FC<Pick<HUDProps, 'score' | 'level' | 'timeLeft' | 'difficulty'>> = ({ score, level, timeLeft, difficulty }) => {
   return (
-    <>
-      <div className="hud">
-        <div className="hud-group">
+      <div className="hud-header">
+        <div className="hud-group left">
             <div className="hud-item" title="Pontuação">
                 <Trophy size={20} className="hud-icon" color="#FFD700" />
                 <span className="hud-value">{score}</span>
@@ -51,85 +29,135 @@ const HUD: React.FC<HUDProps> = ({ gameState, score, level, timeLeft, difficulty
             </div>
         </div>
 
-        {/* Turn Indicator - Centered in HUD on Desktop, or below on mobile via CSS */}
-        <div className="turn-indicator-wrapper">
-             <AnimatePresence mode="wait">
-                {gameState === 'PLAYING_SEQUENCE' ? (
-                    <motion.div
-                        key="watch"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.8 }}
-                        className="turn-badge watch"
-                    >
-                        <Eye size={18} />
-                        <span>OBSERVE</span>
-                    </motion.div>
-                ) : gameState === 'WAITING_FOR_INPUT' ? (
-                     <motion.div
-                        key="play"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.8 }}
-                        className="turn-badge play"
-                    >
-                        <MousePointerClick size={18} />
-                        <span>SUA VEZ</span>
-                    </motion.div>
-                ) : null}
-             </AnimatePresence>
-        </div>
-
-        <div className="hud-group">
+        <div className="hud-group right">
             <div className={`hud-item ${timeLeft <= 10 ? 'urgent' : ''}`} title="Tempo">
                 <Timer size={20} className="hud-icon" />
                 <span className="hud-value">{timeLeft === Infinity ? '∞' : `${timeLeft}s`}</span>
             </div>
-            <div className="hud-item" title="Dificuldade">
+            <div className="hud-item hud-item-difficulty" title="Dificuldade">
                 <Settings size={20} className="hud-icon" />
                 <span className="hud-value-small">{difficulty}</span>
             </div>
         </div>
       </div>
+  );
+};
 
-      {/* Streak Counter - Floating below HUD */}
-      <AnimatePresence>
+// 2. Turn Indicator (Observe / Play)
+export const TurnIndicator: React.FC<{ gameState: GameState }> = ({ gameState }) => {
+    return (
+        <div className="turn-indicator-wrapper">
+             <AnimatePresence mode="wait">
+                {gameState === 'PLAYING_SEQUENCE' ? (
+                    <motion.div
+                        key="watch"
+                        initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.8, y: -10 }}
+                        className="turn-badge watch"
+                    >
+                        <Eye size={20} />
+                        <span>OBSERVE</span>
+                    </motion.div>
+                ) : gameState === 'WAITING_FOR_INPUT' ? (
+                     <motion.div
+                        key="play"
+                        initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.8, y: -10 }}
+                        className="turn-badge play"
+                    >
+                        <MousePointerClick size={20} />
+                        <span>SUA VEZ</span>
+                    </motion.div>
+                ) : <div className="turn-placeholder" />}
+             </AnimatePresence>
+        </div>
+    );
+};
+
+// 3. Streak Badge
+export const StreakBadge: React.FC<{ streak: number }> = ({ streak }) => {
+    return (
+        <AnimatePresence>
         {streak > 1 && (
             <motion.div
                 className="streak-display"
-                initial={{ opacity: 0, y: -20, scale: 0.8 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.5 }}
+                initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                exit={{ opacity: 0, scale: 0.5, rotate: 10 }}
                 key="streak-display"
             >
                 <div className="streak-icon-wrapper">
-                    <Flame size={32} color="#FF4500" fill="#FF4500" />
+                    <Flame size={28} color="#FF4500" fill="#FF4500" />
                 </div>
                 <div className="streak-text">
                     <span className="streak-count">{streak}</span>
-                    <span className="streak-label">COMBO!</span>
+                    <span className="streak-label">COMBO</span>
                 </div>
             </motion.div>
         )}
       </AnimatePresence>
+    );
+};
 
-      {/* Central Feedback Overlay */}
-      <AnimatePresence>
+// 4. Feedback Overlay (Confetti logic + Text)
+export const FeedbackOverlay: React.FC<{ feedback: Feedback | null, streak: number }> = ({ feedback, streak }) => {
+    useEffect(() => {
+        if (feedback?.type === 'info') { // New Round
+          confetti({
+            particleCount: 80,
+            spread: 60,
+            origin: { y: 0.4 },
+            colors: ['#FFD700', '#FF4500', '#00BFFF', '#32CD32'],
+            disableForReducedMotion: true
+          });
+        }
+        // Celebrate every 5 streak
+        if (feedback?.type === 'success' && streak % 5 === 0 && streak > 0) {
+            confetti({
+                particleCount: 50,
+                spread: 70,
+                origin: { y: 0.7 },
+                scalar: 0.8,
+                shapes: ['star'],
+                colors: ['#FFD700', '#FFA500'],
+                disableForReducedMotion: true
+            });
+        }
+        if (feedback?.message === "Corra!") {
+            // Subtle pulse confetti
+        }
+      }, [feedback, streak]);
+
+      return (
+        <AnimatePresence>
         {feedback && (
           <motion.div
             className={`feedback-message feedback-${feedback.type}`}
-            initial={{ opacity: 0, scale: 0.5, rotate: -10, y: '-50%', x: '-50%' }}
-            animate={{ opacity: 1, scale: 1, rotate: 0, y: '-50%', x: '-50%' }}
-            exit={{ opacity: 0, scale: 1.5, filter: 'blur(10px)', y: '-50%', x: '-50%' }}
-            transition={{ type: "spring", stiffness: 400, damping: 15 }}
-            key={feedback.message} // re-animate on message change
+            initial={{ opacity: 0, scale: 0.5, y: '-50%', x: '-50%' }}
+            animate={{ opacity: 1, scale: 1, y: '-50%', x: '-50%' }}
+            exit={{ opacity: 0, scale: 1.2, filter: 'blur(8px)', y: '-50%', x: '-50%' }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            key={feedback.message}
           >
             {feedback.message}
           </motion.div>
         )}
       </AnimatePresence>
-    </>
-  );
+      );
+};
+
+// Default export if needed for backward compatibility, but we prefer the sub-components now.
+const HUD: React.FC<HUDProps> = (props) => {
+    return (
+        <>
+            <HUDHeader {...props} />
+            <TurnIndicator gameState={props.gameState} />
+            <StreakBadge streak={props.streak} />
+            <FeedbackOverlay feedback={props.feedback} streak={props.streak} />
+        </>
+    );
 };
 
 export default HUD;
