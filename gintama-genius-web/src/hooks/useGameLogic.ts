@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { audioController } from '../utils/audio';
 
 export type GameState = 'IDLE' | 'PLAYING_SEQUENCE' | 'WAITING_FOR_INPUT' | 'GAME_OVER';
 
@@ -41,17 +42,7 @@ interface UseGameLogicReturn {
   };
 }
 
-const SOUNDS = {
-  1: '/assets/sounds/vermelho.wav',
-  2: '/assets/sounds/verde.wav',
-  3: '/assets/sounds/azul.wav',
-  4: '/assets/sounds/amarelo.wav',
-  gameOver: '/assets/sounds/fimdejogo.wav',
-  vapo: '/assets/sounds/uow.wav',
-  novo: '/assets/sounds/novo.wav',
-};
-
-const MESSAGES_SUCCESS = ["Boa!", "Isso!", "Genial!", "Segura!", "Vapo!", "Você acertou!", "Incrível!", "Mito!"];
+const MESSAGES_SUCCESS = ["Boa!", "Isso!", "Genial!", "Segura!", "Vapo!", "Você acertou!", "Incrível!", "Mito!", "Na mosca!"];
 const MESSAGES_ERROR = ["Você errou!", "Puts!", "Já era!", "Fim!", "Não foi dessa vez!", "Que azar!", "Errou feio!"];
 const MESSAGES_NEW_ROUND = ["Nova rodada!", "Atenção!", "Lá vem!", "Prepare-se!", "Olho no Lance!"];
 
@@ -75,23 +66,19 @@ export const useGameLogic = (): UseGameLogicReturn => {
   const [streak, setStreak] = useState(0);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
 
-  // Audio refs
-  const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
-
+  // Resume audio context on first interaction
   useEffect(() => {
-    // Preload sounds
-    Object.entries(SOUNDS).forEach(([key, src]) => {
-      const audio = new Audio(src);
-      audioRefs.current[key] = audio;
-    });
+    const unlockAudio = () => audioController.resume();
+    window.addEventListener('click', unlockAudio);
+    window.addEventListener('touchstart', unlockAudio);
+    return () => {
+        window.removeEventListener('click', unlockAudio);
+        window.removeEventListener('touchstart', unlockAudio);
+    };
   }, []);
 
   const playSound = useCallback((key: string | number) => {
-    const audio = audioRefs.current[key];
-    if (audio) {
-      audio.currentTime = 0;
-      audio.play().catch(e => console.error("Error playing sound", e));
-    }
+    audioController.play(key);
   }, []);
 
   const getInitialTime = (mode: TimeMode): number => {
@@ -125,7 +112,8 @@ export const useGameLogic = (): UseGameLogicReturn => {
   const addToSequence = () => {
     const nextColor = Math.floor(Math.random() * 4) + 1;
     setSequence(prev => [...prev, nextColor]);
-    if (sequence.length > 0) {
+    if (sequence.length > 0) { // Don't show on very first round to let user focus? Or yes?
+      // Actually let's show it.
       setFeedback({ message: getRandomMessage(MESSAGES_NEW_ROUND), type: 'info' });
       setTimeout(() => setFeedback(null), 1500);
     }
@@ -138,12 +126,14 @@ export const useGameLogic = (): UseGameLogicReturn => {
       timer = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 10 && prev > 1) {
-            setFeedback({ message: "Corra!", type: 'warning' });
+            // Only update feedback if it's not already "Corra!" to avoid jitter or spam
+            setFeedback(current => current?.message === "Corra!" ? current : { message: "Corra!", type: 'warning' });
           }
 
           if (prev <= 1) {
             setGameState('GAME_OVER');
             playSound('gameOver');
+            setFeedback({ message: "Tempo Esgotado!", type: 'error' });
             return 0;
           }
           return prev - 1;
@@ -157,27 +147,30 @@ export const useGameLogic = (): UseGameLogicReturn => {
   useEffect(() => {
     if (gameState === 'PLAYING_SEQUENCE' && sequence.length > 0) {
       let i = 0;
-      const interval = setInterval(() => {
-        if (i >= sequence.length) {
-          clearInterval(interval);
-          setActiveColor(null);
-          setGameState('WAITING_FOR_INPUT');
-          setUserInputIndex(0);
-          return;
-        }
+      // Delay slightly before starting sequence so user sees "Nova Rodada"
+      const startDelay = setTimeout(() => {
+          const interval = setInterval(() => {
+            if (i >= sequence.length) {
+              clearInterval(interval);
+              setActiveColor(null);
+              setGameState('WAITING_FOR_INPUT');
+              setUserInputIndex(0);
+              return;
+            }
 
-        const color = sequence[i];
-        setActiveColor(color);
-        playSound(color);
+            const color = sequence[i];
+            setActiveColor(color);
+            playSound(color);
 
-        setTimeout(() => {
-          setActiveColor(null);
-        }, 500); // Light up duration
+            setTimeout(() => {
+              setActiveColor(null);
+            }, 500); // Light up duration
 
-        i++;
-      }, 800); // Time between sequence items
+            i++;
+          }, 800); // Time between sequence items
+      }, 1000);
 
-      return () => clearInterval(interval);
+      return () => clearTimeout(startDelay);
     }
   }, [gameState, sequence, playSound]);
 
@@ -230,10 +223,19 @@ export const useGameLogic = (): UseGameLogicReturn => {
             const newStreak = prev + 1;
             if (newStreak % 5 === 0) {
               setFeedback({ message: "Sequência de acertos!", type: 'success' });
-              setTimeout(() => setFeedback(null), 1000);
+              setTimeout(() => setFeedback(null), 1500);
             }
             return newStreak;
          });
+
+         // No feedback for individual correct hits mid-sequence to avoid clutter?
+         // Actually user likes "Você acertou".
+         // Let's only show random success occasionally or if streak is high?
+         // Or just small feedback?
+         // For now, keep it cleaner: only streak milestones or end of sequence.
+         // Wait, the user wants "Você acertou".
+         // If I show it on every click, it's annoying.
+         // I'll show it only on Sequence Complete (above) OR Milestone.
 
          setKaguraCount(prev => {
              const newVal = prev + 1;
@@ -243,7 +245,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
                  setScore(s => s + 10);
                  playSound('vapo');
                  setKaguraActive(true);
-                 setTimeout(() => setKaguraActive(false), 2000); // Hide after 2s (VB uses TimerKagura)
+                 setTimeout(() => setKaguraActive(false), 2000);
                  return 0;
              }
              return newVal;
