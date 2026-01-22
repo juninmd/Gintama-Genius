@@ -441,10 +441,11 @@ select:focus {
 }
 
 /* Button Positioning */
-.btn-vermelho { top: 0; left: 0; border-right: 2px solid #343a40; border-bottom: 2px solid #343a40; background-color: #ef233c; } /* Red (Kagura) */
-.btn-verde { top: 0; right: 0; border-left: 2px solid #343a40; border-bottom: 2px solid #343a40; background-color: #38b000; } /* Green (Standard) */
-.btn-azul { bottom: 0; left: 0; border-right: 2px solid #343a40; border-top: 2px solid #343a40; background-color: #4361ee; } /* Blue (Shinpachi) */
-.btn-amarelo { bottom: 0; right: 0; border-left: 2px solid #343a40; border-top: 2px solid #343a40; background-color: #ffcc00; } /* Yellow (Sadaharu collar?) */
+/* Standard Genius/Simon Layout: Green(TL), Red(TR), Yellow(BL), Blue(BR) */
+.btn-verde { top: 0; left: 0; border-right: 2px solid #343a40; border-bottom: 2px solid #343a40; background-color: #38b000; } /* Green */
+.btn-vermelho { top: 0; right: 0; border-left: 2px solid #343a40; border-bottom: 2px solid #343a40; background-color: #ef233c; } /* Red */
+.btn-amarelo { bottom: 0; left: 0; border-right: 2px solid #343a40; border-top: 2px solid #343a40; background-color: #ffcc00; } /* Yellow */
+.btn-azul { bottom: 0; right: 0; border-left: 2px solid #343a40; border-top: 2px solid #343a40; background-color: #4361ee; } /* Blue */
 
 /* Active State (Glow) */
 .game-btn.active {
