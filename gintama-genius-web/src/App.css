@@ -8,35 +8,43 @@ body {
   padding: 0;
   font-family: 'Poppins', sans-serif;
   overflow: hidden; /* Prevent scrolling */
-  background-color: #1a1a2e;
-  color: #fff;
+  background-color: #0d1b2a; /* Deep blue/black */
+  color: #e0e1dd;
 }
 
 /* Background Animation */
 .app-container {
   width: 100vw;
   height: 100vh;
-  background-size: cover;
-  background-position: center;
+  /* Japanese Wave Pattern via CSS Gradients */
+  background-color: #8ecae6;
+  background-image:
+    radial-gradient(circle at 50% 100%, #219ebc 10%, transparent 11%),
+    radial-gradient(circle at 50% 100%, #023047 20%, transparent 21%),
+    linear-gradient(to bottom, #023047 0%, #219ebc 100%);
+  background-size: 100% 100%;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
-  animation: bgBreathe 30s ease-in-out infinite alternate;
+  /* animation: bgMove 20s ease-in-out infinite alternate; */
 }
 
-@keyframes bgBreathe {
-    0% { background-size: 110%; }
-    100% { background-size: 125%; }
-}
-
-/* Fallback if image missing or for overlay effect */
+/* Subtle overlay pattern */
 .app-container::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%);
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 255, 255, 0.05) 10px,
+      rgba(255, 255, 255, 0.05) 20px
+    );
   pointer-events: none;
   z-index: 0;
 }
@@ -56,7 +64,7 @@ body {
   pointer-events: none;
   width: 100%;
   box-sizing: border-box;
-  z-index: 20; /* High z-index */
+  z-index: 20;
 }
 
 /* Main flexible area for game content */
@@ -69,14 +77,13 @@ body {
     width: 100%;
     position: relative;
     z-index: 5;
-    /* Add padding top to account for HUD */
     padding-top: 60px;
     box-sizing: border-box;
 }
 
 .indicator-area {
     margin-bottom: 2rem;
-    height: 40px; /* reserve space */
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -94,18 +101,28 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(255, 255, 255, 0.1); /* Glassmorphism */
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.85); /* Light paper-like background */
   padding: 2.5rem;
-  border-radius: 1.5rem;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.3),
+    inset 0 0 0 4px #023047; /* Dark blue border */
   text-align: center;
   animation: fadeIn 0.5s ease-out;
   max-width: 90%;
   width: 400px;
   z-index: 30;
+  position: relative;
+}
+
+/* Decorative corners for menu */
+.menu-container::after {
+    content: '';
+    position: absolute;
+    top: -10px; left: -10px; right: -10px; bottom: -10px;
+    border: 2px solid #fff;
+    pointer-events: none;
+    z-index: -1;
 }
 
 .splash-image {
@@ -113,6 +130,15 @@ body {
   height: auto;
   margin-bottom: 2rem;
   filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+}
+
+.menu-title {
+    font-family: 'Mochiy Pop P One', sans-serif;
+    color: #023047;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0px #8ecae6;
 }
 
 .menu-controls {
@@ -128,54 +154,68 @@ body {
   align-items: center;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #fff;
+  color: #023047;
+  font-family: 'Mochiy Pop P One', sans-serif;
 }
 
 select {
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  border: none;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  font-family: inherit;
-  font-weight: bold;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 0.8rem 2.5rem 0.8rem 1rem;
+  border-radius: 4px;
+  border: 3px solid #023047;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23023047' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 1.2em;
+  color: #023047;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s;
+  box-shadow: 4px 4px 0 rgba(2, 48, 71, 0.2);
+  transition: all 0.2s;
 }
 
 select:hover {
-  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 6px 6px 0 rgba(2, 48, 71, 0.2);
 }
 
-select option {
-  background: #333;
-  color: white;
+select:focus {
+  outline: none;
+  border-color: #219ebc;
+  box-shadow: 0 0 0 3px rgba(33, 158, 188, 0.3);
 }
 
 .start-button {
   width: 100%;
   padding: 1rem;
   margin-top: 1rem;
-  background: linear-gradient(45deg, #FF512F 0%, #DD2476 100%); /* Vibrant gradient */
-  border: none;
-  border-radius: 2rem;
-  color: white;
+  /* Gintama Silver/Blue Theme */
+  background: linear-gradient(135deg, #e0e1dd 0%, #a9d6e5 100%);
+  border: 4px solid #023047;
+  border-radius: 8px;
+  color: #023047;
   font-size: 1.5rem;
-  font-weight: 800;
+  font-family: 'Mochiy Pop P One', sans-serif;
   text-transform: uppercase;
   letter-spacing: 2px;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(221, 36, 118, 0.5);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 6px 0px #023047; /* Retro 3D effect */
+  transition: transform 0.1s, box-shadow 0.1s;
 }
 
 .start-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(221, 36, 118, 0.6);
+  box-shadow: 0 8px 0px #023047;
 }
 
 .start-button:active {
-  transform: translateY(1px);
+  transform: translateY(4px);
+  box-shadow: 0 0 0 #023047;
 }
 
 /* --- HUD Elements --- */
@@ -186,36 +226,37 @@ select option {
 }
 
 .hud-item {
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
+  background: rgba(2, 48, 71, 0.9);
   padding: 0.5rem 1rem;
-  border-radius: 999px;
+  border-radius: 4px;
+  /* Manga speech bubble style */
+  clip-path: polygon(
+    0% 0%, 100% 0%, 100% 100%, 10% 100%, 0% 80%
+  );
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 5px solid #fb8500; /* Orange highlight */
   color: white;
   font-weight: 600;
   font-size: 1.2rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
+  font-family: 'Mochiy Pop P One', cursive;
 }
 
 .hud-item.urgent {
-    border-color: #ff4500;
-    box-shadow: 0 0 15px rgba(255, 69, 0, 0.5);
-    animation: pulseRed 1s infinite;
+    border-color: #ff0000;
+    box-shadow: 0 0 15px rgba(255, 69, 0, 0.8);
+    animation: pulseRed 0.5s infinite alternate;
 }
 
 @keyframes pulseRed {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+    from { transform: scale(1); background: rgba(255,0,0,0.8); }
+    to { transform: scale(1.05); background: rgba(150,0,0,0.9); }
 }
 
-/* Turn Indicator (Now flexible) */
+/* Turn Indicator */
 .turn-indicator-wrapper {
-  /* No longer absolute */
   display: flex;
   justify-content: center;
 }
@@ -224,25 +265,43 @@ select option {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1.2rem;
-  border-radius: 2rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
   font-weight: 800;
   text-transform: uppercase;
-  font-size: 1.2rem;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  font-size: 1.4rem;
   letter-spacing: 1px;
+  font-family: 'Mochiy Pop P One', cursive;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Diagonal stripe effect */
+.turn-badge::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(255,255,255,0.1),
+        rgba(255,255,255,0.1) 10px,
+        transparent 10px,
+        transparent 20px
+    );
 }
 
 .turn-badge.watch {
-  background: #FFD700;
-  color: #000;
-  border: 3px solid #fff;
+  background: #ffb703;
+  color: #023047;
+  border: 4px solid #fff;
+  box-shadow: 0 0 15px #ffb703;
 }
 
 .turn-badge.play {
-  background: #00FF00;
-  color: #000;
-  border: 3px solid #fff;
+  background: #06d6a0;
+  color: #023047;
+  border: 4px solid #fff;
+  box-shadow: 0 0 15px #06d6a0;
 }
 
 /* Streak Display */
@@ -256,13 +315,12 @@ select option {
     gap: 0.5rem;
     pointer-events: none;
     z-index: 15;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(255, 255, 255, 0.9);
     padding: 0.5rem 1.5rem;
-    border-radius: 1.5rem;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 69, 0, 0.5);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    transform-origin: bottom right;
+    border-radius: 8px;
+    border: 3px solid #023047;
+    box-shadow: 6px 6px 0px #023047;
+    transform: rotate(-5deg);
 }
 
 .streak-text {
@@ -272,82 +330,90 @@ select option {
 }
 
 .streak-count {
-    font-size: 2.8rem;
+    font-size: 3rem;
     font-weight: 900;
-    color: #ff4500;
-    text-shadow: 0 0 15px rgba(255, 69, 0, 0.8), 2px 2px 0px black;
-    line-height: 0.9;
+    color: #d00000;
+    text-shadow: 2px 2px 0px #000;
+    font-family: 'Mochiy Pop P One', cursive;
 }
 
 .streak-label {
     font-size: 0.9rem;
     font-weight: bold;
-    color: #ffd700;
+    color: #023047;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 1px 1px 0px black;
+    letter-spacing: 1px;
 }
 
-/* Feedback Overlay */
+/* Feedback Overlay - Manga Style */
 .feedback-message {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 4rem; /* Bigger for fun */
+    font-size: 3.5rem;
     font-weight: 900;
     text-align: center;
     z-index: 100;
     pointer-events: none;
     white-space: nowrap;
-    text-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    padding: 2.5rem;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(8px);
-    border-radius: 30px;
-    border: 3px solid rgba(255,255,255,0.2);
+
+    padding: 2rem 3rem;
+    background: #fff;
+    color: #000;
+    border: 5px solid #000;
+
+    /* jagged edges simulation or comic box */
+    clip-path: polygon(
+        0% 10%, 5% 0%, 95% 0%, 100% 10%,
+        100% 90%, 95% 100%, 5% 100%, 0% 90%
+    );
+
+    font-family: 'Mochiy Pop P One', cursive;
+    box-shadow: 10px 10px 0 rgba(0,0,0,0.5);
 }
 
 .feedback-success {
-    color: #00ff00;
-    text-shadow: 0 0 25px #00ff00, 3px 3px 0 #000;
-    border-color: #00ff00;
+    color: #023047;
+    background: #ffb703;
 }
 
 .feedback-error {
-    color: #ff0000;
-    text-shadow: 0 0 25px #ff0000, 3px 3px 0 #000;
-    border-color: #ff0000;
+    color: #fff;
+    background: #d00000;
+    animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
 }
 
 .feedback-warning {
-    color: #ff8800;
-    text-shadow: 0 0 25px #ff8800, 3px 3px 0 #000;
-    animation: shake 0.5s infinite;
+    color: #000;
+    background: #fff;
+    border-color: #d00000;
 }
 
 .feedback-info {
-    color: #00bfff;
-    text-shadow: 0 0 25px #00bfff, 3px 3px 0 #000;
+    color: #023047;
+    background: #8ecae6;
 }
 
 @keyframes shake {
-  0% { transform: translate(-50%, -50%) rotate(0deg); }
-  25% { transform: translate(-52%, -50%) rotate(-5deg); }
-  75% { transform: translate(-48%, -50%) rotate(5deg); }
-  100% { transform: translate(-50%, -50%) rotate(0deg); }
+  10%, 90% { transform: translate(-53%, -50%); }
+  20%, 80% { transform: translate(-47%, -50%); }
+  30%, 50%, 70% { transform: translate(-53%, -50%); }
+  40%, 60% { transform: translate(-47%, -50%); }
 }
 
-/* Game Board Modernization */
+/* Game Board */
 .game-board {
   position: relative;
-  /* Responsive sizing: max 320px, but shrink on smaller screens */
-  width: min(340px, 85vw);
-  height: min(340px, 85vw);
+  width: min(360px, 85vw);
+  height: min(360px, 85vw);
   border-radius: 50%;
-  background: #222;
-  box-shadow: 0 15px 60px rgba(0,0,0,0.7);
-  padding: 12px;
+  /* Wood/Silver frame */
+  background: #ced4da;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.5),
+    inset 0 0 0 10px #6c757d;
+  padding: 15px;
 }
 
 .simon-circle {
@@ -356,6 +422,8 @@ select option {
   height: 100%;
   border-radius: 50%;
   overflow: hidden;
+  border: 5px solid #343a40;
+  box-sizing: border-box;
 }
 
 /* Common button styles */
@@ -365,32 +433,28 @@ select option {
   height: 50%;
   border: none;
   cursor: pointer;
-  opacity: 0.6;
-  transition: opacity 0.1s, filter 0.1s, transform 0.1s;
-  background-size: cover !important;
-  background-position: center !important;
+  opacity: 0.8;
+  transition: all 0.1s;
+  /* Add subtle texture */
+  background-image: radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, transparent 70%);
 }
 
 /* Button Positioning */
-.btn-vermelho { top: 0; left: 0; border-radius: 100% 0 0 0; background-color: #ff0000; }
-.btn-verde { top: 0; right: 0; border-radius: 0 100% 0 0; background-color: #00ff00; }
-.btn-azul { bottom: 0; left: 0; border-radius: 0 0 0 100%; background-color: #0000ff; }
-.btn-amarelo { bottom: 0; right: 0; border-radius: 0 0 100% 0; background-color: #ffff00; }
+.btn-vermelho { top: 0; left: 0; border-right: 2px solid #343a40; border-bottom: 2px solid #343a40; background-color: #ef233c; } /* Red (Kagura) */
+.btn-verde { top: 0; right: 0; border-left: 2px solid #343a40; border-bottom: 2px solid #343a40; background-color: #38b000; } /* Green (Standard) */
+.btn-azul { bottom: 0; left: 0; border-right: 2px solid #343a40; border-top: 2px solid #343a40; background-color: #4361ee; } /* Blue (Shinpachi) */
+.btn-amarelo { bottom: 0; right: 0; border-left: 2px solid #343a40; border-top: 2px solid #343a40; background-color: #ffcc00; } /* Yellow (Sadaharu collar?) */
 
 /* Active State (Glow) */
 .game-btn.active {
   opacity: 1;
-  filter: brightness(1.5) drop-shadow(0 0 40px currentColor);
+  filter: brightness(1.3);
+  box-shadow: inset 0 0 30px rgba(255,255,255,0.8);
   z-index: 2;
 }
 
-.btn-vermelho.active { color: #ff0000; }
-.btn-verde.active { color: #00ff00; }
-.btn-azul.active { color: #0000ff; }
-.btn-amarelo.active { color: #ffff00; }
-
 .game-btn:active {
-  transform: scale(0.96);
+  transform: scale(0.98);
 }
 
 /* Center circle (decoration) */
@@ -398,13 +462,14 @@ select option {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 25%;
-  height: 25%;
-  background: #1a1a2e;
+  width: 30%;
+  height: 30%;
+  background: #fff;
+  border: 5px solid #343a40;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   z-index: 5;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -413,7 +478,7 @@ select option {
 .center-logo {
   width: 70%;
   height: auto;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 /* Kagura Bonus */
@@ -447,8 +512,7 @@ select option {
 .game-over-overlay {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(5px);
+  background: rgba(0, 0, 0, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -456,50 +520,58 @@ select option {
   animation: fadeIn 0.5s;
 }
 
-/* Glitch Effect for Game Over text? Maybe later. For now just standard */
 .game-over-content {
-  background: rgba(255, 255, 255, 0.1);
+  background: #fff;
   padding: 3rem;
-  border-radius: 2rem;
+  border-radius: 8px;
   text-align: center;
-  color: white;
-  border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  color: #000;
+  border: 8px solid #000;
+  box-shadow: 15px 15px 0 #d00000;
+  max-width: 90%;
 }
 
 .game-over-content h2 {
+    font-family: 'Mochiy Pop P One', cursive;
     font-size: 3rem;
     margin: 0 0 1rem 0;
-    color: #FF512F;
+    color: #d00000;
+    text-transform: uppercase;
 }
 
 .restart-button {
   padding: 1rem 2rem;
   font-size: 1.2rem;
-  background: #fff;
-  color: #333;
+  background: #023047;
+  color: #fff;
   border: none;
-  border-radius: 2rem;
+  border-radius: 4px;
   cursor: pointer;
   margin-top: 2rem;
-  font-weight: 800;
+  font-family: 'Mochiy Pop P One', cursive;
+  text-transform: uppercase;
   transition: transform 0.2s;
+  box-shadow: 0 4px 0 #000;
 }
 
 .restart-button:hover {
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #000;
+}
+
+.restart-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 #000;
 }
 
 /* Urgency Pulse */
 .urgent-pulse {
-  animation: screenPulse 0.8s infinite;
-  box-shadow: inset 0 0 50px rgba(255, 0, 0, 0.5);
+  animation: screenPulse 0.5s infinite alternate;
 }
 
 @keyframes screenPulse {
-  0% { box-shadow: inset 0 0 20px rgba(255, 0, 0, 0.2); }
-  50% { box-shadow: inset 0 0 80px rgba(255, 0, 0, 0.6); }
-  100% { box-shadow: inset 0 0 20px rgba(255, 0, 0, 0.2); }
+  0% { box-shadow: inset 0 0 0px rgba(255, 0, 0, 0); }
+  100% { box-shadow: inset 0 0 50px rgba(255, 0, 0, 0.5); }
 }
 
 /* Screen Shake (Error) */
@@ -508,10 +580,10 @@ select option {
 }
 
 @keyframes shakeScreen {
-  10%, 90% { transform: translate3d(-1px, 0, 0); }
-  20%, 80% { transform: translate3d(2px, 0, 0); }
-  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-  40%, 60% { transform: translate3d(4px, 0, 0); }
+  10%, 90% { transform: translate3d(-2px, 0, 0); }
+  20%, 80% { transform: translate3d(4px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+  40%, 60% { transform: translate3d(6px, 0, 0); }
 }
 
 /* Mobile Adjustments */
@@ -521,7 +593,7 @@ select option {
       padding: 0.5rem;
       flex-direction: column;
       gap: 0.5rem;
-      background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, transparent 100%);
+      background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
   }
 
   .hud-group {
@@ -533,28 +605,22 @@ select option {
   .hud-item {
       padding: 0.3rem 0.8rem;
       font-size: 0.9rem;
-      border-radius: 8px;
-  }
-
-  /* Hide difficulty label on mobile to save space if needed, or keep it */
-  .hud-value-small {
-      font-size: 0.8rem;
   }
 
   /* Game Layout */
   .game-layout {
-      /* Less top padding needed because HUD is tighter */
       padding-top: 100px;
-      justify-content: flex-start; /* Move game board up */
+      justify-content: flex-start;
   }
 
   .indicator-area {
       margin-bottom: 1rem;
+      height: 40px;
   }
 
   .game-board {
-      width: min(300px, 85vw);
-      height: min(300px, 85vw);
+      width: min(320px, 90vw);
+      height: min(320px, 90vw);
   }
 
   .streak-display {
@@ -562,13 +628,13 @@ select option {
       bottom: 20px;
       right: auto;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translateX(-50%) rotate(0deg);
       width: max-content;
       transform-origin: bottom center;
   }
 
   .feedback-message {
-      font-size: 2.5rem;
+      font-size: 2.2rem;
       padding: 1.5rem;
       width: 85%;
   }
@@ -579,7 +645,7 @@ select option {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.9);
   border: 1px solid #444;
   padding: 10px;
   border-radius: 5px;
@@ -589,39 +655,4 @@ select option {
   z-index: 1001;
   width: 240px;
   pointer-events: auto;
-}
-
-.debug-panel h3 {
-  margin: 0 0 5px 0;
-  color: #fff;
-  border-bottom: 1px solid #555;
-  padding-bottom: 2px;
-}
-
-.debug-info {
-  margin-bottom: 10px;
-}
-
-.debug-info div {
-  margin-bottom: 2px;
-}
-
-.debug-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-
-.debug-controls button {
-  background: #333;
-  color: #fff;
-  border: 1px solid #555;
-  padding: 2px 5px;
-  cursor: pointer;
-  font-size: 10px;
-  flex: 1 0 40%;
-}
-
-.debug-controls button:hover {
-  background: #555;
 }
