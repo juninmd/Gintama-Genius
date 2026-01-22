@@ -43,6 +43,9 @@ interface UseGameLogicReturn {
 }
 
 const MESSAGES_SUCCESS = [
+  "Você acertou!",
+  "Mandou bem!",
+  "Isso aí!",
   "Beba leite com morango!", // Gintoki likes sweet stuff
   "Isso é o jeito dos samurais!",
   "A alma prateada brilha!",
@@ -56,6 +59,9 @@ const MESSAGES_SUCCESS = [
 ];
 
 const MESSAGES_ERROR = [
+  "Você errou!",
+  "Tente novamente!",
+  "Errou feio!",
   "Seppuku!",
   "Você falhou, Shinpachi!",
   "Zura ja nai, Katsura da!",
@@ -67,6 +73,7 @@ const MESSAGES_ERROR = [
 ];
 
 const MESSAGES_NEW_ROUND = [
+  "Nova Rodada!",
   "Próximo episódio!",
   "Atenção, Yorozuya!",
   "Abra bem os olhos (exceto o Gin)!",
@@ -238,6 +245,11 @@ export const useGameLogic = (): UseGameLogicReturn => {
                  }
                  return newVal;
              });
+        } else {
+             // In Berserk mode, maybe give random praise for surviving?
+             if (Math.random() < 0.3) {
+                setFeedback({ message: "Incrível!", type: 'success' });
+             }
         }
 
         setTimeout(() => {

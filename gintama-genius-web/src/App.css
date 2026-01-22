@@ -29,6 +29,7 @@ body {
   align-items: center;
   justify-content: center;
   position: relative;
+  touch-action: none; /* Prevent browser zooming/scrolling */
   /* animation: bgMove 20s ease-in-out infinite alternate; */
 }
 
@@ -440,10 +441,11 @@ select:focus {
 }
 
 /* Button Positioning */
-.btn-vermelho { top: 0; left: 0; border-right: 2px solid #343a40; border-bottom: 2px solid #343a40; background-color: #ef233c; } /* Red (Kagura) */
-.btn-verde { top: 0; right: 0; border-left: 2px solid #343a40; border-bottom: 2px solid #343a40; background-color: #38b000; } /* Green (Standard) */
-.btn-azul { bottom: 0; left: 0; border-right: 2px solid #343a40; border-top: 2px solid #343a40; background-color: #4361ee; } /* Blue (Shinpachi) */
-.btn-amarelo { bottom: 0; right: 0; border-left: 2px solid #343a40; border-top: 2px solid #343a40; background-color: #ffcc00; } /* Yellow (Sadaharu collar?) */
+/* Standard Genius/Simon Layout: Green(TL), Red(TR), Yellow(BL), Blue(BR) */
+.btn-verde { top: 0; left: 0; border-right: 2px solid #343a40; border-bottom: 2px solid #343a40; background-color: #38b000; } /* Green */
+.btn-vermelho { top: 0; right: 0; border-left: 2px solid #343a40; border-bottom: 2px solid #343a40; background-color: #ef233c; } /* Red */
+.btn-amarelo { bottom: 0; left: 0; border-right: 2px solid #343a40; border-top: 2px solid #343a40; background-color: #ffcc00; } /* Yellow */
+.btn-azul { bottom: 0; right: 0; border-left: 2px solid #343a40; border-top: 2px solid #343a40; background-color: #4361ee; } /* Blue */
 
 /* Active State (Glow) */
 .game-btn.active {
@@ -454,7 +456,8 @@ select:focus {
 }
 
 .game-btn:active {
-  transform: scale(0.98);
+  transform: scale(0.95);
+  filter: brightness(1.5);
 }
 
 /* Center circle (decoration) */
@@ -638,6 +641,30 @@ select:focus {
       padding: 1.5rem;
       width: 85%;
   }
+}
+
+/* Short screens (e.g. iPhone SE, small Androids) */
+@media (max-height: 600px) {
+    .game-layout {
+        padding-top: 70px; /* Reduced from 100px */
+    }
+    .indicator-area {
+        margin-bottom: 0.5rem;
+        height: 30px;
+    }
+    .game-board {
+        width: min(280px, 80vw);
+        height: min(280px, 80vw);
+    }
+    .bottom-spacer {
+        height: 20px !important;
+    }
+    .streak-display {
+        bottom: 10px;
+        transform: scale(0.8) translateX(-50%) rotate(0deg);
+        left: 50%;
+        right: auto;
+    }
 }
 
 /* Debug Panel */
