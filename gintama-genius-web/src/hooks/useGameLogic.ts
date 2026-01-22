@@ -42,9 +42,37 @@ interface UseGameLogicReturn {
   };
 }
 
-const MESSAGES_SUCCESS = ["Boa!", "Isso!", "Genial!", "Segura!", "Vapo!", "Você acertou!", "Incrível!", "Mito!", "Na mosca!"];
-const MESSAGES_ERROR = ["Você errou!", "Puts!", "Já era!", "Fim!", "Não foi dessa vez!", "Que azar!", "Errou feio!"];
-const MESSAGES_NEW_ROUND = ["Nova rodada!", "Atenção!", "Lá vem!", "Prepare-se!", "Olho no Lance!"];
+const MESSAGES_SUCCESS = [
+  "Beba leite com morango!", // Gintoki likes sweet stuff
+  "Isso é o jeito dos samurais!",
+  "A alma prateada brilha!",
+  "Não é Zura, é Katsura!",
+  "Just Do It!", // Gintama classic
+  "Shinpachi, seus óculos brilharam!",
+  "Yorozuya Forever!",
+  "Explosão Neo Armstrong!",
+  "Você tem a alma de um samurai!",
+  "Oshi oshi oshi!", // Kagura eating
+];
+
+const MESSAGES_ERROR = [
+  "Seppuku!",
+  "Você falhou, Shinpachi!",
+  "Zura ja nai, Katsura da!",
+  "Oi oi oi!",
+  "Elizabeth está desapontado!",
+  "Madao...",
+  "Sua alma quebrou!",
+  "Vai levar uma espadada de madeira!",
+];
+
+const MESSAGES_NEW_ROUND = [
+  "Próximo episódio!",
+  "Atenção, Yorozuya!",
+  "Abra bem os olhos (exceto o Gin)!",
+  "Lá vem o pedido!",
+  "Prepare-se para o trabalho!",
+];
 
 const getRandomMessage = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
 
