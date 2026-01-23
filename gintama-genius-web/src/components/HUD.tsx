@@ -14,6 +14,12 @@ interface HUDProps {
   feedback: Feedback | null;
 }
 
+const difficultyMap: Record<string, string> = {
+  EASY: 'SHINPACHI',
+  NORMAL: 'SAMURAI',
+  BERSERK: 'YATO',
+};
+
 // 1. Top Bar (Score, Level, Time, Difficulty)
 export const HUDHeader: React.FC<Pick<HUDProps, 'score' | 'level' | 'timeLeft' | 'difficulty'>> = ({ score, level, timeLeft, difficulty }) => {
   return (
@@ -21,11 +27,27 @@ export const HUDHeader: React.FC<Pick<HUDProps, 'score' | 'level' | 'timeLeft' |
         <div className="hud-group left">
             <div className="hud-item" title="Pontuação">
                 <Trophy size={20} className="hud-icon" color="#FFD700" />
-                <span className="hud-value">{score}</span>
+                <motion.span
+                    key={score}
+                    initial={{ scale: 1 }}
+                    animate={{ scale: [1, 1.5, 1] }}
+                    transition={{ type: "spring", duration: 0.3 }}
+                    className="hud-value"
+                >
+                    {score}
+                </motion.span>
             </div>
             <div className="hud-item" title="Nível">
                 <Zap size={20} className="hud-icon" color="#00BFFF" />
-                <span className="hud-value">{level}</span>
+                <motion.span
+                    key={level}
+                    initial={{ scale: 1 }}
+                    animate={{ scale: [1, 1.5, 1], rotate: [0, 10, -10, 0] }}
+                    transition={{ type: "spring", duration: 0.4 }}
+                    className="hud-value"
+                >
+                    {level}
+                </motion.span>
             </div>
         </div>
 
@@ -36,7 +58,7 @@ export const HUDHeader: React.FC<Pick<HUDProps, 'score' | 'level' | 'timeLeft' |
             </div>
             <div className="hud-item hud-item-difficulty" title="Dificuldade">
                 <Settings size={20} className="hud-icon" />
-                <span className="hud-value-small">{difficulty}</span>
+                <span className="hud-value-small">{difficultyMap[difficulty] || difficulty}</span>
             </div>
         </div>
       </div>
