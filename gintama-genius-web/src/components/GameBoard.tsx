@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
+import confetti from 'canvas-confetti';
 import { COLORS } from '../hooks/useGameLogic';
 
 interface GameBoardProps {
@@ -13,6 +14,13 @@ const colorMap: { [key: number]: string } = {
   2: 'verde',
   3: 'azul',
   4: 'amarelo',
+};
+
+const colorHexMap: { [key: string]: string } = {
+  vermelho: '#ef233c',
+  verde: '#38b000',
+  azul: '#4361ee',
+  amarelo: '#ffcc00',
 };
 
 const GameBoard: React.FC<GameBoardProps> = ({ activeColor, onColorClick, disabled }) => {
@@ -54,10 +62,32 @@ const GameButton: React.FC<{
     disabled: boolean
 }> = ({ colorName, isActive, onClick, disabled }) => {
     const [isPressed, setIsPressed] = React.useState(false);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+
+    const triggerConfetti = () => {
+        if (buttonRef.current) {
+            const rect = buttonRef.current.getBoundingClientRect();
+            const x = (rect.left + rect.width / 2) / window.innerWidth;
+            const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+            confetti({
+                particleCount: 15,
+                spread: 40,
+                origin: { x, y },
+                colors: [colorHexMap[colorName]],
+                disableForReducedMotion: true,
+                startVelocity: 15,
+                gravity: 2,
+                scalar: 0.6,
+                ticks: 50
+            });
+        }
+    };
 
     const handleMouseDown = () => {
         if (!disabled) {
             setIsPressed(true);
+            triggerConfetti();
             onClick();
         }
     };
@@ -70,6 +100,7 @@ const GameButton: React.FC<{
         if (!disabled) {
             e.preventDefault(); // Prevent ghost clicks
             setIsPressed(true);
+            triggerConfetti();
             onClick();
         }
     }
@@ -81,6 +112,7 @@ const GameButton: React.FC<{
 
     return (
         <motion.button
+            ref={buttonRef}
             className={`game-btn btn-${colorName} ${showActive ? 'active' : ''}`}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}

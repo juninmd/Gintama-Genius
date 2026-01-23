@@ -161,8 +161,11 @@ export const useGameLogic = (): UseGameLogicReturn => {
       timer = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 10 && prev > 1) {
-            // Only update feedback if it's not already "Corra!" to avoid jitter or spam
-            setFeedback(current => current?.message === "Corra!" ? current : { message: "Corra!", type: 'warning' });
+            // Prioritize "Corra!" but respect recent success messages for a brief moment
+            setFeedback(current => {
+                 if (current?.type === 'success' || current?.type === 'error') return current;
+                 return { message: "Corra!", type: 'warning' };
+            });
           }
 
           if (prev <= 1) {
@@ -229,6 +232,8 @@ export const useGameLogic = (): UseGameLogicReturn => {
           const newStreak = prev + 1;
           if (newStreak % 5 === 0) {
              setFeedback({ message: "Sequência de acertos!", type: 'success' });
+          } else if (newStreak <= 3) {
+             setFeedback({ message: "Você acertou!", type: 'success' });
           } else {
              setFeedback({ message: getRandomMessage(MESSAGES_SUCCESS), type: 'success' });
           }
