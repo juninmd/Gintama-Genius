@@ -52,10 +52,15 @@ export const HUDHeader: React.FC<Pick<HUDProps, 'score' | 'level' | 'timeLeft' |
         </div>
 
         <div className="hud-group right">
-            <div className={`hud-item ${timeLeft <= 10 ? 'urgent' : ''}`} title="Tempo">
+            <motion.div
+                className={`hud-item ${timeLeft <= 10 ? 'urgent' : ''}`}
+                title="Tempo"
+                animate={timeLeft <= 10 ? { scale: [1, 1.1, 1] } : {}}
+                transition={{ repeat: Infinity, duration: 0.5 }}
+            >
                 <Timer size={20} className="hud-icon" />
                 <span className="hud-value">{timeLeft === Infinity ? '∞' : `${timeLeft}s`}</span>
-            </div>
+            </motion.div>
             <div className="hud-item hud-item-difficulty" title="Dificuldade">
                 <Settings size={20} className="hud-icon" />
                 <span className="hud-value-small">{difficultyMap[difficulty] || difficulty}</span>
@@ -100,6 +105,15 @@ export const TurnIndicator: React.FC<{ gameState: GameState }> = ({ gameState })
 
 // 3. Streak Badge
 export const StreakBadge: React.FC<{ streak: number }> = ({ streak }) => {
+    const getStreakColor = (s: number) => {
+        if (s < 5) return "#FF4500"; // Orange
+        if (s < 10) return "#DC143C"; // Red
+        if (s < 15) return "#00BFFF"; // Blue
+        return "#9400D3"; // Purple
+    };
+
+    const color = getStreakColor(streak);
+
     return (
         <AnimatePresence>
         {streak > 1 && (
@@ -111,10 +125,10 @@ export const StreakBadge: React.FC<{ streak: number }> = ({ streak }) => {
                 key="streak-display"
             >
                 <div className="streak-icon-wrapper">
-                    <Flame size={28} color="#FF4500" fill="#FF4500" />
+                    <Flame size={28} color={color} fill={color} />
                 </div>
                 <div className="streak-text">
-                    <span className="streak-count">{streak}</span>
+                    <span className="streak-count" style={{ color: color }}>{streak}</span>
                     <span className="streak-label">COMBO</span>
                 </div>
             </motion.div>
@@ -157,9 +171,11 @@ export const FeedbackOverlay: React.FC<{ feedback: Feedback | null, streak: numb
         {feedback && (
           <motion.div
             className={`feedback-message feedback-${feedback.type}`}
-            initial={{ opacity: 0, scale: 0.5, y: '-50%', x: '-50%' }}
-            animate={{ opacity: 1, scale: 1, y: '-50%', x: '-50%' }}
-            exit={{ opacity: 0, scale: 1.2, filter: 'blur(8px)', y: '-50%', x: '-50%' }}
+            // Move to bottom area to avoid blocking the board
+            style={{ top: 'auto', bottom: '15%' }}
+            initial={{ opacity: 0, scale: 0.5, y: 50, x: '-50%' }}
+            animate={{ opacity: 1, scale: 1, y: 0, x: '-50%' }}
+            exit={{ opacity: 0, scale: 1.2, filter: 'blur(8px)', y: 50, x: '-50%' }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             key={feedback.message}
           >
