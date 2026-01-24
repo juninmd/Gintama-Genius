@@ -111,8 +111,7 @@ body {
     0 0 0 10px rgba(255, 255, 255, 0.2);
   text-align: center;
   animation: fadeIn 0.5s ease-out;
-  max-width: 90%;
-  width: 400px;
+  width: min(400px, 90vw);
   z-index: 30;
   position: relative;
   overflow: hidden;
@@ -184,6 +183,7 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   padding: 0.8rem 2.5rem 0.8rem 1rem;
+  min-height: 48px; /* Touch target */
   border-radius: 4px;
   border: 3px solid #023047;
   background-color: #fff;
@@ -214,6 +214,7 @@ select:focus {
 .start-button {
   width: 100%;
   padding: 1rem;
+  min-height: 56px; /* Touch target */
   margin-top: 1rem;
   /* Gintama Silver/Blue Theme */
   background: linear-gradient(135deg, #e0e1dd 0%, #a9d6e5 100%);
@@ -426,8 +427,8 @@ select:focus {
 /* Game Board */
 .game-board {
   position: relative;
-  width: min(360px, 85vw);
-  height: min(360px, 85vw);
+  width: min(340px, 85vw);
+  height: min(340px, 85vw);
   border-radius: 50%;
   /* Wood/Silver frame */
   background: #ced4da;

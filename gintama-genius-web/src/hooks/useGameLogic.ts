@@ -56,6 +56,11 @@ const MESSAGES_SUCCESS = [
   "Explosão Neo Armstrong!",
   "Você tem a alma de um samurai!",
   "Oshi oshi oshi!", // Kagura eating
+  "Genial!",
+  "Incrível!",
+  "Surpreendente!",
+  "Combo Yorozuya!",
+  "Elizabeth aprova!",
 ];
 
 const MESSAGES_ERROR = [
@@ -70,6 +75,9 @@ const MESSAGES_ERROR = [
   "Madao...",
   "Sua alma quebrou!",
   "Vai levar uma espadada de madeira!",
+  "Não desista!",
+  "Faltou cálcio!",
+  "Foi quase!",
 ];
 
 const MESSAGES_NEW_ROUND = [
