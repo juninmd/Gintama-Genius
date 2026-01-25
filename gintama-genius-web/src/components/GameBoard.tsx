@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { COLORS } from '../hooks/useGameLogic';
 
@@ -62,7 +62,18 @@ const GameButton: React.FC<{
     disabled: boolean
 }> = ({ colorName, isActive, onClick, disabled }) => {
     const [isPressed, setIsPressed] = React.useState(false);
+    const [popups, setPopups] = useState<{id: number, text: string}[]>([]);
     const buttonRef = useRef<HTMLButtonElement>(null);
+
+    const addPopup = () => {
+        const id = Date.now() + Math.random();
+        const texts = ["+1", "Boa!", "Isso!", "Acertou!", "Aí sim!", "Yorozuya!"];
+        const text = texts[Math.floor(Math.random() * texts.length)];
+        setPopups(prev => [...prev, {id, text}]);
+        setTimeout(() => {
+             setPopups(prev => prev.filter(p => p.id !== id));
+        }, 800);
+    };
 
     const triggerConfetti = () => {
         if (buttonRef.current) {
@@ -88,6 +99,7 @@ const GameButton: React.FC<{
         if (!disabled) {
             setIsPressed(true);
             triggerConfetti();
+            addPopup();
             onClick();
         }
     };
@@ -101,6 +113,7 @@ const GameButton: React.FC<{
             e.preventDefault(); // Prevent ghost clicks
             setIsPressed(true);
             triggerConfetti();
+            addPopup();
             onClick();
         }
     }
@@ -133,6 +146,33 @@ const GameButton: React.FC<{
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
         >
+            <AnimatePresence>
+                {popups.map(p => (
+                    <motion.div
+                        key={p.id}
+                        initial={{ opacity: 0, y: 0, scale: 0.5 }}
+                        animate={{ opacity: 1, y: -40, scale: 1.2 }}
+                        exit={{ opacity: 0, y: -60, scale: 0.8 }}
+                        transition={{ duration: 0.5 }}
+                        style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            color: '#fff',
+                            fontWeight: '900',
+                            fontSize: '1.5rem',
+                            textShadow: '2px 2px 0 #000, 0 0 10px rgba(0,0,0,0.5)',
+                            pointerEvents: 'none',
+                            zIndex: 20,
+                            whiteSpace: 'nowrap',
+                            fontFamily: "'Mochiy Pop P One', cursive"
+                        }}
+                    >
+                        {p.text}
+                    </motion.div>
+                ))}
+            </AnimatePresence>
         </motion.button>
     );
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { audioController } from '../utils/audio';
 
-export type GameState = 'IDLE' | 'PLAYING_SEQUENCE' | 'WAITING_FOR_INPUT' | 'GAME_OVER';
+export type GameState = 'IDLE' | 'PLAYING_SEQUENCE' | 'WAITING_FOR_INPUT' | 'GAME_OVER' | 'COUNTDOWN';
 
 export type Difficulty = 'BERSERK' | 'NORMAL' | 'EASY';
 export type TimeMode = '30s' | '60s' | '120s' | '240s' | 'INFINITE';
@@ -28,6 +28,7 @@ interface UseGameLogicReturn {
   kaguraActive: boolean;
   streak: number;
   feedback: Feedback | null;
+  countdownValue: number;
   startGame: (difficulty: Difficulty, timeMode: TimeMode) => void;
   handleColorClick: (color: number) => void;
   resetGame: () => void;
@@ -108,6 +109,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
   const [debugMode, setDebugMode] = useState(false);
   const [streak, setStreak] = useState(0);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
+  const [countdownValue, setCountdownValue] = useState(0);
 
   // Resume audio context on first interaction
   useEffect(() => {
@@ -137,7 +139,6 @@ export const useGameLogic = (): UseGameLogicReturn => {
 
   const startGame = (difficulty: Difficulty, timeMode: TimeMode) => {
     setSettings({ difficulty, timeMode });
-    setGameState('PLAYING_SEQUENCE');
     setScore(0);
     setLevel(0);
     setSequence([]);
@@ -148,8 +149,24 @@ export const useGameLogic = (): UseGameLogicReturn => {
     setFeedback(null);
     setTimeLeft(getInitialTime(timeMode));
 
-    playSound('novo');
-    addToSequence();
+    setGameState('COUNTDOWN');
+    setCountdownValue(3);
+
+    let count = 3;
+    const interval = setInterval(() => {
+      count -= 1;
+      setCountdownValue(count);
+      if (count <= 0) {
+        clearInterval(interval);
+        setTimeout(() => {
+            setGameState('PLAYING_SEQUENCE');
+            playSound('novo');
+            addToSequence();
+        }, 800);
+      } else {
+        // Optional: play tick sound
+      }
+    }, 1000);
   };
 
   const addToSequence = () => {
@@ -165,7 +182,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
   // Timer Effect
   useEffect(() => {
     let timer: ReturnType<typeof setInterval>;
-    if (gameState !== 'IDLE' && gameState !== 'GAME_OVER' && settings.timeMode !== 'INFINITE') {
+    if (gameState !== 'IDLE' && gameState !== 'GAME_OVER' && gameState !== 'COUNTDOWN' && settings.timeMode !== 'INFINITE') {
       timer = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 10 && prev > 1) {
@@ -363,6 +380,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
     kaguraActive,
     streak,
     feedback,
+    countdownValue,
     startGame,
     handleColorClick,
     resetGame,
