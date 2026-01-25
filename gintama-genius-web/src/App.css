@@ -370,9 +370,10 @@ select:focus {
 /* Feedback Overlay - Manga Style */
 .feedback-message {
     position: absolute;
-    top: 50%;
+    top: auto;
+    bottom: 15%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    /* transform: translateX(-50%); Handled by framer-motion */
     font-size: 3.5rem;
     font-weight: 900;
     text-align: center;
@@ -649,18 +650,20 @@ select:focus {
 
   .streak-display {
       position: absolute;
-      bottom: 20px;
+      bottom: 10px;
       right: auto;
       left: 50%;
       transform: translateX(-50%) rotate(0deg);
       width: max-content;
       transform-origin: bottom center;
+      z-index: 110;
   }
 
   .feedback-message {
       font-size: 2.2rem;
       padding: 1.5rem;
       width: 85%;
+      bottom: 25%;
   }
 }
 
