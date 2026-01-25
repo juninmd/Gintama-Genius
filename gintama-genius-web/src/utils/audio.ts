@@ -14,7 +14,6 @@ const ERROR_FREQ = 110; // A2
 class AudioController {
   private context: AudioContext | null = null;
   private buffers: { [key: string]: AudioBuffer } = {};
-  // private soundEnabled: boolean = true;
   private sounds: { [key: string]: string } = {
     1: '/assets/sounds/vermelho.wav',
     2: '/assets/sounds/verde.wav',
@@ -27,7 +26,8 @@ class AudioController {
 
   constructor() {
     this.initContext();
-    this.preloadSounds();
+    // Fire and forget preload
+    this.preloadSounds().catch(e => console.warn("Audio preload failed:", e));
   }
 
   private initContext() {
@@ -39,45 +39,53 @@ class AudioController {
       }
     } catch (e) {
       console.warn('Web Audio API not supported', e);
-      // this.soundEnabled = false;
     }
   }
 
   // Allow resuming context on first user interaction
   public resume() {
     if (this.context && this.context.state === 'suspended') {
-      this.context.resume();
+      this.context.resume().catch(e => console.warn("Failed to resume audio context:", e));
     }
   }
 
   private async preloadSounds() {
     if (!this.context) return;
 
-    for (const [key, src] of Object.entries(this.sounds)) {
-      try {
-        const response = await fetch(src);
-        const arrayBuffer = await response.arrayBuffer();
-        const audioBuffer = await this.context.decodeAudioData(arrayBuffer);
-        this.buffers[key] = audioBuffer;
-      } catch (e) {
-        console.warn(`Failed to load sound ${key}, falling back to synth.`, e);
-      }
-    }
+    const promises = Object.entries(this.sounds).map(async ([key, src]) => {
+        try {
+            const response = await fetch(src);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const arrayBuffer = await response.arrayBuffer();
+            if (this.context) {
+                 const audioBuffer = await this.context.decodeAudioData(arrayBuffer);
+                 this.buffers[key] = audioBuffer;
+            }
+        } catch (e) {
+            console.warn(`Failed to load sound ${key} (${src}), falling back to synth.`, e);
+        }
+    });
+
+    await Promise.allSettled(promises);
   }
 
   public play(key: SoundKey) {
     this.resume();
     if (!this.context) return;
 
-    // Try playing buffer first
-    if (this.buffers[key]) {
-      const source = this.context.createBufferSource();
-      source.buffer = this.buffers[key];
-      source.connect(this.context.destination);
-      source.start(0);
-    } else {
-      // Fallback to synth
-      this.playSynth(key);
+    try {
+        // Try playing buffer first
+        if (this.buffers[key]) {
+            const source = this.context.createBufferSource();
+            source.buffer = this.buffers[key];
+            source.connect(this.context.destination);
+            source.start(0);
+        } else {
+            // Fallback to synth
+            this.playSynth(key);
+        }
+    } catch (e) {
+        console.error("Error playing sound:", e);
     }
   }
 
