@@ -498,6 +498,7 @@ select:focus {
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none; /* Allows clicks to pass through to buttons */
 }
 
 .center-logo {
@@ -660,10 +661,10 @@ select:focus {
   }
 
   .feedback-message {
-      font-size: 2.2rem;
-      padding: 1.5rem;
-      width: 85%;
-      bottom: 25%;
+      font-size: 1.5rem;
+      padding: 1rem;
+      width: 90%;
+      bottom: 15%;
   }
 }
 
