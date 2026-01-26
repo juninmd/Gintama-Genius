@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { audioController } from '../utils/audio';
 
-export type GameState = 'IDLE' | 'PLAYING_SEQUENCE' | 'WAITING_FOR_INPUT' | 'GAME_OVER';
+export type GameState = 'IDLE' | 'PLAYING_SEQUENCE' | 'WAITING_FOR_INPUT' | 'GAME_OVER' | 'COUNTDOWN';
 
 export type Difficulty = 'BERSERK' | 'NORMAL' | 'EASY';
 export type TimeMode = '30s' | '60s' | '120s' | '240s' | 'INFINITE';
@@ -28,6 +28,7 @@ interface UseGameLogicReturn {
   kaguraActive: boolean;
   streak: number;
   feedback: Feedback | null;
+  countdownValue: number;
   startGame: (difficulty: Difficulty, timeMode: TimeMode) => void;
   handleColorClick: (color: number) => void;
   resetGame: () => void;
@@ -108,6 +109,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
   const [debugMode, setDebugMode] = useState(false);
   const [streak, setStreak] = useState(0);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
+  const [countdownValue, setCountdownValue] = useState(0);
 
   // New State for sequence playback
   const [playbackIndex, setPlaybackIndex] = useState<number>(-1);
@@ -182,16 +184,9 @@ export const useGameLogic = (): UseGameLogicReturn => {
 
   // Timer Effect
   useEffect(() => {
-    if (gameState === 'IDLE' || gameState === 'GAME_OVER' || settings.timeMode === 'INFINITE') {
-        if (timerRef.current) clearInterval(timerRef.current);
-        return;
-    }
-
-    // Only countdown if we are NOT waiting for the sequence to play?
-    // Usually timer runs during user input, or total game time?
-    // Assuming total game time based on "TimeMode".
-
-    timerRef.current = setInterval(() => {
+    let timer: ReturnType<typeof setInterval>;
+    if (gameState !== 'IDLE' && gameState !== 'GAME_OVER' && gameState !== 'COUNTDOWN' && settings.timeMode !== 'INFINITE') {
+      timer = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 10 && prev > 1) {
              // Avoid spamming feedback if it's already urgent
@@ -416,6 +411,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
     kaguraActive,
     streak,
     feedback,
+    countdownValue,
     startGame,
     handleColorClick,
     resetGame,

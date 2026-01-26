@@ -171,8 +171,6 @@ export const FeedbackOverlay: React.FC<{ feedback: Feedback | null, streak: numb
         {feedback && (
           <motion.div
             className={`feedback-message feedback-${feedback.type}`}
-            // Move to bottom area to avoid blocking the board
-            style={{ top: 'auto', bottom: '15%' }}
             initial={{ opacity: 0, scale: 0.5, y: 50, x: '-50%' }}
             animate={{ opacity: 1, scale: 1, y: 0, x: '-50%' }}
             exit={{ opacity: 0, scale: 1.2, filter: 'blur(8px)', y: 50, x: '-50%' }}

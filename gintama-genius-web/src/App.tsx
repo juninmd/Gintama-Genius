@@ -5,6 +5,7 @@ import GameBoard from './components/GameBoard';
 import { HUDHeader, TurnIndicator, StreakBadge, FeedbackOverlay } from './components/HUD';
 import GameOver from './components/GameOver';
 import DebugPanel from './components/DebugPanel';
+import Countdown from './components/Countdown';
 
 function App() {
   const {
@@ -19,6 +20,7 @@ function App() {
     userInputIndex,
     streak,
     feedback,
+    countdownValue,
     debugActions,
     startGame,
     handleColorClick,
@@ -84,6 +86,7 @@ function App() {
       {/* Overlays */}
       {gameState !== 'IDLE' && (
         <>
+            {gameState === 'COUNTDOWN' && <Countdown value={countdownValue} />}
             <StreakBadge streak={streak} />
             <FeedbackOverlay feedback={feedback} streak={streak} />
 
