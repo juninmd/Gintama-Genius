@@ -95,8 +95,9 @@ const GameButton: React.FC<{
         }
     };
 
-    const handleMouseDown = () => {
+    const handlePointerDown = (e: React.PointerEvent) => {
         if (!disabled) {
+            e.preventDefault(); // Critical for preventing ghost clicks and scrolling
             setIsPressed(true);
             triggerConfetti();
             addPopup();
@@ -104,19 +105,9 @@ const GameButton: React.FC<{
         }
     };
 
-    const handleMouseUp = () => {
+    const handlePointerUp = () => {
         setIsPressed(false);
     };
-
-    const handleTouchStart = (e: React.TouchEvent) => {
-        if (!disabled) {
-            e.preventDefault(); // Prevent ghost clicks
-            setIsPressed(true);
-            triggerConfetti();
-            addPopup();
-            onClick();
-        }
-    }
 
     const showActive = isActive || isPressed;
     const imgSrc = showActive
@@ -127,17 +118,15 @@ const GameButton: React.FC<{
         <motion.button
             ref={buttonRef}
             className={`game-btn btn-${colorName} ${showActive ? 'active' : ''}`}
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleMouseUp}
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
+            onPointerLeave={handlePointerUp}
             style={{
                 backgroundImage: `url(${imgSrc})`,
                 cursor: disabled ? 'default' : 'pointer',
-                // Explicitly set background size again to be safe with motion override quirks
                 backgroundSize: 'cover',
-                backgroundPosition: 'center'
+                backgroundPosition: 'center',
+                touchAction: 'none' // DISBALE BROWSER GESTURES
             }}
             animate={{
                 scale: showActive ? 1.05 : 1,
