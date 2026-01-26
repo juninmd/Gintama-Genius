@@ -27,6 +27,7 @@ interface UseGameLogicReturn {
   };
   kaguraActive: boolean;
   streak: number;
+  highScore: number;
   feedback: Feedback | null;
   countdownValue: number;
   startGame: (difficulty: Difficulty, timeMode: TimeMode) => void;
@@ -108,6 +109,13 @@ export const useGameLogic = (): UseGameLogicReturn => {
   const [kaguraActive, setKaguraActive] = useState(false);
   const [debugMode, setDebugMode] = useState(false);
   const [streak, setStreak] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    try {
+        return Number(localStorage.getItem('gintama_highscore')) || 0;
+    } catch {
+        return 0;
+    }
+  });
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [countdownValue, setCountdownValue] = useState(0);
 
@@ -165,10 +173,25 @@ export const useGameLogic = (): UseGameLogicReturn => {
     const firstColor = Math.floor(Math.random() * 4) + 1;
     setSequence([firstColor]);
 
-    setGameState('PLAYING_SEQUENCE');
-    setFeedback({ message: getRandomMessage(MESSAGES_NEW_ROUND), type: 'info' });
-    setTimeout(() => setFeedback(null), 1500);
+    setGameState('COUNTDOWN');
+    setCountdownValue(3);
   };
+
+  // Countdown Logic
+  useEffect(() => {
+    if (gameState === 'COUNTDOWN' && countdownValue > 0) {
+        const timer = setTimeout(() => setCountdownValue(prev => prev - 1), 1000);
+        return () => clearTimeout(timer);
+    } else if (gameState === 'COUNTDOWN' && countdownValue === 0) {
+        // Defer to avoid cascading render warning
+        const t = setTimeout(() => {
+            setGameState('PLAYING_SEQUENCE');
+            setFeedback({ message: getRandomMessage(MESSAGES_NEW_ROUND), type: 'info' });
+            setTimeout(() => setFeedback(null), 1500);
+        }, 0);
+        return () => clearTimeout(t);
+    }
+  }, [gameState, countdownValue]);
 
   const addToSequence = () => {
     const nextColor = Math.floor(Math.random() * 4) + 1;
@@ -181,6 +204,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
         setTimeout(() => setFeedback(null), 1500);
     }, 200);
   };
+
 
   // Timer Effect
   useEffect(() => {
@@ -205,7 +229,9 @@ export const useGameLogic = (): UseGameLogicReturn => {
           }
           return prev - 1;
         });
-    }, 1000);
+      }, 1000);
+      timerRef.current = timer;
+    }
 
     return () => {
         if (timerRef.current) clearInterval(timerRef.current);
@@ -280,7 +306,18 @@ export const useGameLogic = (): UseGameLogicReturn => {
 
       if (nextIndex === sequence.length) {
         // Completed sequence
-        setScore(prev => prev + 1);
+        setScore(prev => {
+            const newScore = prev + 1;
+            if (newScore > highScore) {
+                setHighScore(newScore);
+                try {
+                    localStorage.setItem('gintama_highscore', newScore.toString());
+                } catch (e) {
+                    console.warn('Failed to save highscore', e);
+                }
+            }
+            return newScore;
+        });
         setLevel(prev => prev + 1);
         setKaguraCount(prev => prev + 1);
 
@@ -325,7 +362,18 @@ export const useGameLogic = (): UseGameLogicReturn => {
         }, 1000);
       } else {
          // Correct input, but sequence not finished.
-         setScore(prev => prev + 1);
+         setScore(prev => {
+            const newScore = prev + 1;
+            if (newScore > highScore) {
+                setHighScore(newScore);
+                try {
+                    localStorage.setItem('gintama_highscore', newScore.toString());
+                } catch (e) {
+                    console.warn('Failed to save highscore', e);
+                }
+            }
+            return newScore;
+         });
          setStreak(prev => {
             const newStreak = prev + 1;
             // Feedback for mid-sequence milestones?
@@ -410,6 +458,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
     settings,
     kaguraActive,
     streak,
+    highScore,
     feedback,
     countdownValue,
     startGame,
