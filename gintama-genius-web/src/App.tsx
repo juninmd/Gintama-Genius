@@ -19,6 +19,7 @@ function App() {
     sequence,
     userInputIndex,
     streak,
+    highScore,
     feedback,
     countdownValue,
     debugActions,
@@ -99,7 +100,7 @@ function App() {
       )}
 
       {gameState === 'GAME_OVER' && (
-        <GameOver score={score} onRestart={resetGame} />
+        <GameOver score={score} highScore={highScore} onRestart={resetGame} />
       )}
     </div>
   );

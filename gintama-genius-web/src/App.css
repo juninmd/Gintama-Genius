@@ -16,6 +16,7 @@ body {
 .app-container {
   width: 100vw;
   height: 100vh;
+  height: 100dvh; /* Mobile browser friendly */
   /* Japanese Wave Pattern via CSS Gradients */
   background-color: #8ecae6;
   background-image:
