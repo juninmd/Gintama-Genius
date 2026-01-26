@@ -1,0 +1,13 @@
+
+> gintama-genius-web@0.0.0 dev
+> vite --port 3000 --host 0.0.0.0
+
+
+  VITE v7.3.1  ready in 349 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: http://192.168.0.2:3000/
+9:58:29 AM [vite] (client) hmr update /src/App.tsx, /src/components/GameBoard.tsx
+9:59:40 AM [vite] (client) hmr update /src/App.tsx, /src/components/GameBoard.tsx
+1:01:29 PM [vite] (client) hmr update /src/App.css
+1:02:28 PM [vite] (client) hmr update /src/App.css
