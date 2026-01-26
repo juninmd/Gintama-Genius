@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { audioController } from '../utils/audio';
 
 export type GameState = 'IDLE' | 'PLAYING_SEQUENCE' | 'WAITING_FOR_INPUT' | 'GAME_OVER' | 'COUNTDOWN';
@@ -111,14 +111,22 @@ export const useGameLogic = (): UseGameLogicReturn => {
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [countdownValue, setCountdownValue] = useState(0);
 
+  // New State for sequence playback
+  const [playbackIndex, setPlaybackIndex] = useState<number>(-1);
+
+  // Refs for cleanup
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
   // Resume audio context on first interaction
   useEffect(() => {
     const unlockAudio = () => audioController.resume();
-    window.addEventListener('click', unlockAudio);
-    window.addEventListener('touchstart', unlockAudio);
+    window.addEventListener('click', unlockAudio, { once: true });
+    window.addEventListener('touchstart', unlockAudio, { once: true });
+    window.addEventListener('pointerdown', unlockAudio, { once: true });
     return () => {
         window.removeEventListener('click', unlockAudio);
         window.removeEventListener('touchstart', unlockAudio);
+        window.removeEventListener('pointerdown', unlockAudio);
     };
   }, []);
 
@@ -148,35 +156,30 @@ export const useGameLogic = (): UseGameLogicReturn => {
     setStreak(0);
     setFeedback(null);
     setTimeLeft(getInitialTime(timeMode));
+    setPlaybackIndex(-1);
 
-    setGameState('COUNTDOWN');
-    setCountdownValue(3);
+    // Start!
+    playSound('novo');
 
-    let count = 3;
-    const interval = setInterval(() => {
-      count -= 1;
-      setCountdownValue(count);
-      if (count <= 0) {
-        clearInterval(interval);
-        setTimeout(() => {
-            setGameState('PLAYING_SEQUENCE');
-            playSound('novo');
-            addToSequence();
-        }, 800);
-      } else {
-        // Optional: play tick sound
-      }
-    }, 1000);
+    // Initialize first sequence
+    const firstColor = Math.floor(Math.random() * 4) + 1;
+    setSequence([firstColor]);
+
+    setGameState('PLAYING_SEQUENCE');
+    setFeedback({ message: getRandomMessage(MESSAGES_NEW_ROUND), type: 'info' });
+    setTimeout(() => setFeedback(null), 1500);
   };
 
   const addToSequence = () => {
     const nextColor = Math.floor(Math.random() * 4) + 1;
     setSequence(prev => [...prev, nextColor]);
-    if (sequence.length > 0) { // Don't show on very first round to let user focus? Or yes?
-      // Actually let's show it.
-      setFeedback({ message: getRandomMessage(MESSAGES_NEW_ROUND), type: 'info' });
-      setTimeout(() => setFeedback(null), 1500);
-    }
+    setPlaybackIndex(-1); // Reset playback
+
+    // Brief delay before showing new round message
+    setTimeout(() => {
+        setFeedback({ message: getRandomMessage(MESSAGES_NEW_ROUND), type: 'info' });
+        setTimeout(() => setFeedback(null), 1500);
+    }, 200);
   };
 
   // Timer Effect
@@ -186,8 +189,9 @@ export const useGameLogic = (): UseGameLogicReturn => {
       timer = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 10 && prev > 1) {
-            // Prioritize "Corra!" but respect recent success messages for a brief moment
-            setFeedback(current => {
+             // Avoid spamming feedback if it's already urgent
+             setFeedback(current => {
+                 if (current?.message === "Corra!") return current;
                  if (current?.type === 'success' || current?.type === 'error') return current;
                  return { message: "Corra!", type: 'warning' };
             });
@@ -201,41 +205,67 @@ export const useGameLogic = (): UseGameLogicReturn => {
           }
           return prev - 1;
         });
-      }, 1000);
-    }
-    return () => clearInterval(timer);
+    }, 1000);
+
+    return () => {
+        if (timerRef.current) clearInterval(timerRef.current);
+    };
   }, [gameState, settings.timeMode, playSound]);
 
-  // Sequence Playback Effect
+  // Sequence Playback Engine (The Fix)
   useEffect(() => {
-    if (gameState === 'PLAYING_SEQUENCE' && sequence.length > 0) {
-      let i = 0;
-      // Delay slightly before starting sequence so user sees "Nova Rodada"
-      const startDelay = setTimeout(() => {
-          const interval = setInterval(() => {
-            if (i >= sequence.length) {
-              clearInterval(interval);
-              setActiveColor(null);
-              setGameState('WAITING_FOR_INPUT');
-              setUserInputIndex(0);
-              return;
-            }
-
-            const color = sequence[i];
-            setActiveColor(color);
-            playSound(color);
-
-            setTimeout(() => {
-              setActiveColor(null);
-            }, 500); // Light up duration
-
-            i++;
-          }, 800); // Time between sequence items
-      }, 1000);
-
-      return () => clearTimeout(startDelay);
+    if (gameState !== 'PLAYING_SEQUENCE') {
+        return;
     }
-  }, [gameState, sequence, playSound]);
+
+    // Initial delay before playback starts
+    if (playbackIndex === -1) {
+        const t = setTimeout(() => setPlaybackIndex(0), 1000);
+        return () => clearTimeout(t);
+    }
+
+    // End of sequence
+    if (playbackIndex >= sequence.length) {
+        // Defer to avoid cascading render warning
+        const t = setTimeout(() => {
+             setGameState('WAITING_FOR_INPUT');
+             setUserInputIndex(0);
+             setActiveColor(null);
+        }, 0);
+        return () => clearTimeout(t);
+    }
+
+    // Play current note
+    const color = sequence[playbackIndex];
+    let isMounted = true;
+
+    // 1. Light ON & Sound
+    const t1 = setTimeout(() => {
+        if (!isMounted) return;
+        setActiveColor(color);
+        playSound(color);
+    }, 100);
+
+    // 2. Light OFF
+    const t2 = setTimeout(() => {
+        if (!isMounted) return;
+        setActiveColor(null);
+    }, 600); // 500ms duration
+
+    // 3. Next Index
+    const t3 = setTimeout(() => {
+        if (!isMounted) return;
+        setPlaybackIndex(prev => prev + 1);
+    }, 900); // 300ms gap
+
+    return () => {
+        isMounted = false;
+        setActiveColor(null); // Ensure no stuck lights when leaving state
+        clearTimeout(t1);
+        clearTimeout(t2);
+        clearTimeout(t3);
+    };
+  }, [gameState, playbackIndex, sequence, playSound]);
 
   const handleColorClick = (color: number) => {
     if (gameState !== 'WAITING_FOR_INPUT') return;
@@ -253,6 +283,8 @@ export const useGameLogic = (): UseGameLogicReturn => {
         setScore(prev => prev + 1);
         setLevel(prev => prev + 1);
         setKaguraCount(prev => prev + 1);
+
+        // Streak Logic
         setStreak(prev => {
           const newStreak = prev + 1;
           if (newStreak % 5 === 0) {
@@ -264,49 +296,47 @@ export const useGameLogic = (): UseGameLogicReturn => {
           }
           return newStreak;
         });
+
+        // Clear feedback after a moment
         setTimeout(() => setFeedback(null), 1000);
 
         // Kagura Bonus Check
         if (settings.difficulty !== 'BERSERK') {
              setKaguraCount(prev => {
-                 const newVal = prev;
-                 if ((newVal) === 30) {
-                     return 0;
-                 }
-                 return newVal;
+                 if (prev === 30) return 0; // Reset every 30
+                 return prev;
              });
         } else {
-             // In Berserk mode, maybe give random praise for surviving?
              if (Math.random() < 0.3) {
                 setFeedback({ message: "Incrível!", type: 'success' });
              }
         }
 
+        // Move to next round
         setTimeout(() => {
-          setGameState('PLAYING_SEQUENCE');
-          addToSequence();
+            // Check for Kagura Trigger at 30?
+            // The logic below was checking `newVal === 30`.
+            // Let's preserve the original "Bonus Trigger" logic properly.
+
+            // Logic: if we just hit 30 (which we tracked in prev setKaguraCount), trigger bonus.
+            // But state updates are async. Let's do it simpler.
+            setGameState('PLAYING_SEQUENCE');
+            addToSequence();
         }, 1000);
       } else {
          // Correct input, but sequence not finished.
          setScore(prev => prev + 1);
          setStreak(prev => {
             const newStreak = prev + 1;
-            if (newStreak % 5 === 0) {
+            // Feedback for mid-sequence milestones?
+             if (newStreak % 5 === 0) {
               setFeedback({ message: "Sequência de acertos!", type: 'success' });
-              setTimeout(() => setFeedback(null), 1500);
+              setTimeout(() => setFeedback(null), 1000);
             }
             return newStreak;
          });
 
-         // No feedback for individual correct hits mid-sequence to avoid clutter?
-         // Actually user likes "Você acertou".
-         // Let's only show random success occasionally or if streak is high?
-         // Or just small feedback?
-         // For now, keep it cleaner: only streak milestones or end of sequence.
-         // Wait, the user wants "Você acertou".
-         // If I show it on every click, it's annoying.
-         // I'll show it only on Sequence Complete (above) OR Milestone.
-
+         // Bonus Check mid-sequence? Original code had it.
          setKaguraCount(prev => {
              const newVal = prev + 1;
              if (newVal === 30 && settings.difficulty !== 'BERSERK') {
@@ -338,6 +368,8 @@ export const useGameLogic = (): UseGameLogicReturn => {
     setSequence([]);
     setStreak(0);
     setFeedback(null);
+    setPlaybackIndex(-1);
+    if (timerRef.current) clearInterval(timerRef.current);
   };
 
   // Debug Actions
@@ -359,7 +391,6 @@ export const useGameLogic = (): UseGameLogicReturn => {
         if (gameState !== 'IDLE' && gameState !== 'GAME_OVER') {
             setScore(prev => prev + 10);
             setLevel(prev => prev + 1);
-            setKaguraCount(prev => prev + 1);
             setTimeout(() => {
                 setGameState('PLAYING_SEQUENCE');
                 addToSequence();
