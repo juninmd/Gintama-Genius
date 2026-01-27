@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Zap, Timer, Settings, Flame, Eye, MousePointerClick } from 'lucide-react';
+import { Trophy, Zap, Timer, Settings, Flame, Eye, MousePointerClick, AlertTriangle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import type { Feedback, GameState } from '../hooks/useGameLogic';
 
@@ -12,6 +12,7 @@ interface HUDProps {
   difficulty: string;
   streak: number;
   feedback: Feedback | null;
+  isUrgent: boolean;
 }
 
 const difficultyMap: Record<string, string> = {
@@ -129,7 +130,22 @@ export const StreakBadge: React.FC<{ streak: number }> = ({ streak }) => {
                 </div>
                 <div className="streak-text">
                     <span className="streak-count" style={{ color: color }}>{streak}</span>
-                    <span className="streak-label">COMBO</span>
+                    <span className="streak-label">SEQUÊNCIA</span>
+                     {/* Progress Bar for next milestone (every 5) */}
+                     <div style={{
+                         width: '100%',
+                         height: '4px',
+                         background: 'rgba(0,0,0,0.2)',
+                         marginTop: '2px',
+                         borderRadius: '2px',
+                         overflow: 'hidden'
+                     }}>
+                         <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${(streak % 5) * 20}%` }}
+                            style={{ height: '100%', background: color }}
+                         />
+                     </div>
                 </div>
             </motion.div>
         )}
@@ -137,7 +153,56 @@ export const StreakBadge: React.FC<{ streak: number }> = ({ streak }) => {
     );
 };
 
-// 4. Feedback Overlay (Confetti logic + Text)
+// 4. New Urgent Indicator
+export const UrgentIndicator: React.FC<{ visible: boolean }> = ({ visible }) => {
+    return (
+        <AnimatePresence>
+            {visible && (
+                <motion.div
+                    className="urgent-indicator"
+                    initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                    animate={{ opacity: 1, scale: 1.1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.8, y: 20 }}
+                    transition={{
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                        duration: 0.5
+                    }}
+                >
+                    <AlertTriangle size={32} color="#ff0000" />
+                    <span>CORRA!</span>
+                    <AlertTriangle size={32} color="#ff0000" />
+                </motion.div>
+            )}
+        </AnimatePresence>
+    );
+}
+
+// 5. New Round Banner
+export const NewRoundBanner: React.FC<{ feedback: Feedback | null }> = ({ feedback }) => {
+    const isNewRound = feedback?.message === "NOVA RODADA!" || feedback?.message === "PRÓXIMO NÍVEL!" || feedback?.message === "PREPARE-SE!";
+
+    return (
+        <AnimatePresence>
+            {isNewRound && (
+                <motion.div
+                    className="new-round-banner"
+                    initial={{ x: '-100%', opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: '100%', opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 120, damping: 20 }}
+                >
+                   <div className="banner-content">
+                       {feedback?.message}
+                   </div>
+                </motion.div>
+            )}
+        </AnimatePresence>
+    );
+}
+
+
+// 6. Feedback Overlay (Confetti logic + Text)
 export const FeedbackOverlay: React.FC<{ feedback: Feedback | null, streak: number }> = ({ feedback, streak }) => {
     useEffect(() => {
         if (feedback?.type === 'info') { // New Round
@@ -161,10 +226,10 @@ export const FeedbackOverlay: React.FC<{ feedback: Feedback | null, streak: numb
                 disableForReducedMotion: true
             });
         }
-        if (feedback?.message === "Corra!") {
-            // Subtle pulse confetti
-        }
       }, [feedback, streak]);
+
+      // Filter out messages handled by specialized components
+      if (feedback?.message === "NOVA RODADA!" || feedback?.message === "PRÓXIMO NÍVEL!" || feedback?.message === "PREPARE-SE!") return null;
 
       return (
         <AnimatePresence>
@@ -191,6 +256,8 @@ const HUD: React.FC<HUDProps> = (props) => {
             <HUDHeader {...props} />
             <TurnIndicator gameState={props.gameState} />
             <StreakBadge streak={props.streak} />
+            <UrgentIndicator visible={props.isUrgent} />
+            <NewRoundBanner feedback={props.feedback} />
             <FeedbackOverlay feedback={props.feedback} streak={props.streak} />
         </>
     );

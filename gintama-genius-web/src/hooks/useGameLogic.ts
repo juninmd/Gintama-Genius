@@ -45,7 +45,7 @@ interface UseGameLogicReturn {
 }
 
 const MESSAGES_SUCCESS = [
-  "Você acertou!",
+  "VOCÊ ACERTOU!",
   "Mandou bem!",
   "Isso aí!",
   "Beba leite com morango!", // Gintoki likes sweet stuff
@@ -66,7 +66,7 @@ const MESSAGES_SUCCESS = [
 ];
 
 const MESSAGES_ERROR = [
-  "Você errou!",
+  "VOCÊ ERROU!",
   "Tente novamente!",
   "Errou feio!",
   "Seppuku!",
@@ -83,12 +83,9 @@ const MESSAGES_ERROR = [
 ];
 
 const MESSAGES_NEW_ROUND = [
-  "Nova Rodada!",
-  "Próximo episódio!",
-  "Atenção, Yorozuya!",
-  "Abra bem os olhos (exceto o Gin)!",
-  "Lá vem o pedido!",
-  "Prepare-se para o trabalho!",
+  "NOVA RODADA!",
+  "PRÓXIMO NÍVEL!",
+  "PREPARE-SE!",
 ];
 
 const getRandomMessage = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
@@ -212,15 +209,6 @@ export const useGameLogic = (): UseGameLogicReturn => {
     if (gameState !== 'IDLE' && gameState !== 'GAME_OVER' && gameState !== 'COUNTDOWN' && settings.timeMode !== 'INFINITE') {
       timer = setInterval(() => {
         setTimeLeft(prev => {
-          if (prev <= 10 && prev > 1) {
-             // Avoid spamming feedback if it's already urgent
-             setFeedback(current => {
-                 if (current?.message === "Corra!") return current;
-                 if (current?.type === 'success' || current?.type === 'error') return current;
-                 return { message: "Corra!", type: 'warning' };
-            });
-          }
-
           if (prev <= 1) {
             setGameState('GAME_OVER');
             playSound('gameOver');
@@ -325,9 +313,9 @@ export const useGameLogic = (): UseGameLogicReturn => {
         setStreak(prev => {
           const newStreak = prev + 1;
           if (newStreak % 5 === 0) {
-             setFeedback({ message: "Sequência de acertos!", type: 'success' });
+             setFeedback({ message: "SEQUÊNCIA DE ACERTOS!", type: 'success' });
           } else if (newStreak <= 3) {
-             setFeedback({ message: "Você acertou!", type: 'success' });
+             setFeedback({ message: "VOCÊ ACERTOU!", type: 'success' });
           } else {
              setFeedback({ message: getRandomMessage(MESSAGES_SUCCESS), type: 'success' });
           }
@@ -378,7 +366,7 @@ export const useGameLogic = (): UseGameLogicReturn => {
             const newStreak = prev + 1;
             // Feedback for mid-sequence milestones?
              if (newStreak % 5 === 0) {
-              setFeedback({ message: "Sequência de acertos!", type: 'success' });
+              setFeedback({ message: "SEQUÊNCIA DE ACERTOS!", type: 'success' });
               setTimeout(() => setFeedback(null), 1000);
             }
             return newStreak;

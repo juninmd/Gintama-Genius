@@ -2,7 +2,7 @@ import './App.css';
 import { useGameLogic } from './hooks/useGameLogic';
 import Menu from './components/Menu';
 import GameBoard from './components/GameBoard';
-import { HUDHeader, TurnIndicator, StreakBadge, FeedbackOverlay } from './components/HUD';
+import { HUDHeader, TurnIndicator, StreakBadge, FeedbackOverlay, UrgentIndicator, NewRoundBanner } from './components/HUD';
 import GameOver from './components/GameOver';
 import DebugPanel from './components/DebugPanel';
 import Countdown from './components/Countdown';
@@ -88,6 +88,8 @@ function App() {
       {gameState !== 'IDLE' && (
         <>
             {gameState === 'COUNTDOWN' && <Countdown value={countdownValue} />}
+            <UrgentIndicator visible={isUrgent} />
+            <NewRoundBanner feedback={feedback} />
             <StreakBadge streak={streak} />
             <FeedbackOverlay feedback={feedback} streak={streak} />
 

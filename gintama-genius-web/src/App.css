@@ -613,52 +613,120 @@ select:focus {
   40%, 60% { transform: translate3d(6px, 0, 0); }
 }
 
+/* New Components */
+.urgent-indicator {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'Mochiy Pop P One', cursive;
+    font-size: 2.5rem;
+    color: #ff0000;
+    text-shadow: 0 0 10px rgba(0,0,0,0.8), 2px 2px 0 #000;
+    z-index: 90;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.new-round-banner {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    transform: translateY(-50%);
+    background: linear-gradient(90deg, transparent 0%, rgba(2, 48, 71, 0.95) 15%, rgba(2, 48, 71, 0.95) 85%, transparent 100%);
+    padding: 2rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+    pointer-events: none;
+    border-top: 2px solid #8ecae6;
+    border-bottom: 2px solid #8ecae6;
+}
+
+.banner-content {
+    font-family: 'Mochiy Pop P One', cursive;
+    font-size: 3rem;
+    color: #ffb703;
+    text-transform: uppercase;
+    text-shadow: 4px 4px 0 #000;
+    letter-spacing: 2px;
+}
+
 /* Mobile Adjustments */
 @media (max-width: 600px) {
-  /* Smaller Header */
+  /* Smaller Header - Grid Layout */
   .hud-header {
       padding: 0.5rem;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 0.5rem;
       background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
   }
 
   .hud-group {
       width: 100%;
-      justify-content: space-between;
+      gap: 0.5rem;
+  }
+
+  .hud-group.left {
+      justify-content: flex-start;
+  }
+  .hud-group.right {
+      justify-content: flex-end;
   }
 
   /* Compact HUD items */
   .hud-item {
-      padding: 0.3rem 0.8rem;
-      font-size: 0.9rem;
+      padding: 0.3rem 0.5rem;
+      font-size: 0.8rem;
+      min-width: 0; /* Allow shrinking */
+  }
+
+  .hud-value {
+      font-size: 1rem;
   }
 
   /* Game Layout */
   .game-layout {
-      padding-top: 100px;
+      padding-top: 90px;
       justify-content: flex-start;
   }
 
   .indicator-area {
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       height: 40px;
   }
 
   .game-board {
-      width: min(320px, 90vw);
-      height: min(320px, 90vw);
+      width: min(300px, 80vw);
+      height: min(300px, 80vw);
   }
 
   .streak-display {
       position: absolute;
-      bottom: 10px;
-      right: auto;
-      left: 50%;
-      transform: translateX(-50%) rotate(0deg);
-      width: max-content;
-      transform-origin: bottom center;
-      z-index: 110;
+      top: 100px; /* Move to top right area below header */
+      right: 10px;
+      bottom: auto;
+      left: auto;
+      transform: scale(0.8);
+      transform-origin: top right;
+      z-index: 15;
+      background: rgba(255, 255, 255, 0.9);
+      border-width: 2px;
+  }
+
+  .urgent-indicator {
+      font-size: 1.5rem;
+      bottom: 120px;
+  }
+
+  .banner-content {
+      font-size: 1.8rem;
   }
 
   .feedback-message {
