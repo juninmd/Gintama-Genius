@@ -168,6 +168,11 @@ export const UrgentIndicator: React.FC<{ visible: boolean }> = ({ visible }) => 
                         repeatType: "reverse",
                         duration: 0.5
                     }}
+                    style={{
+                        backgroundColor: 'rgba(0,0,0,0.7)',
+                        borderRadius: '8px',
+                        padding: '0.5rem 1rem'
+                    }}
                 >
                     <AlertTriangle size={32} color="#ff0000" />
                     <span>CORRA!</span>
