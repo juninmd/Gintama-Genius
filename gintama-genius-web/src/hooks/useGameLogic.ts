@@ -63,6 +63,12 @@ const MESSAGES_SUCCESS = [
   "Surpreendente!",
   "Combo Yorozuya!",
   "Elizabeth aprova!",
+  "Mais de 8000!",
+  "Quebra de Limite!",
+  "Justaway aprovado!",
+  "Bankai!... Ops, anime errado.",
+  "Sadaharu, morde ele!",
+  "O rei dos samurais!",
 ];
 
 const MESSAGES_ERROR = [
@@ -80,6 +86,10 @@ const MESSAGES_ERROR = [
   "Não desista!",
   "Faltou cálcio!",
   "Foi quase!",
+  "Neo Armstrong Cyclone Jet...",
+  "Parece que você precisa de óculos, Shinpachi.",
+  "Shogun te desaprova!",
+  "Don dake!",
 ];
 
 const MESSAGES_NEW_ROUND = [
@@ -392,8 +402,15 @@ export const useGameLogic = (): UseGameLogicReturn => {
       // Wrong
       setGameState('GAME_OVER');
       playSound('gameOver');
+
+      // Combo Breaker Check
+      if (streak > 5) {
+          setFeedback({ message: "COMBO QUEBRADO!", type: 'error' });
+      } else {
+          setFeedback({ message: getRandomMessage(MESSAGES_ERROR), type: 'error' });
+      }
+
       setStreak(0);
-      setFeedback({ message: getRandomMessage(MESSAGES_ERROR), type: 'error' });
     }
   };
 

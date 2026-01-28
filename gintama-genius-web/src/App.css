@@ -646,6 +646,7 @@ select:focus {
     pointer-events: none;
     border-top: 2px solid #8ecae6;
     border-bottom: 2px solid #8ecae6;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
 }
 
 .banner-content {
@@ -703,18 +704,18 @@ select:focus {
   }
 
   .game-board {
-      width: min(300px, 80vw);
-      height: min(300px, 80vw);
+      width: min(300px, 80vw, 45dvh);
+      height: min(300px, 80vw, 45dvh);
   }
 
   .streak-display {
       position: absolute;
-      top: 100px; /* Move to top right area below header */
+      top: auto;
       right: 10px;
-      bottom: auto;
+      bottom: 10px;
       left: auto;
-      transform: scale(0.8);
-      transform-origin: top right;
+      transform: scale(0.7);
+      transform-origin: bottom right;
       z-index: 15;
       background: rgba(255, 255, 255, 0.9);
       border-width: 2px;
@@ -722,7 +723,8 @@ select:focus {
 
   .urgent-indicator {
       font-size: 1.5rem;
-      bottom: 120px;
+      bottom: 50%;
+      transform: translate(-50%, -50%);
   }
 
   .banner-content {
