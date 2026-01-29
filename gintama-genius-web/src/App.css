@@ -75,20 +75,23 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between; /* Space out elements */
     width: 100%;
     position: relative;
     z-index: 5;
-    padding-top: 60px;
+    padding-top: 70px;
+    padding-bottom: 20px;
     box-sizing: border-box;
+    height: 100%;
 }
 
 .indicator-area {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .board-area {
@@ -96,6 +99,30 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex: 1;
+}
+
+.hud-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    min-height: 80px;
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+/* Reset positioning when inside footer */
+.hud-footer .urgent-indicator,
+.hud-footer .streak-display {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    transform: none;
+    margin: 0;
+    pointer-events: none;
 }
 
 /* --- Menu --- */
@@ -593,24 +620,24 @@ select:focus {
 
 /* Urgency Pulse */
 .urgent-pulse {
-  animation: screenPulse 0.6s infinite alternate;
+  animation: screenPulse 0.5s infinite alternate;
 }
 
 @keyframes screenPulse {
-  0% { box-shadow: inset 0 0 0px rgba(255, 0, 0, 0); }
-  100% { box-shadow: inset 0 0 100px rgba(255, 0, 0, 0.6), inset 0 0 30px rgba(255, 0, 0, 0.8); }
+  0% { box-shadow: inset 0 0 30px rgba(255, 0, 0, 0.3); border: 5px solid rgba(255,0,0,0.1); }
+  100% { box-shadow: inset 0 0 150px rgba(255, 0, 0, 0.8); border: 5px solid rgba(255,0,0,0.8); }
 }
 
 /* Screen Shake (Error) */
 .shake-screen {
-  animation: shakeScreen 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  animation: shakeScreen 0.4s cubic-bezier(.36,.07,.19,.97) both;
 }
 
 @keyframes shakeScreen {
-  10%, 90% { transform: translate3d(-2px, 0, 0); }
-  20%, 80% { transform: translate3d(4px, 0, 0); }
-  30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
-  40%, 60% { transform: translate3d(6px, 0, 0); }
+  10%, 90% { transform: translate3d(-10px, 0, 0) rotate(-1deg); }
+  20%, 80% { transform: translate3d(10px, 0, 0) rotate(1deg); }
+  30%, 50%, 70% { transform: translate3d(-10px, 0, 0) rotate(-1deg); }
+  40%, 60% { transform: translate3d(10px, 0, 0) rotate(1deg); }
 }
 
 /* New Components */
@@ -694,8 +721,8 @@ select:focus {
 
   /* Game Layout */
   .game-layout {
-      padding-top: 90px;
-      justify-content: flex-start;
+      padding-top: 85px;
+      /* On mobile, we rely on the flex separation */
   }
 
   .indicator-area {
@@ -703,28 +730,30 @@ select:focus {
       height: 40px;
   }
 
+  /* Improved Board Sizing for Mobile */
   .game-board {
-      width: min(300px, 80vw, 45dvh);
-      height: min(300px, 80vw, 45dvh);
+      width: clamp(260px, 80vw, 45dvh);
+      height: clamp(260px, 80vw, 45dvh);
   }
 
-  .streak-display {
-      position: absolute;
+  /* Force relative in footer for mobile even if specific rules exist */
+  .hud-footer .streak-display {
+      position: relative !important;
       top: auto;
-      right: 10px;
-      bottom: 10px;
+      right: auto;
+      bottom: auto;
       left: auto;
-      transform: scale(0.7);
-      transform-origin: bottom right;
-      z-index: 15;
-      background: rgba(255, 255, 255, 0.9);
-      border-width: 2px;
+      transform: scale(0.8) !important;
+      transform-origin: center;
+      margin: 0;
   }
 
-  .urgent-indicator {
-      font-size: 1.5rem;
-      bottom: 50%;
-      transform: translate(-50%, -50%);
+  .hud-footer .urgent-indicator {
+      position: relative !important;
+      bottom: auto !important;
+      left: auto !important;
+      transform: scale(0.8) !important;
+      margin: 0;
   }
 
   .banner-content {
@@ -742,24 +771,19 @@ select:focus {
 /* Short screens (e.g. iPhone SE, small Androids) */
 @media (max-height: 600px) {
     .game-layout {
-        padding-top: 70px; /* Reduced from 100px */
+        padding-top: 70px;
     }
     .indicator-area {
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.2rem;
         height: 30px;
     }
     .game-board {
-        width: min(280px, 80vw);
-        height: min(280px, 80vw);
+        width: clamp(240px, 75vw, 40dvh);
+        height: clamp(240px, 75vw, 40dvh);
     }
-    .bottom-spacer {
-        height: 20px !important;
-    }
-    .streak-display {
-        bottom: 10px;
-        transform: scale(0.8) translateX(-50%) rotate(0deg);
-        left: 50%;
-        right: auto;
+    /* Let footer handle positioning */
+    .hud-footer {
+        min-height: 60px;
     }
 }
 
