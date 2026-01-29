@@ -196,6 +196,7 @@ export const NewRoundBanner: React.FC<{ feedback: Feedback | null }> = ({ feedba
                     animate={{ x: 0, opacity: 1 }}
                     exit={{ x: '100%', opacity: 0 }}
                     transition={{ type: "spring", stiffness: 120, damping: 20 }}
+                    style={{ backdropFilter: 'blur(8px)' }}
                 >
                    <div className="banner-content">
                        {feedback?.message}

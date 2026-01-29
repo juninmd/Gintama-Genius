@@ -78,8 +78,11 @@ function App() {
                />
             </div>
 
-             {/* Spacer for bottom area if needed */}
-             <div className="bottom-spacer" style={{ height: '60px' }}></div>
+             {/* Footer area for HUD elements */}
+             <div className="hud-footer">
+                <UrgentIndicator visible={isUrgent} />
+                <StreakBadge streak={streak} />
+             </div>
           </>
         )}
       </div>
@@ -88,9 +91,7 @@ function App() {
       {gameState !== 'IDLE' && (
         <>
             {gameState === 'COUNTDOWN' && <Countdown value={countdownValue} />}
-            <UrgentIndicator visible={isUrgent} />
             <NewRoundBanner feedback={feedback} />
-            <StreakBadge streak={streak} />
             <FeedbackOverlay feedback={feedback} streak={streak} />
 
             {kaguraActive && (
