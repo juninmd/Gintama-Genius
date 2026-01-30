@@ -30,6 +30,8 @@ interface UseGameLogicReturn {
   highScore: number;
   feedback: Feedback | null;
   countdownValue: number;
+  isMuted: boolean;
+  toggleMute: () => void;
   startGame: (difficulty: Difficulty, timeMode: TimeMode) => void;
   handleColorClick: (color: number) => void;
   resetGame: () => void;
@@ -71,12 +73,25 @@ const MESSAGES_SUCCESS = [
   "MITOU!",
   "LENDÁRIO!",
   "SENSA!",
+  "PULO NO TEMPO!",
+  "MODO SHIROYASHA!",
+  "PATRIOT COMPLETO!",
+  "CUIDADO COM A MAIONESE!",
+  "É SÓ QUEBRAR O FREIO!",
+  "ZURA ESPERA!",
+  "ELIZABETH ESTÁ OLHANDO!",
 ];
 
 const MESSAGES_ERROR = [
   "VOCÊ ERROU!",
   "TENTE NOVAMENTE!",
   "ERROU FEIO!",
+  "VIROU ÓCULOS...",
+  "PARECE O MADAO!",
+  "SEM DINHEIRO PRO PACHINKO!",
+  "CORTE DE SALÁRIO!",
+  "A CULPA É DO SHOGUN!",
+  "QUEDA NO RANKING DE POPULARIDADE!",
   "SEPPUKU IMEDIATO!",
   "FALHOU, SHINPACHI!",
   "ZURA JA NAI, KATSURA DA!",
@@ -129,9 +144,15 @@ export const useGameLogic = (): UseGameLogicReturn => {
   });
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [countdownValue, setCountdownValue] = useState(0);
+  const [isMuted, setIsMuted] = useState(audioController.muted);
 
   // New State for sequence playback
   const [playbackIndex, setPlaybackIndex] = useState<number>(-1);
+
+  const toggleMute = () => {
+    const newState = audioController.toggleMute();
+    setIsMuted(newState);
+  };
 
   // Refs for cleanup
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -470,6 +491,8 @@ export const useGameLogic = (): UseGameLogicReturn => {
     highScore,
     feedback,
     countdownValue,
+    isMuted,
+    toggleMute,
     startGame,
     handleColorClick,
     resetGame,
