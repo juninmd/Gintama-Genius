@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Flame, Droplets, Zap, Leaf } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { COLORS } from '../hooks/useGameLogic';
 
@@ -21,6 +22,12 @@ const colorHexMap: { [key: string]: string } = {
   verde: '#38b000',
   azul: '#4361ee',
   amarelo: '#ffcc00',
+};
+
+const getIconTransform = () => {
+    // Buttons are already positioned. We just need to center the icon in the button div.
+    // The button div is a square quadrant.
+    return 'translate(-50%, -50%)';
 };
 
 const GameBoard: React.FC<GameBoardProps> = ({ activeColor, onColorClick, disabled }) => {
@@ -64,6 +71,19 @@ const GameButton: React.FC<{
     const [isPressed, setIsPressed] = React.useState(false);
     const [popups, setPopups] = useState<{id: number, text: string}[]>([]);
     const buttonRef = useRef<HTMLButtonElement>(null);
+
+    const getIcon = () => {
+        const props = { size: 48, color: 'rgba(255,255,255,0.6)', style: { filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' } };
+        if (isActive || isPressed) props.color = '#fff';
+
+        switch (colorName) {
+            case 'vermelho': return <Flame {...props} />;
+            case 'verde': return <Leaf {...props} />;
+            case 'azul': return <Droplets {...props} />;
+            case 'amarelo': return <Zap {...props} />;
+            default: return null;
+        }
+    };
 
     const addPopup = () => {
         const id = Date.now() + Math.random();
@@ -135,6 +155,16 @@ const GameButton: React.FC<{
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
         >
+            <div style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: getIconTransform(), // Custom offset
+                pointerEvents: 'none'
+            }}>
+                {getIcon()}
+            </div>
+
             <AnimatePresence>
                 {popups.map(p => (
                     <motion.div
