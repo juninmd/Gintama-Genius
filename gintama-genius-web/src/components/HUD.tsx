@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Zap, Timer, Settings, Flame, Eye, MousePointerClick, AlertTriangle } from 'lucide-react';
+import { Trophy, Zap, Timer, Settings, Flame, Eye, MousePointerClick, AlertTriangle, Volume2, VolumeX } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import type { Feedback, GameState } from '../hooks/useGameLogic';
 
@@ -13,6 +13,8 @@ interface HUDProps {
   streak: number;
   feedback: Feedback | null;
   isUrgent: boolean;
+  isMuted: boolean;
+  toggleMute: () => void;
 }
 
 const difficultyMap: Record<string, string> = {
@@ -22,10 +24,19 @@ const difficultyMap: Record<string, string> = {
 };
 
 // 1. Top Bar (Score, Level, Time, Difficulty)
-export const HUDHeader: React.FC<Pick<HUDProps, 'score' | 'level' | 'timeLeft' | 'difficulty'>> = ({ score, level, timeLeft, difficulty }) => {
+export const HUDHeader: React.FC<Pick<HUDProps, 'score' | 'level' | 'timeLeft' | 'difficulty' | 'isMuted' | 'toggleMute'>> = ({ score, level, timeLeft, difficulty, isMuted, toggleMute }) => {
   return (
       <div className="hud-header">
         <div className="hud-group left">
+            <button
+                onClick={toggleMute}
+                className="hud-item"
+                style={{ cursor: 'pointer', border: 'none', marginRight: '0.5rem' }}
+                title={isMuted ? "Ativar Som" : "Mudo"}
+            >
+                {isMuted ? <VolumeX size={20} className="hud-icon" color="#ef233c" /> : <Volume2 size={20} className="hud-icon" />}
+            </button>
+
             <div className="hud-item" title="Pontuação">
                 <Trophy size={20} className="hud-icon" color="#FFD700" />
                 <motion.span
