@@ -13,6 +13,7 @@ const ERROR_FREQ = 110; // A2
 
 class AudioController {
   private context: AudioContext | null = null;
+  public muted: boolean = false;
   private buffers: { [key: string]: AudioBuffer } = {};
   private sounds: { [key: string]: string } = {
     1: '/assets/sounds/vermelho.wav',
@@ -49,6 +50,11 @@ class AudioController {
     }
   }
 
+  public toggleMute(): boolean {
+      this.muted = !this.muted;
+      return this.muted;
+  }
+
   private async preloadSounds() {
     if (!this.context) return;
 
@@ -70,6 +76,7 @@ class AudioController {
   }
 
   public play(key: SoundKey) {
+    if (this.muted) return;
     this.resume();
     if (!this.context) return;
 

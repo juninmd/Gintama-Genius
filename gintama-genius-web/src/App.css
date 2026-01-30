@@ -55,10 +55,6 @@ body {
 
 /* The header stays fixed at top */
 .hud-header {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
   padding: 1rem;
   display: flex;
   justify-content: space-between;
@@ -67,6 +63,7 @@ body {
   width: 100%;
   box-sizing: border-box;
   z-index: 20;
+  flex-shrink: 0; /* Don't shrink the header */
 }
 
 /* Main flexible area for game content */
@@ -79,14 +76,13 @@ body {
     width: 100%;
     position: relative;
     z-index: 5;
-    padding-top: 70px;
-    padding-bottom: 20px;
+    padding: 1rem 0; /* Reduced padding as header is now in flow */
     box-sizing: border-box;
-    height: 100%;
+    min-height: 0; /* Important for flex containers */
 }
 
 .indicator-area {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     height: 50px;
     display: flex;
     align-items: center;
@@ -721,8 +717,8 @@ select:focus {
 
   /* Game Layout */
   .game-layout {
-      padding-top: 85px;
-      /* On mobile, we rely on the flex separation */
+      /* Padding adjusted handled by flex flow now */
+      padding: 0.5rem 0;
   }
 
   .indicator-area {
@@ -770,8 +766,8 @@ select:focus {
 
 /* Short screens (e.g. iPhone SE, small Androids) */
 @media (max-height: 600px) {
-    .game-layout {
-        padding-top: 70px;
+    .hud-header {
+        padding: 0.5rem;
     }
     .indicator-area {
         margin-bottom: 0.2rem;

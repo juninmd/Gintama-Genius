@@ -22,6 +22,8 @@ function App() {
     highScore,
     feedback,
     countdownValue,
+    isMuted,
+    toggleMute,
     debugActions,
     startGame,
     handleColorClick,
@@ -56,6 +58,8 @@ function App() {
           level={level}
           timeLeft={timeLeft}
           difficulty={settings.difficulty}
+          isMuted={isMuted}
+          toggleMute={toggleMute}
         />
       )}
 
