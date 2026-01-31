@@ -264,6 +264,10 @@ select:focus {
   box-shadow: 0 0 0 #023047;
 }
 
+.debug-toggle {
+    pointer-events: auto !important;
+}
+
 /* --- HUD Elements --- */
 
 .hud-group {
@@ -288,6 +292,7 @@ select:focus {
   font-size: 1.2rem;
   box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
   font-family: 'Mochiy Pop P One', cursive;
+  pointer-events: auto;
 }
 
 .hud-item.urgent {
@@ -728,8 +733,8 @@ select:focus {
 
   /* Improved Board Sizing for Mobile */
   .game-board {
-      width: clamp(260px, 80vw, 45dvh);
-      height: clamp(260px, 80vw, 45dvh);
+      width: clamp(260px, 80vw, 55vh);
+      height: clamp(260px, 80vw, 55vh);
   }
 
   /* Force relative in footer for mobile even if specific rules exist */
@@ -739,7 +744,6 @@ select:focus {
       right: auto;
       bottom: auto;
       left: auto;
-      transform: scale(0.8) !important;
       transform-origin: center;
       margin: 0;
   }
@@ -748,7 +752,6 @@ select:focus {
       position: relative !important;
       bottom: auto !important;
       left: auto !important;
-      transform: scale(0.8) !important;
       margin: 0;
   }
 
@@ -774,12 +777,35 @@ select:focus {
         height: 30px;
     }
     .game-board {
-        width: clamp(240px, 75vw, 40dvh);
-        height: clamp(240px, 75vw, 40dvh);
+        width: clamp(240px, 75vw, 45vh);
+        height: clamp(240px, 75vw, 45vh);
     }
     /* Let footer handle positioning */
     .hud-footer {
         min-height: 60px;
+    }
+}
+
+/* Landscape Mode for Mobile/Tablets */
+@media (max-height: 500px) and (orientation: landscape) {
+    .game-layout {
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .indicator-area {
+        height: auto;
+        margin-bottom: 0;
+    }
+    .hud-footer {
+        width: auto;
+        flex-direction: column;
+        min-height: 0;
+        gap: 1rem;
+    }
+    .game-board {
+        width: clamp(200px, 50vw, 85vh);
+        height: clamp(200px, 50vw, 85vh);
     }
 }
 
