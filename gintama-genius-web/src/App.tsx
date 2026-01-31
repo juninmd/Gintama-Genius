@@ -34,7 +34,7 @@ function App() {
   const isError = feedback?.type === 'error';
 
   return (
-    <div className={`app-container ${isUrgent ? 'urgent-pulse' : ''} ${isError ? 'shake-screen' : ''}`} style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/assets/images/fundo.png')` }}>
+    <div className={`app-container ${isUrgent ? 'urgent-pulse' : ''}`} style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/assets/images/fundo.png')` }}>
 
       <button
         className="debug-toggle"
@@ -74,7 +74,7 @@ function App() {
                 <TurnIndicator gameState={gameState} />
             </div>
 
-            <div className="board-area">
+            <div className={`board-area ${isError ? 'shake-screen' : ''}`}>
                <GameBoard
                  activeColor={activeColor}
                  onColorClick={handleColorClick}
