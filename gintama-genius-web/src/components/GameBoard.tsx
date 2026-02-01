@@ -87,7 +87,7 @@ const GameButton: React.FC<{
 
     const addPopup = () => {
         const id = Date.now() + Math.random();
-        const texts = ["+1", "Boa!", "Isso!", "Acertou!", "Aí sim!", "Yorozuya!"];
+        const texts = ["+1", "Boa!", "Isso!", "Acertou!", "Aí sim!", "Yorozuya!", "VOCÊ ACERTOU!", "BOA!"];
         const text = texts[Math.floor(Math.random() * texts.length)];
         setPopups(prev => [...prev, {id, text}]);
         setTimeout(() => {

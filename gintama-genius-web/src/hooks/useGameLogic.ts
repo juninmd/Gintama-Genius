@@ -50,6 +50,8 @@ const MESSAGES_SUCCESS = [
   "VOCÊ ACERTOU!",
   "MANDOU BEM!",
   "ISSO AÍ!",
+  "BOA!",
+  "CONTINUE ASSIM!",
   "LEITE DE MORANGO PRA VOCÊ!",
   "ALMA PRATEADA BRILHANDO!",
   "NÃO É ZURA, É KATSURA!",
@@ -88,6 +90,7 @@ const MESSAGES_SUCCESS = [
 
 const MESSAGES_ERROR = [
   "VOCÊ ERROU!",
+  "QUE PENA!",
   "TENTE NOVAMENTE!",
   "ERROU FEIO!",
   "VIROU ÓCULOS...",
@@ -357,9 +360,14 @@ export const useGameLogic = (): UseGameLogicReturn => {
           if (newStreak % 5 === 0) {
              setFeedback({ message: "SEQUÊNCIA DE ACERTOS!", type: 'success' });
           } else if (newStreak <= 3) {
-             setFeedback({ message: "VOCÊ ACERTOU!", type: 'success' });
+             // Simple feedback for early hits
+             const simple = ["VOCÊ ACERTOU!", "BOA!", "ISSO AÍ!"];
+             setFeedback({ message: simple[Math.floor(Math.random() * simple.length)], type: 'success' });
           } else {
-             setFeedback({ message: getRandomMessage(MESSAGES_SUCCESS), type: 'success' });
+             // Reduce spam for higher streaks, but still show occasionally
+             if (Math.random() < 0.3) {
+                 setFeedback({ message: getRandomMessage(MESSAGES_SUCCESS), type: 'success' });
+             }
           }
           return newStreak;
         });
