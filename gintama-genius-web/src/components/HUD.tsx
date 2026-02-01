@@ -172,7 +172,7 @@ export const UrgentIndicator: React.FC<{ visible: boolean }> = ({ visible }) => 
                 <motion.div
                     className="urgent-indicator"
                     initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                    animate={{ opacity: 1, scale: 1.1, y: 0 }}
+                    animate={{ opacity: 1, scale: [1, 1.1, 1], y: 0 }}
                     exit={{ opacity: 0, scale: 0.8, y: 20 }}
                     transition={{
                         repeat: Infinity,
@@ -180,9 +180,11 @@ export const UrgentIndicator: React.FC<{ visible: boolean }> = ({ visible }) => 
                         duration: 0.5
                     }}
                     style={{
-                        backgroundColor: 'rgba(0,0,0,0.7)',
+                        backgroundColor: 'rgba(0,0,0,0.8)',
                         borderRadius: '8px',
-                        padding: '0.5rem 1rem'
+                        padding: '0.5rem 1rem',
+                        border: '3px solid #ff0000',
+                        boxShadow: '0 0 30px rgba(255, 0, 0, 0.6)'
                     }}
                 >
                     <AlertTriangle size={32} color="#ff0000" />
@@ -203,10 +205,10 @@ export const NewRoundBanner: React.FC<{ feedback: Feedback | null }> = ({ feedba
             {isNewRound && (
                 <motion.div
                     className="new-round-banner"
-                    initial={{ x: '-100%', opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: '100%', opacity: 0 }}
-                    transition={{ type: "spring", stiffness: 120, damping: 20 }}
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: [0.5, 1.2, 1], opacity: 1 }}
+                    exit={{ scale: 1.5, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 20 }}
                     style={{ backdropFilter: 'blur(8px)' }}
                 >
                    <div className="banner-content">
@@ -253,10 +255,10 @@ export const FeedbackOverlay: React.FC<{ feedback: Feedback | null, streak: numb
         {feedback && (
           <motion.div
             className={`feedback-message feedback-${feedback.type}`}
-            initial={{ opacity: 0, scale: 0.5, y: 50, x: '-50%' }}
-            animate={{ opacity: 1, scale: 1, y: 0, x: '-50%' }}
-            exit={{ opacity: 0, scale: 1.2, filter: 'blur(8px)', y: 50, x: '-50%' }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            initial={{ opacity: 0, scale: 0.5, y: 50, x: '-50%', rotate: -5 }}
+            animate={{ opacity: 1, scale: [0.5, 1.2, 1], y: 0, x: '-50%', rotate: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: -50, x: '-50%' }}
+            transition={{ type: "spring", stiffness: 400, damping: 15 }}
             key={feedback.message}
           >
             {feedback.message}
