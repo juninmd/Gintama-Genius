@@ -11,6 +11,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./gintama-genius-web
+
     strategy:
       matrix:
         node-version: [18.x, 20.x]
@@ -26,13 +30,10 @@ jobs:
         cache-dependency-path: gintama-genius-web/package-lock.json
 
     - name: Install Dependencies
-      working-directory: ./gintama-genius-web
       run: npm ci
 
     - name: Lint
-      working-directory: ./gintama-genius-web
       run: npm run lint
 
     - name: Build
-      working-directory: ./gintama-genius-web
       run: npm run build
