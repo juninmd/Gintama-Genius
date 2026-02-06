@@ -17,17 +17,12 @@ const colorMap: { [key: number]: string } = {
   4: 'amarelo',
 };
 
+// Updated to Neon Palette
 const colorHexMap: { [key: string]: string } = {
-  vermelho: '#ef233c',
-  verde: '#38b000',
-  azul: '#4361ee',
-  amarelo: '#ffcc00',
-};
-
-const getIconTransform = () => {
-    // Buttons are already positioned. We just need to center the icon in the button div.
-    // The button div is a square quadrant.
-    return 'translate(-50%, -50%)';
+  vermelho: '#ff0055',
+  verde: '#00ff00',
+  azul: '#00f3ff',
+  amarelo: '#f9f871',
 };
 
 const GameBoard: React.FC<GameBoardProps> = ({ activeColor, onColorClick, disabled }) => {
@@ -73,8 +68,8 @@ const GameButton: React.FC<{
     const buttonRef = useRef<HTMLButtonElement>(null);
 
     const getIcon = () => {
-        const props = { size: 48, color: 'rgba(255,255,255,0.6)', style: { filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' } };
-        if (isActive || isPressed) props.color = '#fff';
+        const props = { size: 48, color: 'rgba(0,0,0,0.5)', style: { filter: 'drop-shadow(0 0 5px rgba(255,255,255,0.5))' } };
+        // In neon theme, icons should perhaps be dark on bright buttons
 
         switch (colorName) {
             case 'vermelho': return <Flame {...props} />;
@@ -87,7 +82,7 @@ const GameButton: React.FC<{
 
     const addPopup = () => {
         const id = Date.now() + Math.random();
-        const texts = ["+1", "Boa!", "Isso!", "Acertou!", "Aí sim!", "Yorozuya!", "VOCÊ ACERTOU!", "BOA!"];
+        const texts = ["+1", "NEON!", "CYBER!", "HIT!", "GOOD!", "COMBO!", "PERFECT"];
         const text = texts[Math.floor(Math.random() * texts.length)];
         setPopups(prev => [...prev, {id, text}]);
         setTimeout(() => {
@@ -102,22 +97,23 @@ const GameButton: React.FC<{
             const y = (rect.top + rect.height / 2) / window.innerHeight;
 
             confetti({
-                particleCount: 15,
-                spread: 40,
+                particleCount: 20,
+                spread: 50,
                 origin: { x, y },
                 colors: [colorHexMap[colorName]],
                 disableForReducedMotion: true,
-                startVelocity: 15,
-                gravity: 2,
-                scalar: 0.6,
-                ticks: 50
+                startVelocity: 20,
+                gravity: 1.5,
+                scalar: 0.8,
+                ticks: 50,
+                shapes: ['circle', 'square']
             });
         }
     };
 
     const handlePointerDown = (e: React.PointerEvent) => {
         if (!disabled) {
-            e.preventDefault(); // Critical for preventing ghost clicks and scrolling
+            e.preventDefault();
             setIsPressed(true);
             triggerConfetti();
             addPopup();
@@ -130,9 +126,6 @@ const GameButton: React.FC<{
     };
 
     const showActive = isActive || isPressed;
-    const imgSrc = showActive
-        ? `/assets/images/${colorName}_on.png`
-        : `/assets/images/${colorName}.png`;
 
     return (
         <motion.button
@@ -142,24 +135,19 @@ const GameButton: React.FC<{
             onPointerUp={handlePointerUp}
             onPointerLeave={handlePointerUp}
             style={{
-                backgroundImage: `url(${imgSrc})`,
                 cursor: disabled ? 'default' : 'pointer',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                touchAction: 'none' // DISBALE BROWSER GESTURES
+                touchAction: 'none'
             }}
             animate={{
-                scale: showActive ? 1.05 : 1,
-                filter: showActive ? 'brightness(1.3)' : 'brightness(1)'
+                scale: showActive ? 0.98 : 1,
             }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            transition={{ type: "spring", stiffness: 500, damping: 30 }}
         >
             <div style={{
                 position: 'absolute',
                 top: '50%',
                 left: '50%',
-                transform: getIconTransform(), // Custom offset
+                transform: 'translate(-50%, -50%)',
                 pointerEvents: 'none'
             }}>
                 {getIcon()}
@@ -170,9 +158,9 @@ const GameButton: React.FC<{
                     <motion.div
                         key={p.id}
                         initial={{ opacity: 0, y: 0, scale: 0.5 }}
-                        animate={{ opacity: 1, y: -40, scale: 1.2 }}
-                        exit={{ opacity: 0, y: -60, scale: 0.8 }}
-                        transition={{ duration: 0.5 }}
+                        animate={{ opacity: 1, y: -50, scale: 1.5 }}
+                        exit={{ opacity: 0, y: -80, scale: 0.5 }}
+                        transition={{ duration: 0.6 }}
                         style={{
                             position: 'absolute',
                             top: '50%',
@@ -181,11 +169,11 @@ const GameButton: React.FC<{
                             color: '#fff',
                             fontWeight: '900',
                             fontSize: '1.5rem',
-                            textShadow: '2px 2px 0 #000, 0 0 10px rgba(0,0,0,0.5)',
+                            textShadow: `0 0 10px ${colorHexMap[colorName]}, 0 0 20px ${colorHexMap[colorName]}`,
                             pointerEvents: 'none',
                             zIndex: 20,
                             whiteSpace: 'nowrap',
-                            fontFamily: "'Mochiy Pop P One', cursive"
+                            fontFamily: "'Space Grotesk', sans-serif"
                         }}
                     >
                         {p.text}
