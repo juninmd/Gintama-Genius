@@ -34,7 +34,7 @@ function App() {
   const isError = feedback?.type === 'error';
 
   return (
-    <div className={`app-container ${isUrgent ? 'urgent-pulse' : ''}`} style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/assets/images/fundo.png')` }}>
+    <div className={`app-container ${isUrgent ? 'urgent-pulse' : ''}`} >
 
       <button
         className="debug-toggle"
