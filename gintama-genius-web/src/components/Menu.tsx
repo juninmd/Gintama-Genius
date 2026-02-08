@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Difficulty, TimeMode } from '../hooks/useGameLogic';
+import type { Difficulty, TimeMode } from '../constants';
 
 interface MenuProps {
   onStart: (difficulty: Difficulty, timeMode: TimeMode) => void;
