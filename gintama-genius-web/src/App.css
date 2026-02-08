@@ -200,8 +200,8 @@ select:focus {
 /* Game Board */
 .game-board {
   position: relative;
-  width: min(340px, 85vw);
-  height: min(340px, 85vw);
+  width: clamp(260px, 80vw, 45dvh); /* More responsive */
+  height: clamp(260px, 80vw, 45dvh);
   border-radius: 50%;
   background: rgba(10, 10, 10, 0.9);
   box-shadow: 0 0 50px rgba(0, 243, 255, 0.1), inset 0 0 20px rgba(0,0,0,0.8);
@@ -339,6 +339,48 @@ select:focus {
     max-width: 90%;
 }
 
+/* Bonus Overlay */
+.kagura-bonus {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 200;
+    pointer-events: none;
+    animation: zoomIn 0.3s ease-out;
+}
+.kagura-bonus img {
+    width: 300px;
+    filter: drop-shadow(0 0 20px #ff0055);
+}
+
+@keyframes zoomIn {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+/* Urgent Pulse */
+.urgent-pulse {
+    animation: pulseRed 0.8s infinite;
+}
+
+@keyframes pulseRed {
+    0% { box-shadow: inset 0 0 0px #ff0000; }
+    50% { box-shadow: inset 0 0 50px #ff0000; }
+    100% { box-shadow: inset 0 0 0px #ff0000; }
+}
+
+/* Shake Screen */
+.shake-screen {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
 /* Mobile Adjustments */
 @media (max-width: 600px) {
     .menu-container {
@@ -351,8 +393,7 @@ select:focus {
     }
 
     .game-board {
-        width: min(300px, 80vw);
-        height: min(300px, 80vw);
+        /* Already handled by clamp, but safety check */
     }
 
     .hud-header {
@@ -380,10 +421,6 @@ select:focus {
     }
     .splash-image {
         max-height: 100px;
-    }
-    .game-board {
-        width: 260px;
-        height: 260px;
     }
     .game-layout {
         gap: 0.5rem;
