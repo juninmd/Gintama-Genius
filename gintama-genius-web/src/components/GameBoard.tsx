@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Flame, Droplets, Zap, Leaf } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { COLORS } from '../hooks/useGameLogic';
+import { COLORS } from '../constants';
 
 interface GameBoardProps {
   activeColor: number | null;

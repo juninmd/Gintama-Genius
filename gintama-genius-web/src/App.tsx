@@ -2,7 +2,14 @@ import './App.css';
 import { useGameLogic } from './hooks/useGameLogic';
 import Menu from './components/Menu';
 import GameBoard from './components/GameBoard';
-import { HUDHeader, TurnIndicator, StreakBadge, FeedbackOverlay, UrgentIndicator, NewRoundBanner } from './components/HUD';
+import {
+  HUDHeader,
+  TurnIndicator,
+  StreakBadge,
+  FeedbackOverlay,
+  UrgentIndicator,
+  NewRoundBanner
+} from './components/hud';
 import GameOver from './components/GameOver';
 import DebugPanel from './components/DebugPanel';
 import Countdown from './components/Countdown';
