@@ -30,7 +30,7 @@ const Countdown: React.FC<CountdownProps> = ({ value }) => {
                 fontWeight: '900',
                 color: '#ffb703',
                 textShadow: '6px 6px 0 #023047, 0 0 20px rgba(255,183,3,0.5)',
-                fontFamily: "'Mochiy Pop P One', cursive",
+                fontFamily: "'Space Grotesk', sans-serif",
                 zIndex: 501,
                 whiteSpace: 'nowrap'
             }}

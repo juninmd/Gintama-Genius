@@ -54,7 +54,7 @@ const GameOver: React.FC<GameOverProps> = ({ score, highScore, onRestart }) => {
 
         <div style={{ marginBottom: '1.5rem' }}>
              <motion.div
-                style={{ fontSize: '4rem', fontWeight: 900, color: '#023047', fontFamily: "'Mochiy Pop P One', cursive" }}
+                style={{ fontSize: '4rem', fontWeight: 900, color: '#023047', fontFamily: "'Space Grotesk', sans-serif" }}
              >
                 {displayScore}
              </motion.div>
@@ -85,7 +85,7 @@ const GameOver: React.FC<GameOverProps> = ({ score, highScore, onRestart }) => {
         <div className="rank-container" style={{ margin: '1rem 0', padding: '1rem', background: '#f8f9fa', borderRadius: '8px' }}>
             <div style={{ fontSize: '0.9rem', color: '#6c757d', textTransform: 'uppercase' }}>Rank Atual</div>
             <motion.div
-                style={{ color: rank.color, fontSize: '2rem', fontWeight: 900, textTransform: 'uppercase', fontFamily: "'Mochiy Pop P One', cursive" }}
+                style={{ color: rank.color, fontSize: '2rem', fontWeight: 900, textTransform: 'uppercase', fontFamily: "'Space Grotesk', sans-serif" }}
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.3 }}

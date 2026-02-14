@@ -50,7 +50,26 @@ interface UseGameLogicReturn {
 
 const getRandomMessage = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
 
+const getInitialTime = (mode: TimeMode): number => {
+  switch (mode) {
+    case '30s': return 30;
+    case '60s': return 60;
+    case '120s': return 120;
+    case '240s': return 240;
+    case 'INFINITE': return Infinity;
+    default: return 60;
+  }
+};
+
 export const useGameLogic = (): UseGameLogicReturn => {
+  const initialHighScore = (() => {
+    try {
+      return Number(localStorage.getItem('gintama_highscore')) || 0;
+    } catch {
+      return 0;
+    }
+  })();
+
   const [gameState, setGameState] = useState<GameState>('IDLE');
   const [sequence, setSequence] = useState<number[]>([]);
   const [userInputIndex, setUserInputIndex] = useState(0);
@@ -62,23 +81,88 @@ export const useGameLogic = (): UseGameLogicReturn => {
     difficulty: 'NORMAL',
     timeMode: '60s',
   });
-  const [, setKaguraCount] = useState(0);
   const [kaguraActive, setKaguraActive] = useState(false);
   const [debugMode, setDebugMode] = useState(false);
   const [streak, setStreak] = useState(0);
-  const [highScore, setHighScore] = useState(() => {
-    try {
-        return Number(localStorage.getItem('gintama_highscore')) || 0;
-    } catch {
-        return 0;
-    }
-  });
+  const [highScore, setHighScore] = useState(initialHighScore);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [countdownValue, setCountdownValue] = useState(0);
   const [isMuted, setIsMuted] = useState(audioController.muted);
   const [playbackIndex, setPlaybackIndex] = useState<number>(-1);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timeoutRefs = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const feedbackTokenRef = useRef(0);
+  const inputLockedRef = useRef(false);
+  const kaguraCountRef = useRef(0);
+  const streakRef = useRef(0);
+  const scoreRef = useRef(0);
+  const highScoreRef = useRef(initialHighScore);
+  const userInputIndexRef = useRef(0);
+
+  const clearGameTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  }, []);
+
+  const clearScheduledTimeouts = useCallback(() => {
+    timeoutRefs.current.forEach((timeoutId) => clearTimeout(timeoutId));
+    timeoutRefs.current = [];
+  }, []);
+
+  const scheduleTimeout = useCallback((callback: () => void, delay: number) => {
+    const timeoutId = setTimeout(() => {
+      timeoutRefs.current = timeoutRefs.current.filter((id) => id !== timeoutId);
+      callback();
+    }, delay);
+    timeoutRefs.current.push(timeoutId);
+    return timeoutId;
+  }, []);
+
+  const setStreakValue = useCallback((value: number) => {
+    streakRef.current = value;
+    setStreak(value);
+  }, []);
+
+  const setScoreValue = useCallback((value: number) => {
+    scoreRef.current = value;
+    setScore(value);
+  }, []);
+
+  const setUserInputIndexValue = useCallback((value: number) => {
+    userInputIndexRef.current = value;
+    setUserInputIndex(value);
+  }, []);
+
+  const showFeedback = useCallback((nextFeedback: Feedback, durationMs = 0) => {
+    const token = ++feedbackTokenRef.current;
+    setFeedback(nextFeedback);
+
+    if (durationMs > 0) {
+      scheduleTimeout(() => {
+        if (feedbackTokenRef.current === token) {
+          setFeedback(null);
+        }
+      }, durationMs);
+    }
+  }, [scheduleTimeout]);
+
+  const addScore = useCallback((amount: number) => {
+    const nextScore = scoreRef.current + amount;
+    setScoreValue(nextScore);
+
+    if (nextScore > highScoreRef.current) {
+      highScoreRef.current = nextScore;
+      setHighScore(nextScore);
+      try {
+        localStorage.setItem('gintama_highscore', nextScore.toString());
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+  }, [setScoreValue]);
 
   const toggleMute = () => {
     const newState = audioController.toggleMute();
@@ -91,267 +175,296 @@ export const useGameLogic = (): UseGameLogicReturn => {
     window.addEventListener('touchstart', unlockAudio, { once: true });
     window.addEventListener('pointerdown', unlockAudio, { once: true });
     return () => {
-        window.removeEventListener('click', unlockAudio);
-        window.removeEventListener('touchstart', unlockAudio);
-        window.removeEventListener('pointerdown', unlockAudio);
+      window.removeEventListener('click', unlockAudio);
+      window.removeEventListener('touchstart', unlockAudio);
+      window.removeEventListener('pointerdown', unlockAudio);
     };
   }, []);
+
+  useEffect(() => {
+    return () => {
+      clearGameTimer();
+      clearScheduledTimeouts();
+    };
+  }, [clearGameTimer, clearScheduledTimeouts]);
 
   const playSound = useCallback((key: string | number) => {
     audioController.play(key);
   }, []);
 
-  const getInitialTime = (mode: TimeMode): number => {
-    switch (mode) {
-      case '30s': return 30;
-      case '60s': return 60;
-      case '120s': return 120;
-      case '240s': return 240;
-      case 'INFINITE': return Infinity;
-      default: return 60;
-    }
-  };
+  const triggerKaguraBonus = useCallback(() => {
+    if (settings.difficulty === 'BERSERK') return;
 
-  const startGame = (difficulty: Difficulty, timeMode: TimeMode) => {
-    setSettings({ difficulty, timeMode });
-    setScore(0);
+    kaguraCountRef.current += 1;
+    if (kaguraCountRef.current < 30) return;
+
+    kaguraCountRef.current = 0;
+    if (settings.timeMode !== 'INFINITE') {
+      setTimeLeft((prevTime) => (Number.isFinite(prevTime) ? prevTime + 30 : prevTime));
+    }
+
+    addScore(10);
+    playSound('vapo');
+    setKaguraActive(true);
+    scheduleTimeout(() => setKaguraActive(false), 2000);
+  }, [addScore, playSound, scheduleTimeout, settings.difficulty, settings.timeMode]);
+
+  const addToSequence = useCallback(() => {
+    const nextColor = Math.floor(Math.random() * 4) + 1;
+    setSequence((prev) => [...prev, nextColor]);
+    setPlaybackIndex(-1);
+
+    scheduleTimeout(() => {
+      showFeedback({ message: getRandomMessage(MESSAGES_NEW_ROUND), type: 'info' }, 1500);
+    }, 200);
+  }, [scheduleTimeout, showFeedback]);
+
+  const startGame = useCallback((difficulty: Difficulty, timeMode: TimeMode) => {
+    clearGameTimer();
+    clearScheduledTimeouts();
+
+    inputLockedRef.current = true;
+    kaguraCountRef.current = 0;
+    setStreakValue(0);
+    setScoreValue(0);
+    setUserInputIndexValue(0);
     setLevel(0);
     setSequence([]);
-    setUserInputIndex(0);
-    setKaguraCount(0);
     setKaguraActive(false);
-    setStreak(0);
-    setFeedback(null);
-    setTimeLeft(getInitialTime(timeMode));
     setPlaybackIndex(-1);
+    setTimeLeft(getInitialTime(timeMode));
+    feedbackTokenRef.current += 1;
+    setFeedback(null);
+    setSettings({ difficulty, timeMode });
 
     playSound('novo');
 
     const firstColor = Math.floor(Math.random() * 4) + 1;
     setSequence([firstColor]);
-
     setGameState('COUNTDOWN');
     setCountdownValue(3);
-  };
+  }, [
+    clearGameTimer,
+    clearScheduledTimeouts,
+    playSound,
+    setScoreValue,
+    setStreakValue,
+    setUserInputIndexValue,
+  ]);
 
   useEffect(() => {
-    if (gameState === 'COUNTDOWN' && countdownValue > 0) {
-        const timer = setTimeout(() => setCountdownValue(prev => prev - 1), 1000);
-        return () => clearTimeout(timer);
-    } else if (gameState === 'COUNTDOWN' && countdownValue === 0) {
-        const t = setTimeout(() => {
-            setGameState('PLAYING_SEQUENCE');
-            setFeedback({ message: getRandomMessage(MESSAGES_NEW_ROUND), type: 'info' });
-            setTimeout(() => setFeedback(null), 1500);
-        }, 0);
-        return () => clearTimeout(t);
+    if (gameState !== 'COUNTDOWN') return;
+
+    if (countdownValue > 0) {
+      const timer = setTimeout(() => setCountdownValue((prev) => prev - 1), 1000);
+      return () => clearTimeout(timer);
     }
-  }, [gameState, countdownValue]);
 
-  const addToSequence = () => {
-    const nextColor = Math.floor(Math.random() * 4) + 1;
-    setSequence(prev => [...prev, nextColor]);
-    setPlaybackIndex(-1);
-
-    setTimeout(() => {
-        setFeedback({ message: getRandomMessage(MESSAGES_NEW_ROUND), type: 'info' });
-        setTimeout(() => setFeedback(null), 1500);
-    }, 200);
-  };
+    const transitionTimer = setTimeout(() => {
+      setGameState('PLAYING_SEQUENCE');
+      showFeedback({ message: getRandomMessage(MESSAGES_NEW_ROUND), type: 'info' }, 1500);
+    }, 0);
+    return () => clearTimeout(transitionTimer);
+  }, [gameState, countdownValue, showFeedback]);
 
   useEffect(() => {
-    let timer: ReturnType<typeof setInterval>;
-    if (gameState !== 'IDLE' && gameState !== 'GAME_OVER' && gameState !== 'COUNTDOWN' && settings.timeMode !== 'INFINITE') {
-      timer = setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev <= 1) {
-            setGameState('GAME_OVER');
-            playSound('gameOver');
-            setFeedback({ message: "Tempo Esgotado!", type: 'error' });
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-      timerRef.current = timer;
+    clearGameTimer();
+
+    if (
+      gameState === 'IDLE' ||
+      gameState === 'GAME_OVER' ||
+      gameState === 'COUNTDOWN' ||
+      settings.timeMode === 'INFINITE'
+    ) {
+      return;
     }
-    return () => {
-        if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [gameState, settings.timeMode, playSound]);
+
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        if (prevTime <= 1) {
+          inputLockedRef.current = true;
+          setGameState('GAME_OVER');
+          playSound('gameOver');
+          showFeedback({ message: 'Tempo Esgotado!', type: 'error' });
+          return 0;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
+
+    return clearGameTimer;
+  }, [gameState, settings.timeMode, clearGameTimer, playSound, showFeedback]);
 
   useEffect(() => {
     if (gameState !== 'PLAYING_SEQUENCE') return;
 
     if (playbackIndex === -1) {
-        const t = setTimeout(() => setPlaybackIndex(0), 1000);
-        return () => clearTimeout(t);
+      const timer = setTimeout(() => setPlaybackIndex(0), 1000);
+      return () => clearTimeout(timer);
     }
 
     if (playbackIndex >= sequence.length) {
-        const t = setTimeout(() => {
-             setGameState('WAITING_FOR_INPUT');
-             setUserInputIndex(0);
-             setActiveColor(null);
-        }, 0);
-        return () => clearTimeout(t);
+      const timer = setTimeout(() => {
+        setGameState('WAITING_FOR_INPUT');
+        setUserInputIndexValue(0);
+        setActiveColor(null);
+        inputLockedRef.current = false;
+      }, 0);
+      return () => clearTimeout(timer);
     }
 
     const color = sequence[playbackIndex];
     let isMounted = true;
 
-    const t1 = setTimeout(() => {
-        if (!isMounted) return;
-        setActiveColor(color);
-        playSound(color);
+    const lightUpTimeout = setTimeout(() => {
+      if (!isMounted) return;
+      setActiveColor(color);
+      playSound(color);
     }, 100);
 
-    const t2 = setTimeout(() => {
-        if (!isMounted) return;
-        setActiveColor(null);
+    const clearLightTimeout = setTimeout(() => {
+      if (!isMounted) return;
+      setActiveColor(null);
     }, 600);
 
-    const t3 = setTimeout(() => {
-        if (!isMounted) return;
-        setPlaybackIndex(prev => prev + 1);
+    const nextStepTimeout = setTimeout(() => {
+      if (!isMounted) return;
+      setPlaybackIndex((prev) => prev + 1);
     }, 900);
 
     return () => {
-        isMounted = false;
-        setActiveColor(null);
-        clearTimeout(t1);
-        clearTimeout(t2);
-        clearTimeout(t3);
+      isMounted = false;
+      setActiveColor(null);
+      clearTimeout(lightUpTimeout);
+      clearTimeout(clearLightTimeout);
+      clearTimeout(nextStepTimeout);
     };
-  }, [gameState, playbackIndex, sequence, playSound]);
+  }, [gameState, playbackIndex, sequence, playSound, setUserInputIndexValue]);
 
-  const handleColorClick = (color: number) => {
-    if (gameState !== 'WAITING_FOR_INPUT') return;
+  useEffect(() => {
+    if (gameState !== 'GAME_OVER') return;
+    inputLockedRef.current = true;
+    clearScheduledTimeouts();
+  }, [gameState, clearScheduledTimeouts]);
+
+  const handleColorClick = useCallback((color: number) => {
+    if (gameState !== 'WAITING_FOR_INPUT' || inputLockedRef.current) return;
+
+    const expectedColor = sequence[userInputIndexRef.current];
+    if (expectedColor == null) return;
 
     playSound(color);
 
-    if (color === sequence[userInputIndex]) {
-      const nextIndex = userInputIndex + 1;
-      setUserInputIndex(nextIndex);
-
-      if (nextIndex === sequence.length) {
-        // Correct Sequence Completed
-        setScore(prev => {
-            const newScore = prev + 1;
-            if (newScore > highScore) {
-                setHighScore(newScore);
-                try { localStorage.setItem('gintama_highscore', newScore.toString()); } catch (e) { console.warn(e); }
-            }
-            return newScore;
-        });
-        setLevel(prev => prev + 1);
-        setKaguraCount(prev => prev + 1);
-
-        setStreak(prev => {
-          const newStreak = prev + 1;
-          if (newStreak % 5 === 0) {
-             setFeedback({ message: "SEQUÊNCIA DE ACERTOS!", type: 'success' });
-          } else if (newStreak <= 3) {
-             const simple = ["VOCÊ ACERTOU!", "BOA!", "ISSO AÍ!"];
-             setFeedback({ message: getRandomMessage(simple), type: 'success' });
-          } else {
-             if (Math.random() < 0.4) {
-                 setFeedback({ message: getRandomMessage(MESSAGES_SUCCESS), type: 'success' });
-             }
-          }
-          return newStreak;
-        });
-
-        setTimeout(() => setFeedback(null), 1000);
-
-        if (settings.difficulty !== 'BERSERK') {
-             setKaguraCount(prev => (prev === 30 ? 0 : prev));
-        } else {
-             if (Math.random() < 0.3) {
-                setFeedback({ message: "Incrível!", type: 'success' });
-             }
-        }
-
-        setTimeout(() => {
-            setGameState('PLAYING_SEQUENCE');
-            addToSequence();
-        }, 1000);
-      } else {
-         // Correct Input (Mid-sequence)
-         setScore(prev => {
-            const newScore = prev + 1;
-            if (newScore > highScore) {
-                setHighScore(newScore);
-                try { localStorage.setItem('gintama_highscore', newScore.toString()); } catch (e) { console.warn(e); }
-            }
-            return newScore;
-        });
-         setStreak(prev => prev + 1);
-
-         setKaguraCount(prev => {
-             const newVal = prev + 1;
-             if (newVal === 30 && settings.difficulty !== 'BERSERK') {
-                 setTimeLeft(t => (settings.timeMode === 'INFINITE' ? t : t + 30));
-                 setScore(s => s + 10);
-                 playSound('vapo');
-                 setKaguraActive(true);
-                 setTimeout(() => setKaguraActive(false), 2000);
-                 return 0;
-             }
-             return newVal;
-         });
-      }
-
-    } else {
-      // Mistake
+    if (color !== expectedColor) {
+      inputLockedRef.current = true;
       setGameState('GAME_OVER');
       playSound('gameOver');
 
-      if (streak > 5) {
-          setFeedback({ message: "COMBO QUEBRADO!", type: 'error' });
+      if (streakRef.current > 5) {
+        showFeedback({ message: 'COMBO QUEBRADO!', type: 'error' });
       } else {
-          setFeedback({ message: getRandomMessage(MESSAGES_ERROR), type: 'error' });
+        showFeedback({ message: getRandomMessage(MESSAGES_ERROR), type: 'error' });
       }
 
-      setStreak(0);
+      setStreakValue(0);
+      return;
     }
-  };
 
-  const resetGame = () => {
+    addScore(1);
+    triggerKaguraBonus();
+
+    const nextIndex = userInputIndexRef.current + 1;
+    setUserInputIndexValue(nextIndex);
+    const nextStreak = streakRef.current + 1;
+    setStreakValue(nextStreak);
+
+    if (nextIndex !== sequence.length) return;
+
+    inputLockedRef.current = true;
+    setLevel((prev) => prev + 1);
+
+    if (nextStreak % 5 === 0) {
+      showFeedback({ message: 'SEQUÊNCIA DE ACERTOS!', type: 'success' }, 1000);
+    } else if (nextStreak <= 3) {
+      showFeedback({ message: getRandomMessage(['VOCÊ ACERTOU!', 'BOA!', 'ISSO AÍ!']), type: 'success' }, 1000);
+    } else if (Math.random() < 0.4) {
+      showFeedback({ message: getRandomMessage(MESSAGES_SUCCESS), type: 'success' }, 1000);
+    }
+
+    if (settings.difficulty === 'BERSERK' && Math.random() < 0.3) {
+      showFeedback({ message: 'Incrível!', type: 'success' }, 1000);
+    }
+
+    scheduleTimeout(() => {
+      setGameState('PLAYING_SEQUENCE');
+      addToSequence();
+    }, 1000);
+  }, [
+    gameState,
+    sequence,
+    playSound,
+    showFeedback,
+    setStreakValue,
+    addScore,
+    triggerKaguraBonus,
+    setUserInputIndexValue,
+    settings.difficulty,
+    addToSequence,
+    scheduleTimeout,
+  ]);
+
+  const resetGame = useCallback(() => {
+    clearGameTimer();
+    clearScheduledTimeouts();
+
+    inputLockedRef.current = false;
+    kaguraCountRef.current = 0;
     setGameState('IDLE');
-    setScore(0);
+    setScoreValue(0);
     setLevel(0);
     setSequence([]);
-    setStreak(0);
+    setStreakValue(0);
+    setUserInputIndexValue(0);
     setFeedback(null);
+    feedbackTokenRef.current += 1;
     setPlaybackIndex(-1);
-    if (timerRef.current) clearInterval(timerRef.current);
-  };
+    setKaguraActive(false);
+    setCountdownValue(0);
+    setActiveColor(null);
+  }, [
+    clearGameTimer,
+    clearScheduledTimeouts,
+    setScoreValue,
+    setStreakValue,
+    setUserInputIndexValue,
+  ]);
 
   const debugActions = {
     isDebug: debugMode,
-    toggleDebug: () => setDebugMode(prev => !prev),
-    addScore: (amount: number) => setScore(prev => prev + amount),
+    toggleDebug: () => setDebugMode((prev) => !prev),
+    addScore: (amount: number) => addScore(amount),
     triggerBonus: () => {
       setKaguraActive(true);
       playSound('vapo');
-      setTimeout(() => setKaguraActive(false), 2000);
+      scheduleTimeout(() => setKaguraActive(false), 2000);
     },
     setGameOver: () => {
+      inputLockedRef.current = true;
       setGameState('GAME_OVER');
       playSound('gameOver');
     },
     setTimer: (seconds: number) => setTimeLeft(seconds),
     winLevel: () => {
-        if (gameState !== 'IDLE' && gameState !== 'GAME_OVER') {
-            setScore(prev => prev + 10);
-            setLevel(prev => prev + 1);
-            setTimeout(() => {
-                setGameState('PLAYING_SEQUENCE');
-                addToSequence();
-            }, 500);
-        }
-    }
+      if (gameState === 'IDLE' || gameState === 'GAME_OVER') return;
+
+      addScore(10);
+      setLevel((prev) => prev + 1);
+      inputLockedRef.current = true;
+      scheduleTimeout(() => {
+        setGameState('PLAYING_SEQUENCE');
+        addToSequence();
+      }, 500);
+    },
   };
 
   return {

@@ -97,6 +97,20 @@ body {
   min-height: 0; /* Important for flex child scrolling/sizing */
 }
 
+.indicator-area {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board-area {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Menu */
 .menu-container {
   padding: 2rem;
@@ -228,6 +242,10 @@ select:focus {
   background-size: cover;
 }
 
+.game-btn:disabled {
+  cursor: default;
+}
+
 /* Neon Button Colors */
 .btn-verde { top: 0; left: 0; background-color: #00ff00; border-right: 2px solid #000; border-bottom: 2px solid #000; }
 .btn-vermelho { top: 0; right: 0; background-color: #ff0055; border-left: 2px solid #000; border-bottom: 2px solid #000; }
@@ -275,6 +293,11 @@ select:focus {
   font-weight: 600;
   font-size: 0.9rem;
   pointer-events: auto;
+}
+
+.hud-value-small {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
 }
 
 .streak-display {
@@ -337,6 +360,101 @@ select:focus {
     border-radius: 12px;
     text-align: center;
     max-width: 90%;
+}
+
+.game-over-content h1 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #ff0055;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.restart-button {
+  border: 2px solid var(--neon-blue);
+  background: linear-gradient(90deg, rgba(0, 243, 255, 0.15), rgba(0, 243, 255, 0.3));
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 10px;
+  padding: 0.8rem 1.4rem;
+  cursor: pointer;
+  box-shadow: 0 0 16px rgba(0, 243, 255, 0.3);
+}
+
+.restart-button:hover {
+  background: var(--neon-blue);
+  color: #000;
+}
+
+.debug-toggle {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 1000;
+  opacity: 0.35;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.debug-toggle:hover {
+  opacity: 1;
+}
+
+.debug-panel {
+  position: absolute;
+  top: 52px;
+  right: 12px;
+  z-index: 1000;
+  width: min(300px, 85vw);
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 0, 85, 0.5);
+  border-radius: 10px;
+  color: #fff;
+  padding: 0.8rem;
+  font-size: 0.82rem;
+  box-shadow: 0 0 24px rgba(255, 0, 85, 0.2);
+}
+
+.debug-panel h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.debug-info {
+  display: grid;
+  gap: 0.2rem;
+  margin-bottom: 0.6rem;
+}
+
+.debug-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.debug-controls button {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.72rem;
+  padding: 0.35rem;
+  cursor: pointer;
+}
+
+button:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--neon-blue);
+  outline-offset: 2px;
 }
 
 /* Bonus Overlay */
@@ -412,6 +530,15 @@ select:focus {
     .hud-footer {
         padding-bottom: 1rem;
     }
+
+    .game-over-content {
+      padding: 1.5rem;
+    }
+
+    .debug-panel {
+      top: 44px;
+      right: 8px;
+    }
 }
 
 /* Short screens */
@@ -425,4 +552,15 @@ select:focus {
     .game-layout {
         gap: 0.5rem;
     }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
