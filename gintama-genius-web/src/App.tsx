@@ -39,19 +39,22 @@ function App() {
 
   const isUrgent = timeLeft <= 10 && gameState !== 'IDLE' && gameState !== 'GAME_OVER' && settings.timeMode !== 'INFINITE';
   const isError = feedback?.type === 'error';
+  const showDebugTools = import.meta.env.DEV;
 
   return (
     <div className={`app-container ${isUrgent ? 'urgent-pulse' : ''}`} >
 
-      <button
-        className="debug-toggle"
-        onClick={debugActions.toggleDebug}
-        style={{ position: 'absolute', top: 5, right: 5, zIndex: 1000, opacity: 0.3, background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '24px' }}
-      >
-        🐞
-      </button>
+      {showDebugTools && (
+        <button
+          className="debug-toggle"
+          onClick={debugActions.toggleDebug}
+          aria-label="Alternar debug"
+        >
+          🐞
+        </button>
+      )}
 
-      {debugActions.isDebug && (
+      {showDebugTools && debugActions.isDebug && (
         <DebugPanel
           state={{ gameState, score, level, timeLeft, sequence, userInputIndex, activeColor }}
           actions={debugActions}
@@ -107,7 +110,7 @@ function App() {
 
             {kaguraActive && (
                 <div className="kagura-bonus">
-                   <img src="/assets/images/uow.png" alt="Bonus!" />
+                   <img src="/assets/images/uow.png" alt="Bônus Kagura" />
                 </div>
             )}
         </>

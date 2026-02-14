@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Flame, Droplets, Zap, Leaf } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -25,7 +25,43 @@ const colorHexMap: { [key: string]: string } = {
   amarelo: '#f9f871',
 };
 
+const KEY_TO_COLOR: Record<string, number> = {
+  '1': 1,
+  '2': 2,
+  '3': 3,
+  '4': 4,
+  r: 1,
+  g: 2,
+  b: 3,
+  y: 4,
+  arrowup: 1,
+  arrowleft: 2,
+  arrowright: 3,
+  arrowdown: 4,
+};
+
 const GameBoard: React.FC<GameBoardProps> = ({ activeColor, onColorClick, disabled }) => {
+  useEffect(() => {
+    if (disabled) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.repeat) return;
+
+      const target = event.target as HTMLElement | null;
+      const tag = target?.tagName;
+      if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+
+      const mappedColor = KEY_TO_COLOR[event.key.toLowerCase()];
+      if (!mappedColor) return;
+
+      event.preventDefault();
+      onColorClick(mappedColor);
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [disabled, onColorClick]);
+
   return (
     <div className="game-board">
       <div className="simon-circle">
@@ -66,6 +102,16 @@ const GameButton: React.FC<{
     const [isPressed, setIsPressed] = React.useState(false);
     const [popups, setPopups] = useState<{id: number, text: string}[]>([]);
     const buttonRef = useRef<HTMLButtonElement>(null);
+    const popupTimeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+    const shouldReduceMotion = typeof window !== 'undefined'
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    useEffect(() => {
+      return () => {
+        popupTimeoutsRef.current.forEach((timeoutId) => clearTimeout(timeoutId));
+        popupTimeoutsRef.current = [];
+      };
+    }, []);
 
     const getIcon = () => {
         const props = { size: 48, color: 'rgba(0,0,0,0.5)', style: { filter: 'drop-shadow(0 0 5px rgba(255,255,255,0.5))' } };
@@ -85,9 +131,11 @@ const GameButton: React.FC<{
         const texts = ["+1", "NEON!", "CYBER!", "HIT!", "GOOD!", "COMBO!", "PERFECT"];
         const text = texts[Math.floor(Math.random() * texts.length)];
         setPopups(prev => [...prev, {id, text}]);
-        setTimeout(() => {
-             setPopups(prev => prev.filter(p => p.id !== id));
+        const timeoutId = setTimeout(() => {
+            setPopups(prev => prev.filter(p => p.id !== id));
+            popupTimeoutsRef.current = popupTimeoutsRef.current.filter((t) => t !== timeoutId);
         }, 800);
+        popupTimeoutsRef.current.push(timeoutId);
     };
 
     const triggerConfetti = () => {
@@ -97,15 +145,15 @@ const GameButton: React.FC<{
             const y = (rect.top + rect.height / 2) / window.innerHeight;
 
             confetti({
-                particleCount: 20,
+                particleCount: 12,
                 spread: 50,
                 origin: { x, y },
                 colors: [colorHexMap[colorName]],
                 disableForReducedMotion: true,
-                startVelocity: 20,
+                startVelocity: 16,
                 gravity: 1.5,
-                scalar: 0.8,
-                ticks: 50,
+                scalar: 0.7,
+                ticks: 42,
                 shapes: ['circle', 'square']
             });
         }
@@ -115,8 +163,12 @@ const GameButton: React.FC<{
         if (!disabled) {
             e.preventDefault();
             setIsPressed(true);
-            triggerConfetti();
-            addPopup();
+            if (!shouldReduceMotion && Math.random() < 0.35) {
+              triggerConfetti();
+            }
+            if (!shouldReduceMotion && Math.random() < 0.6) {
+              addPopup();
+            }
             onClick();
         }
     };
@@ -131,12 +183,15 @@ const GameButton: React.FC<{
         <motion.button
             ref={buttonRef}
             className={`game-btn btn-${colorName} ${showActive ? 'active' : ''}`}
+            aria-label={`Botão ${colorName}`}
+            disabled={disabled}
             onPointerDown={handlePointerDown}
             onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
             onPointerLeave={handlePointerUp}
             style={{
                 cursor: disabled ? 'default' : 'pointer',
-                touchAction: 'none'
+                touchAction: 'manipulation'
             }}
             animate={{
                 scale: showActive ? 0.98 : 1,

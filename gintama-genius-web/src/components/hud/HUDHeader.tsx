@@ -20,7 +20,7 @@ export const HUDHeader: React.FC<HUDHeaderProps> = ({ score, level, timeLeft, di
           onClick={toggleMute}
           className="hud-item"
           style={{ cursor: 'pointer', border: 'none', background: 'transparent' }}
-          title={isMuted ? "Ativar Som" : "Mudo"}
+          title={isMuted ? 'Ativar Som' : 'Silenciar'}
         >
           {isMuted ? <VolumeX size={20} color="#ff0055" /> : <Volume2 size={20} color="#00f3ff" />}
         </button>
