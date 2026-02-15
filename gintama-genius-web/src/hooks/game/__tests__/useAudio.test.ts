@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
 import { useAudio } from '../useAudio';
 import { audioController } from '../../../utils/audio';
 
@@ -25,7 +25,7 @@ describe('useAudio', () => {
 
   it('should toggle mute state', () => {
     // Mock toggleMute to return true
-    (audioController.toggleMute as any).mockReturnValue(true);
+    (audioController.toggleMute as Mock).mockReturnValue(true);
 
     const { result } = renderHook(() => useAudio());
 
