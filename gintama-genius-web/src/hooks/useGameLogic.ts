@@ -98,7 +98,10 @@ export const useGameLogic = () => {
   // Sync GameState with Sequence Playback
   useEffect(() => {
     if (gameState === 'PLAYING_SEQUENCE' && !isInputLocked && sequence.length > 0 && playbackIndex === -1) {
+      const timer = setTimeout(() => {
         setGameState('WAITING_FOR_INPUT');
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [gameState, isInputLocked, sequence.length, playbackIndex]);
 
