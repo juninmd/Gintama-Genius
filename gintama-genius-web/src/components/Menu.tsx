@@ -21,7 +21,7 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
             onError={() => setImageError(true)}
           />
       ) : (
-          <h1 className="menu-title">Yorozuya Training</h1>
+          <h1 className="menu-title">Treinamento Yorozuya</h1>
       )}
 
       <div className="menu-controls">
