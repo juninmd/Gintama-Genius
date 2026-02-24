@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { GameState } from '../../constants';
+import type { GameState } from '../../constants';
 
 interface DebugDependencies {
     gameState: GameState;

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { GameState } from '../hooks/useGameLogic';
+import type { GameState } from '../constants';
 
 interface DebugPanelProps {
   state: {
@@ -12,6 +12,7 @@ interface DebugPanelProps {
     activeColor: number | null;
   };
   actions: {
+    isDebug: boolean;
     winLevel: () => void;
     addScore: (amount: number) => void;
     triggerBonus: () => void;
@@ -22,6 +23,8 @@ interface DebugPanelProps {
 }
 
 const DebugPanel: React.FC<DebugPanelProps> = ({ state, actions }) => {
+  if (!actions.isDebug) return null;
+
   return (
     <div className="debug-panel">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px', borderBottom: '1px solid #555', paddingBottom: '2px' }}>

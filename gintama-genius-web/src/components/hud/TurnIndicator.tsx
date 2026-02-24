@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, MousePointerClick } from 'lucide-react';
-import type { GameState } from '../../hooks/useGameLogic';
+import type { GameState } from '../../constants';
 
 interface TurnIndicatorProps {
   gameState: GameState;
