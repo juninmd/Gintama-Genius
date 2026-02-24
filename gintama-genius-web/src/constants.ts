@@ -96,3 +96,34 @@ export const COLORS = [1, 2, 3, 4] as const;
 
 export type Difficulty = 'BERSERK' | 'NORMAL' | 'EASY';
 export type TimeMode = '30s' | '60s' | '120s' | '240s' | 'INFINITE';
+export type GameState = 'IDLE' | 'PLAYING_SEQUENCE' | 'WAITING_FOR_INPUT' | 'GAME_OVER' | 'COUNTDOWN';
+
+export const COLOR_MAP: { [key: number]: string } = {
+  1: 'vermelho',
+  2: 'verde',
+  3: 'azul',
+  4: 'amarelo',
+};
+
+// Updated to Neon Palette
+export const COLOR_HEX_MAP: { [key: string]: string } = {
+  vermelho: '#ff0055',
+  verde: '#00ff00',
+  azul: '#00f3ff',
+  amarelo: '#f9f871',
+};
+
+export const KEY_TO_COLOR: Record<string, number> = {
+  '1': 1,
+  '2': 2,
+  '3': 3,
+  '4': 4,
+  r: 1,
+  g: 2,
+  b: 3,
+  y: 4,
+  arrowup: 1,
+  arrowleft: 2,
+  arrowright: 3,
+  arrowdown: 4,
+};

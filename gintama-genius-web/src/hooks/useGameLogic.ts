@@ -3,19 +3,19 @@ import { useAudio } from './game/useAudio';
 import { useGameScore } from './game/useGameScore';
 import { useGameTimer } from './game/useGameTimer';
 import { useGameSequence } from './game/useGameSequence';
+import { useDebugActions } from './game/useDebugActions';
 import {
   MESSAGES_SUCCESS,
   MESSAGES_ERROR,
   MESSAGES_NEW_ROUND,
   type Difficulty,
-  type TimeMode
+  type TimeMode,
+  type GameState
 } from '../constants';
-
-export type GameState = 'IDLE' | 'PLAYING_SEQUENCE' | 'WAITING_FOR_INPUT' | 'GAME_OVER' | 'COUNTDOWN';
 
 export interface Feedback {
   message: string;
-  type: 'success' | 'error' | 'warning' | 'info';
+  type: 'success' | 'error' | 'warning' | 'info' | 'combo';
 }
 
 const getRandomMessage = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
@@ -86,6 +86,21 @@ export const useGameLogic = () => {
     setTimeLeft
   } = useGameTimer(settings.timeMode, onTimeUp);
 
+  // --- Debug Hook ---
+  const debugActions = useDebugActions({
+    gameState,
+    addScore,
+    setKaguraActive,
+    playSound,
+    setGameState,
+    clearTimer,
+    setTimeLeft,
+    setLevel,
+    setIsInputLocked,
+    addToSequence,
+    playSequence
+  });
+
   // --- Effects ---
 
   // Sync timer with settings change in IDLE
@@ -124,7 +139,7 @@ export const useGameLogic = () => {
     if (settings.difficulty === 'BERSERK') return;
 
     kaguraCountRef.current += 1;
-    if (kaguraCountRef.current < 30) return;
+    if (kaguraCountRef.current < 15) return; // Lowered from 30 to 15
 
     kaguraCountRef.current = 0;
     if (settings.timeMode !== 'INFINITE') {
@@ -140,7 +155,6 @@ export const useGameLogic = () => {
   const startGame = useCallback((difficulty: Difficulty, timeMode: TimeMode) => {
     resetScore();
     resetSequence();
-    // settings update will trigger resetTimer via effect
     setSettings({ difficulty, timeMode });
 
     setLevel(0);
@@ -185,7 +199,7 @@ export const useGameLogic = () => {
         setLevel(prev => prev + 1);
 
         if (newStreak % 5 === 0) {
-            showFeedback({ message: 'SEQUÊNCIA DE ACERTOS!', type: 'success' }, 1500);
+            showFeedback({ message: 'SEQUÊNCIA DE ACERTOS!', type: 'combo' }, 2000);
         } else if (newStreak <= 3) {
             showFeedback({ message: getRandomMessage(['VOCÊ ACERTOU!', 'BOA!', 'ISSO AÍ!']), type: 'success' }, 1000);
         } else if (Math.random() < 0.4) {
@@ -216,35 +230,6 @@ export const useGameLogic = () => {
     setFeedback(null);
     setKaguraActive(false);
   }, [resetScore, resetSequence, clearTimer]);
-
-  const [debugMode, setDebugMode] = useState(false);
-  const debugActions = {
-    isDebug: debugMode,
-    toggleDebug: () => setDebugMode(prev => !prev),
-    addScore,
-    triggerBonus: () => {
-        setKaguraActive(true);
-        playSound('vapo');
-        setTimeout(() => setKaguraActive(false), 2000);
-    },
-    setGameOver: () => {
-        setGameState('GAME_OVER');
-        playSound('gameOver');
-        clearTimer();
-    },
-    setTimer: (s: number) => setTimeLeft(s),
-    winLevel: () => {
-        if (gameState === 'IDLE' || gameState === 'GAME_OVER') return;
-        addScore(10);
-        setLevel(prev => prev + 1);
-        setIsInputLocked(true);
-        setTimeout(() => {
-            addToSequence();
-            setGameState('PLAYING_SEQUENCE');
-            playSequence();
-        }, 500);
-    }
-  };
 
   return {
     gameState,
