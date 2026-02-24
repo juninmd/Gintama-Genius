@@ -307,8 +307,10 @@ select:focus {
   background: rgba(0, 0, 0, 0.7);
   padding: 0.5rem 1.2rem;
   border-radius: 30px;
-  border: 1px solid var(--neon-red);
+  border: 2px solid var(--neon-red);
   box-shadow: 0 0 15px rgba(255, 0, 85, 0.3);
+  min-width: 140px;
+  justify-content: center;
 }
 
 .streak-count {
@@ -391,8 +393,13 @@ select:focus {
 
 .debug-toggle {
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: 4px;
+  right: 4px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 1000;
   opacity: 0.35;
   background: none;
@@ -401,6 +408,7 @@ select:focus {
   cursor: pointer;
   font-size: 24px;
   line-height: 1;
+  border-radius: 50%;
 }
 
 .debug-toggle:hover {
