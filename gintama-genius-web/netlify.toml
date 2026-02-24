@@ -1,5 +1,6 @@
 [build]
-  command = "npm run build"
+  base = "gintama-genius-web"
+  command = "pnpm run build"
   publish = "dist"
 
 [[redirects]]
