@@ -62,19 +62,19 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
                 color: '#ff0055',
                 fontSize: '1.8rem',
                 fontWeight: '900',
-                textShadow: '0 0 20px #ff0055',
+                textShadow: '0 0 30px #ff0055',
                 padding: '0.8rem 1.5rem',
                 background: 'rgba(20, 0, 0, 0.9)',
                 borderRadius: '50px',
                 border: '2px solid #ff0055',
-                boxShadow: '0 0 30px rgba(255, 0, 85, 0.5)',
+                boxShadow: '0 0 40px rgba(255, 0, 85, 0.8)',
                 zIndex: 100,
                 whiteSpace: 'nowrap',
                 backdropFilter: 'blur(4px)'
               }}
             >
               <AlertTriangle size={36} strokeWidth={3} />
-              <span style={{ fontFamily: "'Space Grotesk', sans-serif" }}>CORRA!</span>
+              <span style={{ fontFamily: "'Space Grotesk', sans-serif" }}>CORRA AGORA!</span>
             </motion.div>
         </>
       )}
