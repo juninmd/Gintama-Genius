@@ -1,0 +1,68 @@
+/* Game Board */
+.game-board {
+  position: relative;
+  width: clamp(260px, 80vw, 45dvh); /* More responsive */
+  height: clamp(260px, 80vw, 45dvh);
+  border-radius: 50%;
+  background: rgba(10, 10, 10, 0.9);
+  box-shadow: 0 0 50px rgba(0, 243, 255, 0.1), inset 0 0 20px rgba(0,0,0,0.8);
+  padding: 12px;
+  border: 2px solid #333;
+}
+
+.simon-circle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-btn {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  border: none;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.1s;
+  background-size: cover;
+}
+
+.game-btn:disabled {
+  cursor: default;
+}
+
+/* Neon Button Colors */
+.btn-verde { top: 0; left: 0; background-color: #00ff00; border-right: 2px solid #000; border-bottom: 2px solid #000; }
+.btn-vermelho { top: 0; right: 0; background-color: #ff0055; border-left: 2px solid #000; border-bottom: 2px solid #000; }
+.btn-amarelo { bottom: 0; left: 0; background-color: #f9f871; border-right: 2px solid #000; border-top: 2px solid #000; }
+.btn-azul { bottom: 0; right: 0; background-color: #00f3ff; border-left: 2px solid #000; border-top: 2px solid #000; }
+
+.game-btn.active {
+  opacity: 1;
+  filter: brightness(1.3);
+  z-index: 2;
+  box-shadow: 0 0 60px currentColor;
+}
+
+.center-circle {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32%; height: 32%;
+  background: #000;
+  border-radius: 50%;
+  border: 4px solid #1a1a1a;
+  z-index: 10;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.center-logo {
+  width: 65%;
+  height: auto;
+  filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+}
