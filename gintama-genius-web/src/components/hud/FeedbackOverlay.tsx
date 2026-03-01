@@ -11,6 +11,7 @@ interface FeedbackOverlayProps {
 export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, streak }) => {
   const isCombo = feedback?.message.includes('SEQUÊNCIA') || feedback?.message.includes('COMBO');
   const isError = feedback?.type === 'error';
+  const isSuccess = feedback?.type === 'success';
 
   // Confetti Effects
   useEffect(() => {
@@ -55,10 +56,21 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
     }
   }, [feedback, isCombo]);
 
-  // Don't show "New Round" messages here as they have their own banner usually,
-  // but if we want to show everything here, we can.
-  // Based on previous code, 'info' was skipped.
   if (feedback?.type === 'info') return null;
+
+  const getBorderColor = () => {
+    if (isError) return '#ff0055';
+    if (isCombo) return '#f9f871';
+    if (isSuccess) return '#00ff00';
+    return '#00f3ff';
+  };
+
+  const getShadowColor = () => {
+    if (isError) return 'rgba(255,0,85,0.8)';
+    if (isCombo) return 'rgba(249,248,113,0.8)';
+    if (isSuccess) return 'rgba(0,255,0,0.8)';
+    return 'rgba(0,243,255,0.8)';
+  };
 
   return (
     <AnimatePresence mode='wait'>
@@ -93,18 +105,18 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
                 : 'rgba(0,0,0,0.85)',
             padding: isCombo ? '1.5rem 3rem' : '1rem 2rem',
             borderRadius: '50px',
-            border: `3px solid ${isError ? '#ff0055' : (isCombo ? '#fff' : '#00f3ff')}`,
-            boxShadow: `0 0 50px ${isError ? 'rgba(255,0,85,0.5)' : (isCombo ? 'rgba(249,248,113,0.6)' : 'rgba(0,243,255,0.5)')}`,
+            border: `3px solid ${getBorderColor()}`,
+            boxShadow: `0 0 50px ${getShadowColor()}`,
             textAlign: 'center',
             transform: isCombo ? 'scale(1.1)' : 'none',
             backdropFilter: 'blur(8px)'
           }}>
             <span style={{
-                color: isCombo ? '#000' : (isError ? '#ff0055' : '#00f3ff'),
+                color: isCombo ? '#000' : getBorderColor(),
                 fontSize: isCombo ? '1.8rem' : '1.5rem',
                 fontWeight: '900',
                 textTransform: 'uppercase',
-                textShadow: isCombo ? 'none' : '0 0 10px currentColor',
+                textShadow: isCombo ? 'none' : `0 0 10px ${getBorderColor()}`,
                 whiteSpace: 'nowrap',
                 fontFamily: "'Space Grotesk', sans-serif",
                 display: 'block'
