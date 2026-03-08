@@ -19,6 +19,16 @@
     animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
 }
 
+/* Flash Error */
+.flash-error {
+    animation: flashErrorRed 0.5s ease-out;
+}
+
+@keyframes flashErrorRed {
+    0% { background-color: rgba(255, 0, 0, 0.8); }
+    100% { background-color: var(--cyber-dark); }
+}
+
 @keyframes shake {
     10%, 90% { transform: translate3d(-2px, 0, 0); }
     20%, 80% { transform: translate3d(8px, 0, 0); }

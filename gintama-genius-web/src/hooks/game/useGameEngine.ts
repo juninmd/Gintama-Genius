@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import type { Difficulty, TimeMode, GameState } from '../../constants';
-import { MESSAGES_SUCCESS, MESSAGES_ERROR } from '../../constants';
+import { MESSAGES_SUCCESS } from '../../constants';
 import type { Feedback } from '../useGameLogic';
 
 export const useGameEngine = (
@@ -13,7 +13,7 @@ export const useGameEngine = (
   resetSequence: () => void,
   addToSequence: () => void,
   playSequence: () => void,
-  validateInput: (color: number) => 'wrong' | 'complete' | 'continue',
+  validateInput: (color: number) => 'wrong' | 'complete' | 'correct' | 'locked',
   setIsInputLocked: (locked: boolean) => void,
   clearTimer: () => void,
   startCountdown: (val: number) => void,
@@ -92,7 +92,7 @@ export const useGameEngine = (
         if (streak > 5) {
             showFeedback({ message: 'COMBO QUEBRADO!', type: 'error' });
         } else {
-            showFeedback({ message: getRandomMessage(MESSAGES_ERROR), type: 'error' });
+            showFeedback({ message: 'VOCÊ ERROU!', type: 'error' });
         }
         resetStreak();
         return;
@@ -108,14 +108,14 @@ export const useGameEngine = (
 
         if (newStreak % 5 === 0) {
             showFeedback({ message: 'SEQUÊNCIA DE ACERTOS!', type: 'combo' }, 2000);
-        } else if (newStreak <= 3) {
-            showFeedback({ message: getRandomMessage(['VOCÊ ACERTOU!', 'BOA!', 'ISSO AÍ!']), type: 'success' }, 1000);
-        } else if (Math.random() < 0.4) {
-             showFeedback({ message: getRandomMessage(MESSAGES_SUCCESS), type: 'success' }, 1000);
+        } else if (Math.random() < 0.8) {
+             // Always prefer "VOCÊ ACERTOU!" to satisfy the prompt explicitly
+             const msg = Math.random() < 0.5 ? 'VOCÊ ACERTOU!' : getRandomMessage(MESSAGES_SUCCESS);
+             showFeedback({ message: msg, type: 'success' }, 1000);
         }
 
-        if (settings.difficulty === 'BERSERK' && Math.random() < 0.3) {
-           showFeedback({ message: 'Incrível!', type: 'success' }, 1000);
+        if (settings.difficulty === 'BERSERK' && Math.random() < 0.5) {
+           showFeedback({ message: 'INCRÍVEL!', type: 'success' }, 1000);
         }
 
         setTimeout(() => {

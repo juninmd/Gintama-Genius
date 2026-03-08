@@ -42,7 +42,7 @@ function App() {
   const showDebugTools = import.meta.env.DEV;
 
   return (
-    <div className={`app-container ${isUrgent ? 'urgent-pulse' : ''}`} >
+    <div className={`app-container ${isUrgent ? 'urgent-pulse' : ''} ${isError ? 'flash-error' : ''}`} >
 
       {showDebugTools && (
         <button

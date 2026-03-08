@@ -6,7 +6,6 @@ import { useGameSequence } from './game/useGameSequence';
 import { useDebugActions } from './game/useDebugActions';
 import { useGameEngine } from './game/useGameEngine';
 import {
-  MESSAGES_NEW_ROUND,
   type Difficulty,
   type TimeMode,
   type GameState
@@ -16,8 +15,6 @@ export interface Feedback {
   message: string;
   type: 'success' | 'error' | 'warning' | 'info' | 'combo';
 }
-
-const getRandomMessage = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
 
 export const useGameLogic = () => {
   const { isMuted, toggleMute, playSound } = useAudio();
@@ -103,7 +100,7 @@ export const useGameLogic = () => {
     if (gameState === 'COUNTDOWN' && countdownValue === 0) {
       const timer = setTimeout(() => {
         setGameState('PLAYING_SEQUENCE');
-        showFeedback({ message: getRandomMessage(MESSAGES_NEW_ROUND), type: 'info' }, 1500);
+        showFeedback({ message: 'NOVA RODADA!', type: 'info' }, 1500);
         startTimer();
         playSequence();
       }, 500);
