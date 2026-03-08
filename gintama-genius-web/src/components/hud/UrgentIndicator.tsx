@@ -20,7 +20,7 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
                 style={{
                     position: 'fixed',
                     top: 0, left: 0, right: 0, bottom: 0,
-                    background: 'radial-gradient(circle, transparent 40%, rgba(255, 0, 0, 0.4) 90%)',
+                    background: 'radial-gradient(circle, transparent 40%, rgba(255, 0, 0, 0.6) 90%)',
                     pointerEvents: 'none',
                     zIndex: 5
                 }}
