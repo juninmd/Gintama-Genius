@@ -74,7 +74,7 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
               }}
             >
               <AlertTriangle size={36} strokeWidth={3} />
-              <span style={{ fontFamily: "'Space Grotesk', sans-serif" }}>CORRA AGORA!</span>
+              <span style={{ fontFamily: "'Space Grotesk', sans-serif" }}>CORRA!</span>
             </motion.div>
         </>
       )}
