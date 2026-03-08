@@ -78,7 +78,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
         <motion.div
           key={feedback.message + streak}
           initial={{ opacity: 0, scale: 0.5, rotate: isError ? -10 : 10, y: 50 }}
-          animate={{ opacity: 1, scale: 1, rotate: isCombo ? [0, -5, 5, 0] : 0, y: 0 }}
+          animate={{ opacity: 1, scale: 1.2, rotate: isCombo ? [0, -5, 5, 0] : 0, y: 0 }}
           exit={{ opacity: 0, scale: 1.5, rotate: isError ? 10 : -10, y: -50 }}
           transition={{
             type: "spring",

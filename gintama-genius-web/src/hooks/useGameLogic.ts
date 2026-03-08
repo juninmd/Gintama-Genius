@@ -103,7 +103,7 @@ export const useGameLogic = () => {
     if (gameState === 'COUNTDOWN' && countdownValue === 0) {
       const timer = setTimeout(() => {
         setGameState('PLAYING_SEQUENCE');
-        showFeedback({ message: getRandomMessage(MESSAGES_NEW_ROUND), type: 'info' }, 1500);
+        showFeedback({ message: 'NOVA RODADA!', type: 'info' }, 1500);
         startTimer();
         playSequence();
       }, 500);
