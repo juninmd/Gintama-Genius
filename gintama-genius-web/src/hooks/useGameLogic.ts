@@ -6,7 +6,6 @@ import { useGameSequence } from './game/useGameSequence';
 import { useDebugActions } from './game/useDebugActions';
 import { useGameEngine } from './game/useGameEngine';
 import {
-  MESSAGES_NEW_ROUND,
   type Difficulty,
   type TimeMode,
   type GameState
@@ -16,8 +15,6 @@ export interface Feedback {
   message: string;
   type: 'success' | 'error' | 'warning' | 'info' | 'combo';
 }
-
-const getRandomMessage = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
 
 export const useGameLogic = () => {
   const { isMuted, toggleMute, playSound } = useAudio();

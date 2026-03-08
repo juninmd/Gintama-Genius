@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import type { Difficulty, TimeMode, GameState } from '../../constants';
-import { MESSAGES_SUCCESS, MESSAGES_ERROR } from '../../constants';
+import { MESSAGES_SUCCESS } from '../../constants';
 import type { Feedback } from '../useGameLogic';
 
 export const useGameEngine = (
@@ -13,7 +13,7 @@ export const useGameEngine = (
   resetSequence: () => void,
   addToSequence: () => void,
   playSequence: () => void,
-  validateInput: (color: number) => 'wrong' | 'complete' | 'continue',
+  validateInput: (color: number) => 'wrong' | 'complete' | 'correct' | 'locked',
   setIsInputLocked: (locked: boolean) => void,
   clearTimer: () => void,
   startCountdown: (val: number) => void,
