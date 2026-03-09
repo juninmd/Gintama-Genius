@@ -1,8 +1,8 @@
 /* Game Board */
 .game-board {
   position: relative;
-  width: clamp(260px, 80vw, 45dvh); /* More responsive */
-  height: clamp(260px, 80vw, 45dvh);
+  width: clamp(280px, 90vw, 55dvh); /* More responsive */
+  height: clamp(280px, 90vw, 55dvh);
   border-radius: 50%;
   background: rgba(10, 10, 10, 0.9);
   box-shadow: 0 0 50px rgba(0, 243, 255, 0.1), inset 0 0 20px rgba(0,0,0,0.8);
