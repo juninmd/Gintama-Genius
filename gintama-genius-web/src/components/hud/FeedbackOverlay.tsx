@@ -84,11 +84,11 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
             type: "spring",
             stiffness: 400,
             damping: 15,
-            rotate: { duration: 0.5 }
+            rotate: { duration: 0.3 }
           }}
           style={{
             position: 'absolute',
-            top: '40%',
+            top: '15%',
             left: 0,
             right: 0,
             display: 'flex',

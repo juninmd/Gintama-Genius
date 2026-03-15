@@ -54,7 +54,7 @@
     align-items: center;
     width: 100%;
     margin-top: auto;
-    padding-bottom: env(safe-area-inset-bottom, 2rem);
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
     gap: 1rem;
     z-index: 20;
 }

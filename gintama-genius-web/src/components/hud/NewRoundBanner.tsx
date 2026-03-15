@@ -20,7 +20,7 @@ export const NewRoundBanner: React.FC<NewRoundBannerProps> = ({ feedback }) => {
           transition={{ type: "spring", stiffness: 100, damping: 20 }}
           style={{
             position: 'absolute',
-            top: '40%',
+            top: '20%',
             left: 0,
             right: 0,
             textAlign: 'center',
