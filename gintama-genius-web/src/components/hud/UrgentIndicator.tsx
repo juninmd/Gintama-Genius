@@ -28,8 +28,8 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
 
             {/* Pulsing Border Effect on Screen */}
             <motion.div
-                animate={{ boxShadow: ['inset 0 0 0px #ff0000', 'inset 0 0 50px #ff0000', 'inset 0 0 0px #ff0000'] }}
-                transition={{ duration: 0.8, repeat: Infinity }}
+                animate={{ boxShadow: ['inset 0 0 0px #ff0000', 'inset 0 0 80px #ff0000', 'inset 0 0 0px #ff0000'] }}
+                transition={{ duration: 0.4, repeat: Infinity }}
                 style={{
                     position: 'fixed',
                     top: 0, left: 0, right: 0, bottom: 0,
