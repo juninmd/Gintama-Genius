@@ -1,0 +1,39 @@
+[[allowlist]]
+description = "False positive: generic-api-key in Gintama Genius/My Project/Resources.resx"
+rules = ["generic-api-key"]
+paths = ["Gintama Genius/My Project/Resources.resx"]
+
+[[allowlist]]
+description = "False positive: generic-api-key in Gintama Genius/Principal.resx"
+rules = ["generic-api-key"]
+paths = ["Gintama Genius/Principal.resx"]
+
+[[allowlist]]
+description = "False positive: generic-api-key in Gintama Genius/Principal.resx"
+rules = ["generic-api-key"]
+paths = ["Gintama Genius/Principal.resx"]
+
+[[allowlist]]
+description = "False positive: generic-api-key in Gintama Genius/Principal.resx"
+rules = ["generic-api-key"]
+paths = ["Gintama Genius/Principal.resx"]
+
+[[allowlist]]
+description = "False positive: generic-api-key in Gintama Genius/Principal.resx"
+rules = ["generic-api-key"]
+paths = ["Gintama Genius/Principal.resx"]
+
+[[allowlist]]
+description = "False positive: generic-api-key in Gintama Genius/Principal.resx"
+rules = ["generic-api-key"]
+paths = ["Gintama Genius/Principal.resx"]
+
+[[allowlist]]
+description = "False positive: generic-api-key in Gintama Genius/Principal.resx"
+rules = ["generic-api-key"]
+paths = ["Gintama Genius/Principal.resx"]
+
+[[allowlist]]
+description = "False positive: generic-api-key in Gintama Genius/Principal.resx"
+rules = ["generic-api-key"]
+paths = ["Gintama Genius/Principal.resx"]
