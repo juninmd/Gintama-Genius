@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Flame, Droplets, Zap, Leaf } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { COLOR_HEX_MAP } from '../constants';
+import { secureRandom } from '../utils/math';
 
 interface GameButtonProps {
     color: number;
@@ -40,9 +41,9 @@ export const GameButton: React.FC<GameButtonProps> = ({ colorName, isActive, onC
     };
 
     const addPopup = () => {
-        const id = Date.now() + Math.random();
+        const id = Date.now() + secureRandom();
         const texts = ["+1", "BOA!", "INCRÍVEL!", "ISSO!", "COMBO!", "PERFEITO", "GENIAL!", "MITOU!"];
-        const text = texts[Math.floor(Math.random() * texts.length)];
+        const text = texts[Math.floor(secureRandom() * texts.length)];
         setPopups(prev => [...prev, {id, text}]);
         const timeoutId = setTimeout(() => {
             setPopups(prev => prev.filter(p => p.id !== id));
@@ -76,10 +77,10 @@ export const GameButton: React.FC<GameButtonProps> = ({ colorName, isActive, onC
         if (!disabled) {
             e.preventDefault();
             setIsPressed(true);
-            if (!shouldReduceMotion && Math.random() < 0.35) {
+            if (!shouldReduceMotion && secureRandom() < 0.35) {
               triggerConfetti();
             }
-            if (!shouldReduceMotion && Math.random() < 0.6) {
+            if (!shouldReduceMotion && secureRandom() < 0.6) {
               addPopup();
             }
             onClick();

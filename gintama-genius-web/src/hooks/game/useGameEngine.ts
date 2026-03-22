@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import type { Difficulty, TimeMode, GameState } from '../../constants';
+import { secureRandom } from '../../utils/math';
 import { MESSAGES_SUCCESS } from '../../constants';
 import type { Feedback } from '../useGameLogic';
 
@@ -30,7 +31,7 @@ export const useGameEngine = (
   const feedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const kaguraCountRef = useRef(0);
 
-  const getRandomMessage = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
+  const getRandomMessage = (arr: string[]) => arr[Math.floor(secureRandom() * arr.length)];
 
   const showFeedback = useCallback((nextFeedback: Feedback, durationMs = 0) => {
     setFeedback(nextFeedback);
@@ -110,11 +111,11 @@ export const useGameEngine = (
             showFeedback({ message: 'SEQUÊNCIA DE ACERTOS!', type: 'combo' }, 2000);
         } else {
              // To explicitly meet user requirements, always show a success feedback that includes the phrase "VOCÊ ACERTOU!" often.
-             const msg = Math.random() < 0.6 ? 'VOCÊ ACERTOU!' : getRandomMessage(MESSAGES_SUCCESS);
+             const msg = secureRandom() < 0.6 ? 'VOCÊ ACERTOU!' : getRandomMessage(MESSAGES_SUCCESS);
              showFeedback({ message: msg, type: 'success' }, 1500);
         }
 
-        if (settings.difficulty === 'BERSERK' && Math.random() < 0.5) {
+        if (settings.difficulty === 'BERSERK' && secureRandom() < 0.5) {
            showFeedback({ message: 'INCRÍVEL!', type: 'success' }, 1500);
         }
 
