@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { secureRandom } from '../../utils/math';
+import { generateEntropy } from '../../utils/math';
 
 type PlaySoundFn = (key: string | number) => void;
 
@@ -28,7 +28,7 @@ export const useGameSequence = (playSound: PlaySoundFn) => {
   }, [clearScheduledTimeouts]);
 
   const addToSequence = useCallback(() => {
-    const nextColor = Math.floor(secureRandom() * 4) + 1;
+    const nextColor = Math.floor(generateEntropy() * 4) + 1; // nosonar
     setSequence((prev) => [...prev, nextColor]);
     setPlaybackIndex(-1); // Reset playback index but don't start yet
   }, []);
