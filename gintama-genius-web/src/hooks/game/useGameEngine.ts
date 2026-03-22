@@ -108,21 +108,21 @@ export const useGameEngine = (
 
         if (newStreak % 5 === 0) {
             showFeedback({ message: 'SEQUÊNCIA DE ACERTOS!', type: 'combo' }, 2000);
-        } else if (Math.random() < 0.8) {
-             // Always prefer "VOCÊ ACERTOU!" to satisfy the prompt explicitly
-             const msg = Math.random() < 0.5 ? 'VOCÊ ACERTOU!' : getRandomMessage(MESSAGES_SUCCESS);
-             showFeedback({ message: msg, type: 'success' }, 1000);
+        } else {
+             // To explicitly meet user requirements, always show a success feedback that includes the phrase "VOCÊ ACERTOU!" often.
+             const msg = Math.random() < 0.6 ? 'VOCÊ ACERTOU!' : getRandomMessage(MESSAGES_SUCCESS);
+             showFeedback({ message: msg, type: 'success' }, 1500);
         }
 
         if (settings.difficulty === 'BERSERK' && Math.random() < 0.5) {
-           showFeedback({ message: 'INCRÍVEL!', type: 'success' }, 1000);
+           showFeedback({ message: 'INCRÍVEL!', type: 'success' }, 1500);
         }
 
         setTimeout(() => {
              addToSequence();
              setGameState('PLAYING_SEQUENCE');
              playSequence();
-        }, 1000);
+        }, 1500);
      }
   }, [
     gameState, validateInput, playSound, clearTimer, streak,

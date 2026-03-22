@@ -4,6 +4,7 @@
 @import './styles/board.css';
 @import './styles/hud.css';
 @import './styles/animations.css';
+@import './styles/layout.css';
 
 :root {
   --neon-blue: #00f3ff;
@@ -78,120 +79,10 @@ body {
   border-radius: 12px;
 }
 
-/* Layout */
-.hud-header {
-  width: 100%;
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  box-sizing: border-box;
-  z-index: 20;
-  pointer-events: none;
-}
-
-.game-layout {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  width: 100%;
-  z-index: 10;
-  gap: 1rem;
-  padding: 1rem 0;
-  min-height: 0; /* Important for flex child scrolling/sizing */
-}
-
-.indicator-area {
-  min-height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.board-area {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 button:focus-visible,
 select:focus-visible {
   outline: 2px solid var(--neon-blue);
   outline-offset: 2px;
-}
-
-/* Mobile Adjustments */
-@media (max-width: 600px) {
-    .menu-container {
-        padding: 1rem;
-        width: 90vw;
-    }
-
-    .menu-title {
-        font-size: 1.4rem;
-    }
-
-    .hud-header {
-        padding: 0.4rem;
-        font-size: 0.75rem;
-        gap: 0.3rem;
-    }
-
-    .hud-item {
-        padding: 0.2rem 0.4rem;
-        gap: 0.3rem;
-        white-space: nowrap;
-    }
-
-    .hud-item svg {
-        width: 16px;
-        height: 16px;
-    }
-
-    .hud-value {
-        font-size: 0.8rem;
-    }
-
-    .hud-value-small {
-        font-size: 0.7rem;
-    }
-
-    .game-over-content {
-      padding: 1.2rem;
-    }
-
-    .debug-panel {
-      top: 40px;
-      right: 4px;
-    }
-
-    .game-layout {
-        gap: 0.5rem;
-        padding: 0.5rem 0;
-    }
-
-    .indicator-area {
-        min-height: 32px;
-    }
-}
-
-/* Short screens */
-@media (max-height: 650px) {
-    .menu-container {
-        padding: 0.8rem;
-    }
-    .splash-image {
-        max-height: 80px;
-    }
-    .game-layout {
-        gap: 0.2rem;
-        padding: 0.2rem 0;
-    }
-    .hud-header {
-        padding: 0.3rem;
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -47,6 +47,19 @@
     text-transform: uppercase;
 }
 
+.pulse-neon-active {
+    animation: pulseNeon 1.5s infinite alternate;
+}
+
+@keyframes pulseNeon {
+    from {
+        filter: brightness(1);
+    }
+    to {
+        filter: brightness(1.2);
+    }
+}
+
 /* Footer */
 .hud-footer {
     display: flex;
@@ -189,4 +202,20 @@
 .kagura-bonus img {
     width: 300px;
     filter: drop-shadow(0 0 20px #ff0055);
+}
+
+/* Mobile adjustments for StreakBadge */
+@media (max-width: 600px) {
+    .streak-count {
+        font-size: 1.5rem;
+    }
+
+    .streak-label {
+        font-size: 0.6rem;
+    }
+
+    .streak-display {
+        min-width: 120px;
+        padding: 0.4rem 1rem;
+    }
 }
