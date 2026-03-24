@@ -20,14 +20,21 @@ export const StreakBadge: React.FC<StreakBadgeProps> = ({ streak }) => {
     <AnimatePresence>
       {streak > 1 && (
         <motion.div
-          className="streak-display"
+          className="streak-display pulse-neon-active"
           initial={{ opacity: 0, scale: 0.5, x: 20 }}
           animate={{
             opacity: 1,
             scale: 1,
             x: 0,
             borderColor: config.color,
-            boxShadow: `0 0 15px ${config.shadow}4d`
+            boxShadow: [
+              `0 0 15px ${config.shadow}4d`,
+              `0 0 30px ${config.shadow}80`,
+              `0 0 15px ${config.shadow}4d`
+            ]
+          }}
+          transition={{
+            boxShadow: { repeat: Infinity, duration: 1.5 }
           }}
           exit={{ opacity: 0, scale: 0.5, x: -20 }}
           key="streak-display"

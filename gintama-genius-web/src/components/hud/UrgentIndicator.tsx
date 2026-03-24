@@ -40,21 +40,24 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
 
             {/* Floating Warning */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.8, y: 50, x: '-50%' }}
+              initial={{ opacity: 0, scale: 0.8, y: 50, x: '-50%', rotate: 0 }}
               animate={{
                 opacity: 1,
-                scale: [1, 1.1, 1],
+                scale: [1, 1.2, 1],
                 y: 0,
-                x: '-50%'
+                x: ['-50%', '-52%', '-48%', '-50%'],
+                rotate: [0, -3, 3, 0]
               }}
-              exit={{ opacity: 0, scale: 0.8, y: 50, x: '-50%' }}
+              exit={{ opacity: 0, scale: 0.8, y: 50, x: '-50%', rotate: 0 }}
               transition={{
-                scale: { repeat: Infinity, duration: 0.6 },
+                scale: { repeat: Infinity, duration: 0.4 },
+                x: { repeat: Infinity, duration: 0.1 },
+                rotate: { repeat: Infinity, duration: 0.1 },
                 opacity: { duration: 0.2 }
               }}
               style={{
                 position: 'fixed',
-                bottom: '18%',
+                top: '35%',
                 left: '50%',
                 display: 'flex',
                 alignItems: 'center',

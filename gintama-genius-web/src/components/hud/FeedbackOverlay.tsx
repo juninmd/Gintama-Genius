@@ -88,7 +88,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
           }}
           style={{
             position: 'absolute',
-            top: '15%',
+            top: '25%',
             left: 0,
             right: 0,
             display: 'flex',
@@ -102,21 +102,21 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
           <div style={{
             background: isCombo
                 ? 'linear-gradient(135deg, rgba(255,0,85,0.95), rgba(249,248,113,0.95))'
-                : 'rgba(0,0,0,0.85)',
-            padding: isCombo ? '1.5rem 3rem' : '1rem 2rem',
+                : 'rgba(0,0,0,0.95)',
+            padding: isCombo ? '2rem 4rem' : '1.5rem 3rem',
             borderRadius: '50px',
-            border: `3px solid ${getBorderColor()}`,
-            boxShadow: `0 0 50px ${getShadowColor()}`,
+            border: `4px solid ${getBorderColor()}`,
+            boxShadow: `0 0 60px ${getShadowColor()}`,
             textAlign: 'center',
-            transform: isCombo ? 'scale(1.1)' : 'none',
-            backdropFilter: 'blur(8px)'
+            transform: isCombo ? 'scale(1.2)' : 'scale(1.1)',
+            backdropFilter: 'blur(10px)'
           }}>
             <span style={{
                 color: isCombo ? '#000' : getBorderColor(),
-                fontSize: isCombo ? '1.8rem' : '1.5rem',
+                fontSize: isCombo ? '2.5rem' : '2rem',
                 fontWeight: '900',
                 textTransform: 'uppercase',
-                textShadow: isCombo ? 'none' : `0 0 10px ${getBorderColor()}`,
+                textShadow: isCombo ? 'none' : `0 0 20px ${getBorderColor()}`,
                 whiteSpace: 'nowrap',
                 fontFamily: "'Space Grotesk', sans-serif",
                 display: 'block'
