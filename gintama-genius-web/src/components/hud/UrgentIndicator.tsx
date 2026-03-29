@@ -63,7 +63,7 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
                 alignItems: 'center',
                 gap: '0.5rem',
                 color: '#ff0055',
-                fontSize: '1.8rem',
+                fontSize: '2.5rem',
                 fontWeight: '900',
                 textShadow: '0 0 30px #ff0055',
                 padding: '0.8rem 1.5rem',
