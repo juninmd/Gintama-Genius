@@ -1,7 +1,11 @@
 [build]
   base = "gintama-genius-web"
-  command = "npm install -g pnpm && pnpm install && pnpm run build"
+  command = "pnpm install && pnpm run build"
   publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  PNPM_VERSION = "9"
 
 [[redirects]]
   from = "/*"
