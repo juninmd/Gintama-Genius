@@ -82,8 +82,8 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
           exit={{ opacity: 0, scale: 1.5, rotate: isError ? 10 : -10, y: -50 }}
           transition={{
             type: "spring",
-            stiffness: 500,
-            damping: 12,
+            stiffness: 400,
+            damping: 15,
             rotate: { duration: 0.3 }
           }}
           style={{
@@ -113,10 +113,10 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
           }}>
             <span style={{
                 color: isCombo ? '#000' : getBorderColor(),
-                fontSize: isCombo ? '3rem' : '2.5rem',
+                fontSize: isCombo ? '2.5rem' : '2rem',
                 fontWeight: '900',
                 textTransform: 'uppercase',
-                textShadow: isCombo ? 'none' : `0 0 10px #fff, 0 0 20px ${getBorderColor()}`,
+                textShadow: isCombo ? 'none' : `0 0 20px ${getBorderColor()}`,
                 whiteSpace: 'nowrap',
                 fontFamily: "'Space Grotesk', sans-serif",
                 display: 'block'

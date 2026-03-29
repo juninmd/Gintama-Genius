@@ -5,7 +5,7 @@
 
 /* Urgent Pulse */
 .urgent-pulse {
-    animation: pulseRed 0.4s infinite;
+    animation: pulseRed 0.8s infinite;
 }
 
 @keyframes pulseRed {
