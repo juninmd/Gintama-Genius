@@ -14,9 +14,9 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
             {/* Vignette Overlay */}
             <motion.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 0.8 }}
+                animate={{ opacity: [0.3, 0.8, 0.3] }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.5, repeat: Infinity }}
                 style={{
                     position: 'fixed',
                     top: 0, left: 0, right: 0, bottom: 0,
@@ -45,14 +45,14 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
                 opacity: 1,
                 scale: [1, 1.2, 1],
                 y: 0,
-                x: ['-50%', '-52%', '-48%', '-50%'],
-                rotate: [0, -3, 3, 0]
+                x: ['-50%', '-54%', '-46%', '-50%'],
+                rotate: [0, -5, 5, 0]
               }}
               exit={{ opacity: 0, scale: 0.8, y: 50, x: '-50%', rotate: 0 }}
               transition={{
                 scale: { repeat: Infinity, duration: 0.4 },
-                x: { repeat: Infinity, duration: 0.1 },
-                rotate: { repeat: Infinity, duration: 0.1 },
+                x: { repeat: Infinity, duration: 0.05 },
+                rotate: { repeat: Infinity, duration: 0.05 },
                 opacity: { duration: 0.2 }
               }}
               style={{
