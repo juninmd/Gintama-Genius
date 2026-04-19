@@ -59,8 +59,8 @@ export const GameButton: React.FC<GameButtonProps> = ({ colorName, isActive, onC
             const y = (rect.top + rect.height / 2) / window.innerHeight;
 
             confetti({
-                particleCount: 12,
-                spread: 50,
+                particleCount: 24,
+                spread: 70,
                 origin: { x, y },
                 colors: [COLOR_HEX_MAP[colorName]],
                 disableForReducedMotion: true,
@@ -80,7 +80,7 @@ export const GameButton: React.FC<GameButtonProps> = ({ colorName, isActive, onC
             if (!shouldReduceMotion && generateEntropy() < 0.35) { // nosonar
               triggerConfetti();
             }
-            if (!shouldReduceMotion && generateEntropy() < 0.6) { // nosonar
+            if (!shouldReduceMotion && generateEntropy() < 0.85) { // nosonar
               addPopup();
             }
             onClick();

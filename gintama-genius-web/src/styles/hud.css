@@ -219,3 +219,13 @@
         padding: 0.4rem 1rem;
     }
 }
+
+@media (max-width: 400px) {
+    .streak-count {
+        font-size: 1.2rem;
+    }
+
+    .streak-label {
+        font-size: 0.5rem;
+    }
+}
