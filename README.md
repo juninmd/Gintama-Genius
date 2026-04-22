@@ -1,38 +1,42 @@
-```markdown
-# Gintama-Genius
+# 🍓 Gintama Genius
 
-## Description
+> Um jogo de memória e reflexos inspirado no universo de Gintama.
 
-A standard software project.
+[![Deployment Status](https://img.shields.io/badge/ArgoCD-Synced-success?style=for-the-badge&logo=argocd)](https://argocd.antonio-code.duckdns.org)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
-## Installation
+## 📝 Descrição
 
-1.  Clone the repository: `git clone https://github.com/YourUsername/Gintama-Genius.git`
-2.  Navigate to the repository directory: `cd Gintama-Genius`
-3.  Install dependencies (if any – `npm install` or similar):  (Note:  Specific dependencies will depend on the project’s requirements, which aren't included in the provided files).
+**Gintama Genius** é um web game que desafia sua memória com personagens e referências da série Gintama. Desenvolvedores com foco em animações fluidas e uma experiência de usuário divertida (e um pouco caótica, como a própria série).
 
-## Usage
+## 🛠️ Tech Stack
 
-The project utilizes the following files:
+- **Frontend**: [React 19](https://react.dev/) + [Vite](https://vite.dev/)
+- **Animações**: [Framer Motion](https://www.framer.com/motion/)
+- **Efeitos**: [Canvas Confetti](https://www.npmjs.com/package/canvas-confetti)
+- **Deployment**: Nginx + Docker
 
-*   `.github`:  Contains project-related files and configuration.
-*   Gintama Genius.sln: The main project file.
-*   Gintama Genius.suo:  A sub-project file.
-*   Gintama Genius:  The core game logic.
-*   Principal_utf8.vb:  A Visual Basic file.
-*   fundo.psd, gameover.psd, gintama-genius-web, netlify.toml, renovate.json, server.log:  Supporting files for various aspects of the project.
+## 🚀 Como Rodar Localmente
 
-**Key Components:**
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/juninmd/Gintama-Genius.git
+   ```
+2. Entre na pasta da web:
+   ```bash
+   cd gintama-genius-web
+   ```
+3. Instale as dependências:
+   ```bash
+   npm install
+   ```
+4. Inicie o jogo:
+   ```bash
+   npm run dev
+   ```
 
-*   **Gintama Genius.sln:**  Contains the main game structure and logic.
-*   **Gintama Genius.suo:**  A sub-project file, likely containing additional features.
-*   **Gintama Genius:** The core game assets and code.
-*   **Principal_utf8.vb:**  Provides visual enhancement and potentially other utility code.
-*   **fundo.psd, gameover.psd:**  Supporting image files for display.
-*   **netlify.toml:**  Configures the web application for deployment.
-*   **renovate.json:**  Used for code versioning and build process.
-*   **server.log:** Logs for debugging and monitoring.
-*   **splash.psd:**  A thumbnail image used in the game.
+## 📦 Deployment
 
-**Note:**  This project is intended for development and testing.  Refer to the README.md for detailed instructions and troubleshooting information.
-```
+Este projeto é servido via **Nginx** no cluster **K3s**.
+
+- **URL de Produção**: [https://gintama.antonio-code.duckdns.org](https://gintama.antonio-code.duckdns.org)
