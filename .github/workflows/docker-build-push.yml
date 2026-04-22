@@ -19,5 +19,5 @@ jobs:
       - name: Build and Push to GHCR
         uses: juninmd/base-actions/docker-build-push@main
         with:
-          image-name: ${{ github.repository }}
+          image-name: juninmd/gintama-genius
           github-token: ${{ secrets.GITHUB_TOKEN }}
