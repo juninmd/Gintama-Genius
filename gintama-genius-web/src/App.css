@@ -55,6 +55,26 @@ body {
   touch-action: none;
 }
 
+/* Fever Mode */
+.fever-mode-active {
+  animation: feverPulse 2s infinite alternate;
+}
+.fever-mode-active::before {
+  background:
+    linear-gradient(90deg, rgba(255,0,85,0.08) 1px, transparent 1px),
+    linear-gradient(rgba(255,0,85,0.08) 1px, transparent 1px);
+}
+.fever-mode-active .board-area .game-board {
+  box-shadow: 0 0 80px rgba(255, 0, 85, 0.4), inset 0 0 30px rgba(0,0,0,0.8);
+  border-color: var(--neon-red);
+}
+
+@keyframes feverPulse {
+  0% { box-shadow: inset 0 0 0px var(--neon-red); filter: saturate(1.2) hue-rotate(0deg); }
+  50% { box-shadow: inset 0 0 50px var(--neon-red); filter: saturate(1.5) hue-rotate(15deg); }
+  100% { box-shadow: inset 0 0 0px var(--neon-red); filter: saturate(1.2) hue-rotate(0deg); }
+}
+
 /* Digital Rain / Grid Overlay */
 .app-container::before {
   content: '';

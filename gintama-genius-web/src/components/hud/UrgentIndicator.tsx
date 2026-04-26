@@ -43,16 +43,16 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
               initial={{ opacity: 0, scale: 0.8, y: 50, x: '-50%', rotate: 0 }}
               animate={{
                 opacity: 1,
-                scale: [1, 1.2, 1],
+                scale: [1, 1.3, 1],
                 y: 0,
-                x: ['-50%', '-54%', '-46%', '-50%'],
-                rotate: [0, -5, 5, 0]
+                x: ['-50%', '-56%', '-44%', '-50%'],
+                rotate: [0, -8, 8, 0]
               }}
               exit={{ opacity: 0, scale: 0.8, y: 50, x: '-50%', rotate: 0 }}
               transition={{
-                scale: { repeat: Infinity, duration: 0.4 },
-                x: { repeat: Infinity, duration: 0.05 },
-                rotate: { repeat: Infinity, duration: 0.05 },
+                scale: { repeat: Infinity, duration: 0.35 },
+                x: { repeat: Infinity, duration: 0.04 },
+                rotate: { repeat: Infinity, duration: 0.04 },
                 opacity: { duration: 0.2 }
               }}
               style={{
