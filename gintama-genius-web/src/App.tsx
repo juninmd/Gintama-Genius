@@ -39,10 +39,11 @@ function App() {
 
   const isUrgent = timeLeft <= 10 && gameState !== 'IDLE' && gameState !== 'GAME_OVER' && settings.timeMode !== 'INFINITE';
   const isError = feedback?.type === 'error';
+  const isFever = streak >= 10;
   const showDebugTools = import.meta.env.DEV;
 
   return (
-    <div className={`app-container ${isUrgent ? 'urgent-pulse' : ''} ${isError ? 'flash-error' : ''}`} >
+    <div className={`app-container ${isUrgent ? 'urgent-pulse' : ''} ${isError ? 'flash-error' : ''} ${isFever ? 'fever-mode-active' : ''}`} >
 
       {showDebugTools && (
         <button

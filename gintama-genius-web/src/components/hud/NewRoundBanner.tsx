@@ -14,26 +14,26 @@ export const NewRoundBanner: React.FC<NewRoundBannerProps> = ({ feedback }) => {
     <AnimatePresence>
       {isNewRound && (
         <motion.div
-          initial={{ scale: 0.8, opacity: 0, x: '-100%' }}
-          animate={{ scale: 1, opacity: 1, x: 0 }}
-          exit={{ scale: 1.2, opacity: 0, x: '100%' }}
-          transition={{ type: "spring", stiffness: 100, damping: 20 }}
+          initial={{ scale: 0.5, opacity: 0, x: '-100%', skewX: -20 }}
+          animate={{ scale: 1, opacity: 1, x: 0, skewX: 0 }}
+          exit={{ scale: 1.5, opacity: 0, x: '100%', skewX: 20 }}
+          transition={{ type: "spring", stiffness: 200, damping: 15 }}
           style={{
             position: 'absolute',
             top: '20%',
             left: 0,
             right: 0,
             textAlign: 'center',
-            color: '#00f3ff',
+            color: '#bc13fe',
             fontSize: 'min(3rem, 10vw)',
-            fontWeight: 'bold',
-            textShadow: '0 0 20px #00f3ff',
+            fontWeight: '900',
+            textShadow: '0 0 20px #bc13fe, 0 0 40px #bc13fe',
             zIndex: 100,
             background: 'rgba(0,0,0,0.8)',
             padding: '2rem 0',
-            borderTop: '2px solid #00f3ff',
-            borderBottom: '2px solid #00f3ff',
-            backdropFilter: 'blur(8px)'
+            borderTop: '4px solid #bc13fe',
+            borderBottom: '4px solid #bc13fe',
+            backdropFilter: 'blur(10px)'
           }}
         >
           {feedback?.message}
