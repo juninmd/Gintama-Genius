@@ -15,6 +15,7 @@ const getInitialTime = (mode: TimeMode): number => {
 export const useGameTimer = (timeMode: TimeMode, onTimeUp: () => void) => {
   const [timeLeft, setTimeLeft] = useState(0);
   const [countdownValue, setCountdownValue] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const clearTimer = useCallback(() => {
@@ -27,10 +28,36 @@ export const useGameTimer = (timeMode: TimeMode, onTimeUp: () => void) => {
   const resetTimer = useCallback(() => {
     clearTimer();
     setTimeLeft(getInitialTime(timeMode));
+    setIsPaused(false);
   }, [timeMode, clearTimer]);
+
+  const pauseTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+      setIsPaused(true);
+    }
+  }, []);
+
+  const resumeTimer = useCallback(() => {
+    if (timeMode === 'INFINITE' || isPaused === false) return;
+
+    setIsPaused(false);
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearTimer();
+          onTimeUp();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, [timeMode, isPaused, clearTimer, onTimeUp]);
 
   const startTimer = useCallback(() => {
     clearTimer();
+    setIsPaused(false);
     if (timeMode === 'INFINITE') return;
 
     timerRef.current = setInterval(() => {
@@ -49,7 +76,6 @@ export const useGameTimer = (timeMode: TimeMode, onTimeUp: () => void) => {
     setCountdownValue(startFrom);
   }, []);
 
-  // Countdown effect
   useEffect(() => {
     if (countdownValue > 0) {
       const timer = setTimeout(() => setCountdownValue((prev) => prev - 1), 1000);
@@ -57,7 +83,6 @@ export const useGameTimer = (timeMode: TimeMode, onTimeUp: () => void) => {
     }
   }, [countdownValue]);
 
-  // Clean up on unmount
   useEffect(() => {
     return () => clearTimer();
   }, [clearTimer]);
@@ -69,6 +94,9 @@ export const useGameTimer = (timeMode: TimeMode, onTimeUp: () => void) => {
     startTimer,
     resetTimer,
     clearTimer,
-    startCountdown
+    startCountdown,
+    pauseTimer,
+    resumeTimer,
+    isPaused,
   };
 };

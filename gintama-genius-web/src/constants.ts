@@ -35,10 +35,10 @@ export const MESSAGES_SUCCESS = [
   "É SÓ QUEBRAR O FREIO!",
   "ZURA ESPERA!",
   "ELIZABETH ESTÁ OLHANDO!",
-  "JUSTAWAY APROVADO!",
-  "CUIDADO COM A MAIONESE!",
   "FREIO DE MÃO QUEBRADO!",
   "SHINSENGUMI EM AÇÃO!",
+  "ONESHOT KING!",
+  "SENSUIIIII!",
 ];
 
 export const MESSAGES_ERROR = [
@@ -90,13 +90,14 @@ export const DIFFICULTY_MAP: Record<string, string> = {
   EASY: 'SHINPACHI',
   NORMAL: 'SAMURAI',
   BERSERK: 'YATO',
+  HARDCORE: 'YATOKING',
 };
 
 export const COLORS = [1, 2, 3, 4] as const;
 
-export type Difficulty = 'BERSERK' | 'NORMAL' | 'EASY';
+export type Difficulty = 'BERSERK' | 'NORMAL' | 'EASY' | 'HARDCORE';
 export type TimeMode = '30s' | '60s' | '120s' | '240s' | 'INFINITE';
-export type GameState = 'IDLE' | 'PLAYING_SEQUENCE' | 'WAITING_FOR_INPUT' | 'GAME_OVER' | 'COUNTDOWN';
+export type GameState = 'IDLE' | 'PLAYING_SEQUENCE' | 'WAITING_FOR_INPUT' | 'GAME_OVER' | 'COUNTDOWN' | 'PAUSED';
 
 export const COLOR_MAP: { [key: number]: string } = {
   1: 'vermelho',

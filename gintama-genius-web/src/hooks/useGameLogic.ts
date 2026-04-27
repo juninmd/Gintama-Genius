@@ -5,6 +5,8 @@ import { useGameTimer } from './game/useGameTimer';
 import { useGameSequence } from './game/useGameSequence';
 import { useDebugActions } from './game/useDebugActions';
 import { useGameEngine } from './game/useGameEngine';
+import { useScoreHistory } from './useScoreHistory';
+import { useAchievements } from './useAchievements';
 import {
   type Difficulty,
   type TimeMode,
@@ -38,20 +40,25 @@ export const useGameLogic = () => {
     timeMode: '60s',
   });
 
+  const { addEntry } = useScoreHistory();
+  const { recentlyUnlocked, checkAndUnlock: checkAchievements } = useAchievements();
+
   const gameStateRef = useRef<GameState>('IDLE');
+  const errorCountRef = useRef(0);
 
   useEffect(() => {
     gameStateRef.current = gameState;
   }, [gameState]);
 
   const onTimeUp = useCallback(() => {
-    if (gameStateRef.current !== 'IDLE' && gameStateRef.current !== 'GAME_OVER') {
+    if (gameStateRef.current !== 'IDLE' && gameStateRef.current !== 'GAME_OVER' && gameStateRef.current !== 'PAUSED') {
         setGameState('GAME_OVER');
         playSound('gameOver');
-        // showFeedback logic has been moved to useGameEngine. We can just rely on the engine's feedback state to be updated, or not show feedback directly here since it's Game Over.
         setIsInputLocked(true);
+        checkAchievements({ score, streak, level: 0, isHardcore: settings.difficulty === 'HARDCORE', errors: errorCountRef.current });
+        addEntry({ score, difficulty: settings.difficulty, timeMode: settings.timeMode, level: 0 });
     }
-  }, [playSound, setIsInputLocked]);
+  }, [playSound, setIsInputLocked, score, streak, settings, addEntry, checkAchievements]);
 
   const {
     timeLeft,
@@ -60,8 +67,22 @@ export const useGameLogic = () => {
     resetTimer,
     clearTimer,
     startCountdown,
-    setTimeLeft
+    setTimeLeft,
+    pauseTimer,
+    resumeTimer
   } = useGameTimer(settings.timeMode, onTimeUp);
+
+  const togglePause = useCallback(() => {
+    if (gameState === 'WAITING_FOR_INPUT') {
+      setGameState('PAUSED');
+      pauseTimer();
+      setIsInputLocked(true);
+    } else if (gameState === 'PAUSED') {
+      setGameState('WAITING_FOR_INPUT');
+      resumeTimer();
+      setIsInputLocked(false);
+    }
+  }, [gameState, pauseTimer, resumeTimer, setIsInputLocked]);
 
   const {
     level,
@@ -77,7 +98,7 @@ export const useGameLogic = () => {
     playSound, resetScore, addScore, incrementStreak, resetStreak, streak,
     resetSequence, addToSequence, playSequence, validateInput, setIsInputLocked,
     clearTimer, startCountdown, setTimeLeft,
-    settings, setSettings, gameState, setGameState
+    settings, setSettings, gameState, setGameState, errorCountRef
   );
 
   const debugActions = useDebugActions({
@@ -86,7 +107,10 @@ export const useGameLogic = () => {
   });
 
   useEffect(() => {
-    if (gameState === 'IDLE') resetTimer();
+    if (gameState === 'IDLE') {
+      resetTimer();
+      errorCountRef.current = 0;
+    }
   }, [settings.timeMode, resetTimer, gameState]);
 
   useEffect(() => {
@@ -108,9 +132,26 @@ export const useGameLogic = () => {
     }
   }, [gameState, countdownValue, startTimer, playSequence, showFeedback]);
 
+  const handleGameOver = useCallback((finalScore: number, finalLevel: number) => {
+    checkAchievements({
+      score: finalScore,
+      streak: streak,
+      level: finalLevel,
+      isHardcore: settings.difficulty === 'HARDCORE',
+      errors: errorCountRef.current
+    });
+    addEntry({
+      score: finalScore,
+      difficulty: settings.difficulty,
+      timeMode: settings.timeMode,
+      level: finalLevel
+    });
+  }, [checkAchievements, addEntry, streak, settings]);
+
   return {
     gameState, score, level, timeLeft, activeColor, sequence, userInputIndex,
     settings, kaguraActive, streak, highScore, feedback, countdownValue, isMuted,
     toggleMute, startGame, handleColorClick, resetGame, debugActions,
+    togglePause, recentlyUnlocked, handleGameOver,
   };
 };

@@ -4,6 +4,14 @@ import { generateEntropy } from '../../utils/math';
 import { MESSAGES_SUCCESS } from '../../constants';
 import type { Feedback } from '../useGameLogic';
 
+const MESSAGES_HARDCORE = [
+  "YATO KING!",
+  "REI DOS YATOS!",
+  "INSTINTO ASSASSINO!",
+  "ONESHOT!",
+  "SENSUIIIII!",
+];
+
 export const useGameEngine = (
   playSound: (key: number | string) => void,
   resetScore: () => void,
@@ -22,7 +30,8 @@ export const useGameEngine = (
   settings: { difficulty: Difficulty; timeMode: TimeMode },
   setSettings: React.Dispatch<React.SetStateAction<{ difficulty: Difficulty; timeMode: TimeMode }>>,
   gameState: GameState,
-  setGameState: React.Dispatch<React.SetStateAction<GameState>>
+  setGameState: React.Dispatch<React.SetStateAction<GameState>>,
+  errorCountRef?: React.MutableRefObject<number>
 ) => {
   const [level, setLevel] = useState(0);
   const [kaguraActive, setKaguraActive] = useState(false);
@@ -31,7 +40,7 @@ export const useGameEngine = (
   const feedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const kaguraCountRef = useRef(0);
 
-  const pickMessage = (arr: string[]) => arr[Math.floor(generateEntropy() * arr.length)]; // nosonar
+  const pickMessage = (arr: string[]) => arr[Math.floor(generateEntropy() * arr.length)];
 
   const showFeedback = useCallback((nextFeedback: Feedback, durationMs = 0) => {
     setFeedback(nextFeedback);
@@ -45,7 +54,7 @@ export const useGameEngine = (
   }, []);
 
   const triggerKaguraBonus = useCallback(() => {
-    if (settings.difficulty === 'BERSERK') return;
+    if (settings.difficulty === 'BERSERK' || settings.difficulty === 'HARDCORE') return;
 
     kaguraCountRef.current += 1;
     if (kaguraCountRef.current < 15) return;
@@ -71,12 +80,14 @@ export const useGameEngine = (
     kaguraCountRef.current = 0;
     setFeedback(null);
 
+    if (errorCountRef) errorCountRef.current = 0;
+
     playSound('novo');
     addToSequence();
 
     setGameState('COUNTDOWN');
     startCountdown(3);
-  }, [resetScore, resetSequence, setSettings, startCountdown, addToSequence, playSound, setGameState]);
+  }, [resetScore, resetSequence, setSettings, startCountdown, addToSequence, playSound, setGameState, errorCountRef]);
 
   const handleColorClick = useCallback((color: number) => {
      if (gameState !== 'WAITING_FOR_INPUT') return;
@@ -86,6 +97,17 @@ export const useGameEngine = (
      const result = validateInput(color);
 
      if (result === 'wrong') {
+        if (errorCountRef) errorCountRef.current += 1;
+
+        if (settings.difficulty === 'HARDCORE') {
+           setGameState('GAME_OVER');
+           playSound('gameOver');
+           clearTimer();
+           showFeedback({ message: 'YATO KING VENCEU!', type: 'error' });
+           resetStreak();
+           return;
+        }
+
         setGameState('GAME_OVER');
         playSound('gameOver');
         clearTimer();
@@ -110,12 +132,14 @@ export const useGameEngine = (
         if (newStreak % 5 === 0) {
             showFeedback({ message: 'SEQUÊNCIA DE ACERTOS!', type: 'combo' }, 2000);
         } else {
-             // To explicitly meet user requirements, always show a success feedback that includes the phrase "VOCÊ ACERTOU!" often.
-             const msg = generateEntropy() < 0.6 ? 'VOCÊ ACERTOU!' : pickMessage(MESSAGES_SUCCESS); // nosonar
+             const msg = generateEntropy() < 0.6 ? 'VOCÊ ACERTOU!' : pickMessage(MESSAGES_SUCCESS);
              showFeedback({ message: msg, type: 'success' }, 1500);
         }
 
-        if (settings.difficulty === 'BERSERK' && generateEntropy() < 0.5) { // nosonar
+        if (settings.difficulty === 'HARDCORE') {
+           const hMsg = pickMessage(MESSAGES_HARDCORE);
+           showFeedback({ message: hMsg, type: 'success' }, 1000);
+        } else if (settings.difficulty === 'BERSERK' && generateEntropy() < 0.5) {
            showFeedback({ message: 'INCRÍVEL!', type: 'success' }, 1500);
         }
 
@@ -128,7 +152,8 @@ export const useGameEngine = (
   }, [
     gameState, validateInput, playSound, clearTimer, streak,
     resetStreak, showFeedback, addScore, incrementStreak,
-    triggerKaguraBonus, setIsInputLocked, addToSequence, playSequence, settings.difficulty, setGameState
+    triggerKaguraBonus, setIsInputLocked, addToSequence, playSequence,
+    settings.difficulty, setGameState, errorCountRef
   ]);
 
   const resetGame = useCallback(() => {
@@ -138,7 +163,8 @@ export const useGameEngine = (
     clearTimer();
     setFeedback(null);
     setKaguraActive(false);
-  }, [resetScore, resetSequence, clearTimer, setGameState]);
+    if (errorCountRef) errorCountRef.current = 0;
+  }, [resetScore, resetSequence, clearTimer, setGameState, errorCountRef]);
 
   return {
     level, setLevel, kaguraActive, setKaguraActive, feedback, showFeedback,

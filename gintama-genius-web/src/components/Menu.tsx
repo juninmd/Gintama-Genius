@@ -28,6 +28,7 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
         <div className="setting-group">
           <label>Nível:</label>
           <select value={difficulty} onChange={(e) => setDifficulty(e.target.value as Difficulty)}>
+            <option value="HARDCORE">Yato King (Hardcore - 1 vida)</option>
             <option value="BERSERK">Yato (Difícil)</option>
             <option value="NORMAL">Samurai (Normal)</option>
             <option value="EASY">Shinpachi (Fácil)</option>
