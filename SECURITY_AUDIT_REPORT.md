@@ -32,7 +32,7 @@ This security audit was conducted on the gintama-genius repository to identify p
 
 ### 3. Code Security ✅ PASS
 - **Input Validation**: Web application validates inputs before processing
-- **No SQL Injection**: Uses proper data access patterns (VB.NET application)
+- **No SQL Injection**: Uses proper data access patterns (TypeScript/React application)
 - **Environment Variables**: Sensitive configuration stored in environment variables
 - **Secret Handling**: No hardcoded secrets found in codebase
 
