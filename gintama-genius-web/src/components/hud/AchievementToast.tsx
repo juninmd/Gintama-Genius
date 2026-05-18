@@ -3,11 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import type { Achievement } from '../../hooks/useAchievements';
 
 interface AchievementToastProps {
-  achievement: Achievement | null;
+  achievement: Achievement | null | boolean;
 }
 
 export const AchievementToast: React.FC<AchievementToastProps> = ({ achievement }) => {
-  if (!achievement) return null;
+  if (!achievement || typeof achievement === 'boolean') return null;
 
   return (
     <AnimatePresence>

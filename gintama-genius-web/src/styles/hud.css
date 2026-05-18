@@ -750,4 +750,7 @@
 
   .pause-content { padding: 1.5rem; }
   .pause-title { font-size: 2rem; }
+
+  .toast { padding: 0.5rem 1rem; }
+  .toast-message { font-size: 0.85rem; }
 }
