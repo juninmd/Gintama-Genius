@@ -15,10 +15,10 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          motion: ['framer-motion'],
-          confetti: ['canvas-confetti'],
+        manualChunks(id: string) {
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) return 'vendor';
+          if (id.includes('node_modules/framer-motion')) return 'motion';
+          if (id.includes('node_modules/canvas-confetti')) return 'confetti';
         },
       },
     },

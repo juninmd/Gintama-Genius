@@ -10,7 +10,7 @@ RUN pnpm run build
 FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /app/dist /usr/share/nginx/html
-COPY gintama-genius-web/nginx.conf /etc/nginx/conf.d/default.conf 2>/dev/null || true
+RUN if [ -f gintama-genius-web/nginx.conf ]; then cp gintama-genius-web/nginx.conf /etc/nginx/conf.d/default.conf; fi
 EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://localhost:80/ || exit 1

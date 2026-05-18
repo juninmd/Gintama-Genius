@@ -2,18 +2,19 @@ import { renderHook } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useAppKeyboard } from '../useAppKeyboard';
 import type { GameState } from '../../../constants';
+import type { Dispatch, SetStateAction } from 'react';
 
 describe('useAppKeyboard', () => {
-  let setShowShortcuts: ReturnType<typeof vi.fn>;
-  let setShowHistory: ReturnType<typeof vi.fn>;
-  let togglePause: ReturnType<typeof vi.fn>;
-  let toggleMute: ReturnType<typeof vi.fn>;
+  let setShowShortcuts: Dispatch<SetStateAction<boolean>>;
+  let setShowHistory: Dispatch<SetStateAction<boolean>>;
+  let togglePause: () => void;
+  let toggleMute: () => void;
 
   beforeEach(() => {
-    setShowShortcuts = vi.fn();
-    setShowHistory = vi.fn();
-    togglePause = vi.fn();
-    toggleMute = vi.fn();
+    setShowShortcuts = vi.fn() as unknown as Dispatch<SetStateAction<boolean>>;
+    setShowHistory = vi.fn() as unknown as Dispatch<SetStateAction<boolean>>;
+    togglePause = vi.fn() as unknown as () => void;
+    toggleMute = vi.fn() as unknown as () => void;
   });
 
   const setupHook = (gameState: GameState = 'WAITING_FOR_INPUT', showShortcuts = false, showHistory = false) => {
