@@ -1,3 +1,4 @@
+import React from 'react';
 import { generateEntropy } from '../../utils/math';
 import type { TimeMode, Difficulty } from '../../constants';
 

@@ -64,28 +64,29 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
             x: { duration: 0.3 }
           }}
           style={{
-            position: 'absolute',
-            top: '25%',
-            left: 0,
-            right: 0,
+            position: 'fixed',
+            top: '30%',
+            left: '50%',
+            transform: 'translateX(-50%)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             pointerEvents: 'none',
-            zIndex: 150
+            zIndex: 150,
+            width: '100%',
           }}
         >
           <div style={{
             background: isCombo
                 ? 'linear-gradient(135deg, rgba(255,0,85,0.95), rgba(249,248,113,0.95))'
                 : 'rgba(0,0,0,0.95)',
-            padding: isCombo ? '2rem 4rem' : '1.5rem 3rem',
+            padding: isCombo ? '1rem 2rem' : '1rem 2rem',
             borderRadius: '50px',
             border: `4px solid ${getBorderColor()}`,
             boxShadow: `0 0 60px ${getShadowColor()}`,
             textAlign: 'center',
-            transform: isCombo ? 'scale(1.2)' : 'scale(1.1)',
+            transform: isCombo ? 'scale(1.1)' : 'scale(1.0)',
             backdropFilter: 'blur(10px)'
           }}>
             <span style={{

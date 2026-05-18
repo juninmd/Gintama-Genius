@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import type { GameState } from '../../constants';
 
 export const useAppKeyboard = (

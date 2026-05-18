@@ -58,10 +58,10 @@ jobs:
           version: 8
 
       - name: Build Docker Container
-        run: docker build -t gintama-genius-web .
+        run: docker build -f ../Dockerfile -t gintama-genius-web .
         working-directory: ./gintama-genius-web
 
       - name: Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+        run: pnpm exec semantic-release

@@ -19,21 +19,22 @@ export const NewRoundBanner: React.FC<NewRoundBannerProps> = ({ feedback }) => {
           exit={{ scale: 1.5, opacity: 0, x: '100%', skewX: 20 }}
           transition={{ type: "spring", stiffness: 200, damping: 15 }}
           style={{
-            position: 'absolute',
+            position: 'fixed',
             top: '20%',
-            left: 0,
-            right: 0,
+            left: '50%',
+            transform: 'translateX(-50%)',
             textAlign: 'center',
             color: '#bc13fe',
-            fontSize: 'min(3rem, 10vw)',
+            fontSize: 'min(2rem, 8vw)',
             fontWeight: '900',
             textShadow: '0 0 20px #bc13fe, 0 0 40px #bc13fe',
             zIndex: 100,
             background: 'rgba(0,0,0,0.8)',
-            padding: '2rem 0',
+            padding: '1rem 0',
             borderTop: '4px solid #bc13fe',
             borderBottom: '4px solid #bc13fe',
-            backdropFilter: 'blur(10px)'
+            backdropFilter: 'blur(10px)',
+            width: '100%'
           }}
         >
           {feedback?.message}
