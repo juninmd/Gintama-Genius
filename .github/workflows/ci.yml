@@ -190,7 +190,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Notify Deployment Start
-        uses: slackapi/slack-github-action@v1
+        uses: slackapi/slack-github-action@v3
         if: ${{ secrets.SLACK_WEBHOOK_URL }}
         continue-on-error: true
         with:
@@ -219,7 +219,7 @@ jobs:
           echo "Rolling back to previous deployment..."
           echo "kubectl rollout undo deployment/gintama-genius"
       - name: Notify Deployment Result
-        uses: slackapi/slack-github-action@v1
+        uses: slackapi/slack-github-action@v3
         if: ${{ secrets.SLACK_WEBHOOK_URL }} && always()
         continue-on-error: true
         with:
