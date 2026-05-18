@@ -1,5 +1,5 @@
 # Build stage
-FROM node:22-alpine AS builder
+FROM node:26-alpine AS builder
 WORKDIR /app
 COPY gintama-genius-web/package.json gintama-genius-web/pnpm-lock.yaml ./
 RUN corepack enable && corepack prepare pnpm@9 --activate && pnpm install --frozen-lockfile
