@@ -1,0 +1,87 @@
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+secrets/
+config/secrets.yml
+*.secret
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+dist-ssr/
+build/
+*.vs/
+*.suo
+*.sln.docstates
+*.user
+*.userosscache
+*.sln.ide/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# VB.NET specific
+[Bb]in/
+[Oo]bj/
+*.userprefs
+*.csproj.user
+Gintama Genius.suo
+
+# NuGet
+packages/
+*.nupkg
+
+# PSD files (large binary assets)
+*.psd
+*.psb
+
+# Docker
+.docker/
+
+# Runtime
+server.log
+
+# Linting
+.eslintcache
+.stylelintcache
+
+# Coverage
+coverage/
+.coverage
+*.lcov
+
+# Misc
+*.local
+*.orig
+.tmp
+temp/
+tmp/
