@@ -1,15 +1,20 @@
-name: Build and Push Docker Image
+name: Deploy
 
 on:
   push:
     branches:
-      - master
       - main
-  workflow_dispatch:
+      - master
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
+  deploy:
+    name: Build and Push Docker Image
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     permissions:
       contents: read
       packages: write
@@ -19,5 +24,5 @@ jobs:
       - name: Build and Push to GHCR
         uses: juninmd/base-actions/docker-build-push@main
         with:
-          image-name: juninmd/gintama-genius
+          image-name: ${{ github.repository }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
