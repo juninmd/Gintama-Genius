@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { pickMessage, executeKaguraBonus, MESSAGES_HARDCORE } from '../useGameEngineHelpers';
 import { generateEntropy } from '../../../utils/math';
+import type { Dispatch, SetStateAction } from 'react';
 
 vi.mock('../../../utils/math', () => ({
   generateEntropy: vi.fn(),
@@ -30,18 +31,18 @@ describe('pickMessage', () => {
 
 describe('executeKaguraBonus', () => {
   let kaguraCountRef: { current: number };
-  let setTimeLeft: ReturnType<typeof vi.fn>;
-  let addScore: ReturnType<typeof vi.fn>;
-  let playSound: ReturnType<typeof vi.fn>;
-  let setKaguraActive: ReturnType<typeof vi.fn>;
+  let setTimeLeft: Dispatch<SetStateAction<number>>;
+  let addScore: (score: number) => void;
+  let playSound: (key: number | string) => void;
+  let setKaguraActive: Dispatch<SetStateAction<boolean>>;
 
   beforeEach(() => {
     vi.useFakeTimers();
     kaguraCountRef = { current: 0 };
-    setTimeLeft = vi.fn();
-    addScore = vi.fn();
-    playSound = vi.fn();
-    setKaguraActive = vi.fn();
+    setTimeLeft = vi.fn() as unknown as Dispatch<SetStateAction<number>>;
+    addScore = vi.fn() as unknown as (score: number) => void;
+    playSound = vi.fn() as unknown as (key: number | string) => void;
+    setKaguraActive = vi.fn() as unknown as Dispatch<SetStateAction<boolean>>;
   });
 
   it('should do nothing for BERSERK difficulty', () => {
@@ -63,7 +64,7 @@ describe('executeKaguraBonus', () => {
 
   it('should trigger bonus after 15 clicks for NORMAL difficulty', () => {
     kaguraCountRef.current = 14;
-    const setTimeLeftFn = vi.fn((fn) => fn(60));
+    const setTimeLeftFn = vi.fn((fn) => fn(60)) as unknown as Dispatch<SetStateAction<number>>;
     executeKaguraBonus('NORMAL', '60s', kaguraCountRef, setTimeLeftFn, addScore, playSound, setKaguraActive);
 
     expect(kaguraCountRef.current).toBe(0);
@@ -75,7 +76,7 @@ describe('executeKaguraBonus', () => {
 
   it('should not add time for INFINITE mode', () => {
     kaguraCountRef.current = 14;
-    const setTimeLeftFn = vi.fn();
+    const setTimeLeftFn = vi.fn() as unknown as Dispatch<SetStateAction<number>>;
     executeKaguraBonus('EASY', 'INFINITE', kaguraCountRef, setTimeLeftFn, addScore, playSound, setKaguraActive);
 
     expect(addScore).toHaveBeenCalledWith(10);
@@ -84,7 +85,7 @@ describe('executeKaguraBonus', () => {
 
   it('should reset kaguraActive after 2000ms', () => {
     kaguraCountRef.current = 14;
-    const setTimeLeftFn = vi.fn((fn) => fn(60));
+    const setTimeLeftFn = vi.fn((fn) => fn(60)) as unknown as Dispatch<SetStateAction<number>>;
     executeKaguraBonus('NORMAL', '60s', kaguraCountRef, setTimeLeftFn, addScore, playSound, setKaguraActive);
 
     expect(setKaguraActive).toHaveBeenCalledWith(true);
