@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import confetti from 'canvas-confetti';
 import type { Feedback } from '../../hooks/useGameLogic';
+import { useConfettiEffect } from './hooks/useConfettiEffect';
 
 interface FeedbackOverlayProps {
   feedback: Feedback | null;
@@ -9,52 +9,11 @@ interface FeedbackOverlayProps {
 }
 
 export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, streak }) => {
-  const isCombo = feedback?.message.includes('SEQUÊNCIA') || feedback?.message.includes('COMBO');
+  const isCombo = feedback?.message.includes('SEQUÊNCIA') || feedback?.message.includes('COMBO') || false;
   const isError = feedback?.type === 'error';
   const isSuccess = feedback?.type === 'success';
 
-  // Confetti Effects
-  useEffect(() => {
-    if (!feedback) return;
-
-    if (feedback.type === 'info') {
-      confetti({
-        particleCount: 80,
-        spread: 60,
-        origin: { y: 0.4 },
-        colors: ['#00f3ff', '#ff0055', '#f9f871'],
-        disableForReducedMotion: true
-      });
-    }
-
-    if (isCombo) {
-      // Big burst for combo
-      const duration = 1500;
-      const end = Date.now() + duration;
-
-      const frame = () => {
-        confetti({
-          particleCount: 5,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0 },
-          colors: ['#ff0055', '#f9f871']
-        });
-        confetti({
-          particleCount: 5,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1 },
-          colors: ['#00f3ff', '#bc13fe']
-        });
-
-        if (Date.now() < end) {
-          requestAnimationFrame(frame);
-        }
-      };
-      frame();
-    }
-  }, [feedback, isCombo]);
+  useConfettiEffect(feedback, isCombo);
 
   if (feedback?.type === 'info') return null;
 
@@ -93,41 +52,18 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
             rotate: { duration: 0.3 },
             x: { duration: 0.3 }
           }}
-          style={{
-            position: 'absolute',
-            top: '25%',
-            left: 0,
-            right: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            pointerEvents: 'none',
-            zIndex: 150
-          }}
+          className={`feedback-overlay-container ${isCombo ? 'combo' : ''} ${isError ? 'error' : ''} ${isSuccess ? 'success' : ''}`}
         >
-          <div style={{
-            background: isCombo
-                ? 'linear-gradient(135deg, rgba(255,0,85,0.95), rgba(249,248,113,0.95))'
-                : 'rgba(0,0,0,0.95)',
-            padding: isCombo ? '2rem 4rem' : '1.5rem 3rem',
-            borderRadius: '50px',
-            border: `4px solid ${getBorderColor()}`,
-            boxShadow: `0 0 60px ${getShadowColor()}`,
-            textAlign: 'center',
-            transform: isCombo ? 'scale(1.2)' : 'scale(1.1)',
-            backdropFilter: 'blur(10px)'
-          }}>
-            <span style={{
-                color: isCombo ? '#000' : getBorderColor(),
-                fontSize: isCombo ? '2.5rem' : '2rem',
-                fontWeight: '900',
-                textTransform: 'uppercase',
-                textShadow: isCombo ? 'none' : `0 0 20px ${getBorderColor()}`,
-                whiteSpace: 'nowrap',
-                fontFamily: "'Space Grotesk', sans-serif",
-                display: 'block'
-            }}>
+          <div className={`feedback-overlay-box ${isCombo ? 'combo' : ''}`}
+               style={{
+                 border: `4px solid ${getBorderColor()}`,
+                 boxShadow: `0 0 60px ${getShadowColor()}`,
+               }}>
+            <span className={`feedback-text ${isCombo ? 'combo' : ''}`}
+                  style={{
+                    color: isCombo ? '#000' : getBorderColor(),
+                    textShadow: isCombo ? 'none' : `0 0 20px ${getBorderColor()}`,
+                  }}>
                 {feedback.message}
             </span>
 
@@ -136,16 +72,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.1, type: "spring" }}
-                    style={{
-                        fontSize: '1.2rem',
-                        fontWeight: 800,
-                        marginTop: '0.5rem',
-                        color: '#000',
-                        background: '#fff',
-                        padding: '0.2rem 0.8rem',
-                        borderRadius: '20px',
-                        display: 'inline-block'
-                    }}
+                    className="feedback-streak-badge"
                 >
                     {streak} ACERTOS!
                 </motion.div>

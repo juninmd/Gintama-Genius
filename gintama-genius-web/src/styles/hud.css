@@ -751,3 +751,71 @@
   .pause-content { padding: 1.5rem; }
   .pause-title { font-size: 2rem; }
 }
+
+/* Feedback Overlay Modular Styles */
+.feedback-overlay-container {
+  position: absolute;
+  top: 25%;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 150;
+}
+
+.feedback-overlay-box {
+  background: rgba(0, 0, 0, 0.95);
+  padding: 1.5rem 3rem;
+  border-radius: 50px;
+  text-align: center;
+  transform: scale(1.1);
+  backdrop-filter: blur(10px);
+}
+
+.feedback-overlay-box.combo {
+  background: linear-gradient(135deg, rgba(255, 0, 85, 0.95), rgba(249, 248, 113, 0.95));
+  padding: 2rem 4rem;
+  transform: scale(1.2);
+}
+
+.feedback-text {
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-family: 'Space Grotesk', sans-serif;
+  display: block;
+}
+
+.feedback-text.combo {
+  font-size: 2.5rem;
+}
+
+.feedback-streak-badge {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-top: 0.5rem;
+  color: #000;
+  background: #fff;
+  padding: 0.2rem 0.8rem;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+@media (max-width: 600px) {
+  .feedback-text {
+    font-size: 1.5rem;
+  }
+  .feedback-text.combo {
+    font-size: 1.8rem;
+  }
+  .feedback-overlay-box {
+    padding: 1rem 2rem;
+  }
+  .feedback-overlay-box.combo {
+    padding: 1.5rem 2.5rem;
+  }
+}
