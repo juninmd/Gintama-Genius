@@ -1,9 +1,7 @@
-[[allowlist]]
+[allowlist]
 description = "False positives for generic-api-key in resource files"
 rules = ["generic-api-key"]
-paths = ["Gintama Genius/My Project/Resources.resx"]
-
-[[allowlist]]
-description = "False positive: generic-api-key in Gintama Genius/Principal.resx"
-rules = ["generic-api-key"]
-paths = ["Gintama Genius/Principal.resx"]
+paths = [
+    "Gintama Genius/My Project/Resources.resx",
+    "Gintama Genius/Principal.resx",
+]
