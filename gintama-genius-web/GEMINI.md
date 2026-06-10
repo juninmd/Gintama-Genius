@@ -1,9 +1,20 @@
+# GEMINI.md - Living Repository Memory
 
-## Responsive HUD & Feedback UI Update (Current Session)
-- **Goal**: Improved HUD feedback text sizes and overlapping bug for smaller screens.
-- **Actions**:
-  - Removed inline `style={{}}` from `FeedbackOverlay.tsx` to utilize CSS classes.
-  - Added `.feedback-text` and `.combo` specific logic in `hud.css`.
-  - Scaled down font-sizes gracefully to `1.5rem`/`1.8rem` for viewports under 600px width.
-  - Adhered strictly to the `<150 lines` limits by extracting `useConfettiEffect` from `FeedbackOverlay.tsx`.
-- **Status**: Visual overlay overlap confirmed resolved on viewports as small as 320x568. Passed linting and testing successfully.
+## Core Principles
+- Single file limit: < 150 lines.
+- Enforce DRY, KISS, and SOLID patterns.
+- Package manager: `pnpm`
+- Auto-deploy via `Release-Bot`.
+
+## Current State
+- The UI features standard "Simon Says" functionality using a cyberpunk theme, responsive down to 320x568 viewports.
+- HUD notifications include `FeedbackOverlay`, `UrgentIndicator`, `TurnIndicator` with confetti integration.
+- Removed inline styles from `FeedbackOverlay.tsx` in favor of CSS classes (`.feedback-text`, `.combo` in `hud.css`).
+- Font-sizes scale gracefully to `1.5rem`/`1.8rem` for viewports under 600px width.
+- `useConfettiEffect` extracted from `FeedbackOverlay.tsx` to stay within file length limits.
+- Codebase has been fully modularized to ensure adherence to file length limits.
+
+## Architecture
+- React 19 + Vite 7.
+- Framework: Custom hooks orchestrator pattern (`useGameLogic` acts as the root orchestrator connecting smaller pure functional hooks).
+- Themed configurations are handled via `constants.ts`.

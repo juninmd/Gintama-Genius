@@ -3,14 +3,7 @@ import type { Difficulty, TimeMode, GameState } from '../../constants';
 import { generateEntropy } from '../../utils/math';
 import { MESSAGES_SUCCESS } from '../../constants';
 import type { Feedback } from '../useGameLogic';
-
-const MESSAGES_HARDCORE = [
-  "YATO KING!",
-  "REI DOS YATOS!",
-  "INSTINTO ASSASSINO!",
-  "ONESHOT!",
-  "SENSUIIIII!",
-];
+import { MESSAGES_HARDCORE, pickMessage, executeKaguraBonus } from './useGameEngineHelpers';
 
 export const useGameEngine = (
   playSound: (key: number | string) => void,
@@ -40,8 +33,6 @@ export const useGameEngine = (
   const feedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const kaguraCountRef = useRef(0);
 
-  const pickMessage = (arr: string[]) => arr[Math.floor(generateEntropy() * arr.length)];
-
   const showFeedback = useCallback((nextFeedback: Feedback, durationMs = 0) => {
     setFeedback(nextFeedback);
     if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current);
@@ -54,20 +45,7 @@ export const useGameEngine = (
   }, []);
 
   const triggerKaguraBonus = useCallback(() => {
-    if (settings.difficulty === 'BERSERK' || settings.difficulty === 'HARDCORE') return;
-
-    kaguraCountRef.current += 1;
-    if (kaguraCountRef.current < 15) return;
-
-    kaguraCountRef.current = 0;
-    if (settings.timeMode !== 'INFINITE') {
-      setTimeLeft((prev) => (Number.isFinite(prev) ? prev + 30 : prev));
-    }
-
-    addScore(10);
-    playSound('vapo');
-    setKaguraActive(true);
-    setTimeout(() => setKaguraActive(false), 2000);
+      executeKaguraBonus(settings.difficulty, settings.timeMode, kaguraCountRef, setTimeLeft, addScore, playSound, setKaguraActive);
   }, [settings.difficulty, settings.timeMode, setTimeLeft, addScore, playSound]);
 
   const startGame = useCallback((difficulty: Difficulty, timeMode: TimeMode) => {

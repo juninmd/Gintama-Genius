@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Flame, Droplets, Zap, Leaf } from 'lucide-react';
-import confetti from 'canvas-confetti';
 import { COLOR_HEX_MAP } from '../constants';
 import { generateEntropy } from '../utils/math';
+import { getButtonIcon, triggerButtonConfetti } from './GameButtonHelpers';
 
 interface GameButtonProps {
     color: number;
@@ -28,18 +27,6 @@ export const GameButton: React.FC<GameButtonProps> = ({ colorName, isActive, onC
       };
     }, []);
 
-    const getIcon = () => {
-        const props = { size: 48, color: 'rgba(0,0,0,0.5)', style: { filter: 'drop-shadow(0 0 5px rgba(255,255,255,0.5))' } };
-
-        switch (colorName) {
-            case 'vermelho': return <Flame {...props} />;
-            case 'verde': return <Leaf {...props} />;
-            case 'azul': return <Droplets {...props} />;
-            case 'amarelo': return <Zap {...props} />;
-            default: return null;
-        }
-    };
-
     const addPopup = () => {
         const id = Date.now() + generateEntropy(); // nosonar
         const texts = ["+1", "BOA!", "INCRÍVEL!", "ISSO!", "COMBO!", "PERFEITO", "GENIAL!", "MITOU!"];
@@ -52,33 +39,12 @@ export const GameButton: React.FC<GameButtonProps> = ({ colorName, isActive, onC
         popupTimeoutsRef.current.push(timeoutId);
     };
 
-    const triggerConfetti = () => {
-        if (buttonRef.current) {
-            const rect = buttonRef.current.getBoundingClientRect();
-            const x = (rect.left + rect.width / 2) / window.innerWidth;
-            const y = (rect.top + rect.height / 2) / window.innerHeight;
-
-            confetti({
-                particleCount: 24,
-                spread: 70,
-                origin: { x, y },
-                colors: [COLOR_HEX_MAP[colorName]],
-                disableForReducedMotion: true,
-                startVelocity: 16,
-                gravity: 1.5,
-                scalar: 0.7,
-                ticks: 42,
-                shapes: ['circle', 'square']
-            });
-        }
-    };
-
     const handlePointerDown = (e: React.PointerEvent) => {
         if (!disabled) {
             e.preventDefault();
             setIsPressed(true);
             if (!shouldReduceMotion && generateEntropy() < 0.35) { // nosonar
-              triggerConfetti();
+              triggerButtonConfetti(buttonRef, colorName);
             }
             if (!shouldReduceMotion && generateEntropy() < 0.85) { // nosonar
               addPopup();
@@ -119,7 +85,7 @@ export const GameButton: React.FC<GameButtonProps> = ({ colorName, isActive, onC
                 transform: 'translate(-50%, -50%)',
                 pointerEvents: 'none'
             }}>
-                {getIcon()}
+                {getButtonIcon(colorName)}
             </div>
 
             <AnimatePresence>
