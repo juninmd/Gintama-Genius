@@ -2,7 +2,7 @@
 FROM node:26-alpine AS builder
 WORKDIR /app
 COPY gintama-genius-web/package.json gintama-genius-web/pnpm-lock.yaml ./
-RUN corepack enable && corepack prepare pnpm@9 --activate && pnpm install --frozen-lockfile
+RUN npm install -g pnpm@9 && pnpm install --frozen-lockfile
 COPY gintama-genius-web/ .
 RUN pnpm run build
 
