@@ -11,10 +11,10 @@ describe('useAppKeyboard', () => {
   let toggleMute: () => void;
 
   beforeEach(() => {
-    setShowShortcuts = vi.fn<[SetStateAction<boolean>], void>();
-    setShowHistory = vi.fn<[SetStateAction<boolean>], void>();
-    togglePause = vi.fn<[], void>();
-    toggleMute = vi.fn<[], void>();
+    setShowShortcuts = vi.fn<(value: SetStateAction<boolean>) => void>();
+    setShowHistory = vi.fn<(value: SetStateAction<boolean>) => void>();
+    togglePause = vi.fn<() => void>();
+    toggleMute = vi.fn<() => void>();
   });
 
   const setupHook = (gameState: GameState = 'WAITING_FOR_INPUT', showShortcuts = false, showHistory = false) => {
