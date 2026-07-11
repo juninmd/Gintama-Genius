@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="111" failures="0" errors="0" time="2.343992082">
+    <testsuite name="src/components/Countdown.test.tsx" timestamp="2026-07-10T03:27:59.980Z" hostname="devbox" tests="3" failures="0" errors="0" skipped="0" time="0.145059694">
+        <testcase classname="src/components/Countdown.test.tsx" name="Countdown &gt; renders the countdown value" time="0.122067451">
+        </testcase>
+        <testcase classname="src/components/Countdown.test.tsx" name="Countdown &gt; renders JÁ! when value is 0" time="0.010232837">
+        </testcase>
+        <testcase classname="src/components/Countdown.test.tsx" name="Countdown &gt; renders JÁ! when value is negative" time="0.008848278">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/ErrorBoundary.test.tsx" timestamp="2026-07-10T03:27:59.982Z" hostname="devbox" tests="3" failures="0" errors="0" skipped="0" time="0.108718968">
+        <testcase classname="src/components/ErrorBoundary.test.tsx" name="ErrorBoundary &gt; renders children when there is no error" time="0.041628434">
+        </testcase>
+        <testcase classname="src/components/ErrorBoundary.test.tsx" name="ErrorBoundary &gt; renders fallback UI when error occurs" time="0.057084437">
+        </testcase>
+        <testcase classname="src/components/ErrorBoundary.test.tsx" name="ErrorBoundary &gt; renders custom fallback when provided" time="0.00603821">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/Menu.test.tsx" timestamp="2026-07-10T03:27:59.984Z" hostname="devbox" tests="6" failures="0" errors="0" skipped="0" time="0.127395175">
+        <testcase classname="src/components/Menu.test.tsx" name="Menu &gt; renders the start button" time="0.065042117">
+        </testcase>
+        <testcase classname="src/components/Menu.test.tsx" name="Menu &gt; renders difficulty select with NORMAL default" time="0.010835203">
+        </testcase>
+        <testcase classname="src/components/Menu.test.tsx" name="Menu &gt; renders time select with 60s default" time="0.00585363">
+        </testcase>
+        <testcase classname="src/components/Menu.test.tsx" name="Menu &gt; calls onStart with default values when start is clicked" time="0.013176652">
+        </testcase>
+        <testcase classname="src/components/Menu.test.tsx" name="Menu &gt; calls onStart with selected difficulty and time" time="0.014831633">
+        </testcase>
+        <testcase classname="src/components/Menu.test.tsx" name="Menu &gt; renders title when splash image fails to load" time="0.013368497">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/hud/FeedbackOverlay.test.tsx" timestamp="2026-07-10T03:27:59.986Z" hostname="devbox" tests="3" failures="0" errors="0" skipped="0" time="0.204112525">
+        <testcase classname="src/components/hud/FeedbackOverlay.test.tsx" name="FeedbackOverlay &gt; does not render when feedback is null" time="0.021728867">
+        </testcase>
+        <testcase classname="src/components/hud/FeedbackOverlay.test.tsx" name="FeedbackOverlay &gt; renders correctly when feedback is an error" time="0.107168492">
+        </testcase>
+        <testcase classname="src/components/hud/FeedbackOverlay.test.tsx" name="FeedbackOverlay &gt; renders correctly for a combo with streak count" time="0.071115067">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/hud/HUDHeader.test.tsx" timestamp="2026-07-10T03:27:59.990Z" hostname="devbox" tests="6" failures="0" errors="0" skipped="0" time="0.420767396">
+        <testcase classname="src/components/hud/HUDHeader.test.tsx" name="HUDHeader &gt; renders score and level" time="0.122836597">
+        </testcase>
+        <testcase classname="src/components/hud/HUDHeader.test.tsx" name="HUDHeader &gt; renders time" time="0.015793324">
+        </testcase>
+        <testcase classname="src/components/hud/HUDHeader.test.tsx" name="HUDHeader &gt; renders infinity symbol for INFINITE time" time="0.021268698">
+        </testcase>
+        <testcase classname="src/components/hud/HUDHeader.test.tsx" name="HUDHeader &gt; renders difficulty label" time="0.011694587">
+        </testcase>
+        <testcase classname="src/components/hud/HUDHeader.test.tsx" name="HUDHeader &gt; renders volume icon when not muted" time="0.215489316">
+        </testcase>
+        <testcase classname="src/components/hud/HUDHeader.test.tsx" name="HUDHeader &gt; renders muted icon when muted" time="0.027066399">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/hud/StreakBadge.test.tsx" timestamp="2026-07-10T03:27:59.992Z" hostname="devbox" tests="6" failures="0" errors="0" skipped="0" time="0.163785114">
+        <testcase classname="src/components/hud/StreakBadge.test.tsx" name="StreakBadge &gt; does not render when streak is 0" time="0.023470485">
+        </testcase>
+        <testcase classname="src/components/hud/StreakBadge.test.tsx" name="StreakBadge &gt; does not render when streak is 1" time="0.003276804">
+        </testcase>
+        <testcase classname="src/components/hud/StreakBadge.test.tsx" name="StreakBadge &gt; renders with SEQUÊNCIA for streak 2-4" time="0.100318714">
+        </testcase>
+        <testcase classname="src/components/hud/StreakBadge.test.tsx" name="StreakBadge &gt; renders with COMBO for streak 5-9" time="0.012961502">
+        </testcase>
+        <testcase classname="src/components/hud/StreakBadge.test.tsx" name="StreakBadge &gt; renders with SUPER for streak 10-14" time="0.011084675">
+        </testcase>
+        <testcase classname="src/components/hud/StreakBadge.test.tsx" name="StreakBadge &gt; renders with BERSERK for streak 15+" time="0.008102175">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/hud/TurnIndicator.test.tsx" timestamp="2026-07-10T03:27:59.995Z" hostname="devbox" tests="5" failures="0" errors="0" skipped="0" time="0.134511729">
+        <testcase classname="src/components/hud/TurnIndicator.test.tsx" name="TurnIndicator &gt; renders OBSERVE when playing sequence" time="0.104041986">
+        </testcase>
+        <testcase classname="src/components/hud/TurnIndicator.test.tsx" name="TurnIndicator &gt; renders SUA VEZ when waiting for input" time="0.017160996">
+        </testcase>
+        <testcase classname="src/components/hud/TurnIndicator.test.tsx" name="TurnIndicator &gt; does not render when game is IDLE" time="0.003156119">
+        </testcase>
+        <testcase classname="src/components/hud/TurnIndicator.test.tsx" name="TurnIndicator &gt; does not render when game is GAME_OVER" time="0.002668477">
+        </testcase>
+        <testcase classname="src/components/hud/TurnIndicator.test.tsx" name="TurnIndicator &gt; does not render during COUNTDOWN" time="0.003546028">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/hud/UrgentIndicator.test.tsx" timestamp="2026-07-10T03:27:59.997Z" hostname="devbox" tests="2" failures="0" errors="0" skipped="0" time="0.19616432">
+        <testcase classname="src/components/hud/UrgentIndicator.test.tsx" name="UrgentIndicator &gt; does not render anything when visible is false" time="0.024240571">
+        </testcase>
+        <testcase classname="src/components/hud/UrgentIndicator.test.tsx" name="UrgentIndicator &gt; renders CORRA! when visible is true" time="0.167643362">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/hooks/__tests__/useAchievements.test.ts" timestamp="2026-07-10T03:27:59.998Z" hostname="devbox" tests="15" failures="0" errors="0" skipped="0" time="0.260672456">
+        <testcase classname="src/hooks/__tests__/useAchievements.test.ts" name="useAchievements &gt; should initialize with all achievements locked" time="0.021789047">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useAchievements.test.ts" name="useAchievements &gt; should unlock achievement by id" time="0.196976714">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useAchievements.test.ts" name="useAchievements &gt; should set recentlyUnlocked when unlocking" time="0.004257137">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useAchievements.test.ts" name="useAchievements &gt; should clear recentlyUnlocked after 3 seconds" time="0.006531154">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useAchievements.test.ts" name="useAchievements &gt; should not unlock the same achievement twice" time="0.003655856">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useAchievements.test.ts" name="useAchievements &gt; should persist unlocked achievements to localStorage" time="0.002924859">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useAchievements.test.ts" name="useAchievements &gt; should load achievements from localStorage on init" time="0.002302288">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useAchievements.test.ts" name="useAchievements &gt; should check and unlock score-based achievements" time="0.002765989">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useAchievements.test.ts" name="useAchievements &gt; should check and unlock streak-based achievements" time="0.003644842">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useAchievements.test.ts" name="useAchievements &gt; should check and unlock level-based achievements" time="0.002117087">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useAchievements.test.ts" name="useAchievements &gt; should unlock hardcore_win when hardcore with no errors" time="0.001826777">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useAchievements.test.ts" name="useAchievements &gt; should not unlock hardcore_win when there are errors" time="0.001518877">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useAchievements.test.ts" name="useAchievements &gt; should unlock perfect_game when no errors and score &gt; 0" time="0.001589857">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useAchievements.test.ts" name="useAchievements &gt; should reset all achievements" time="0.001960396">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useAchievements.test.ts" name="useAchievements &gt; should handle localStorage corruption gracefully" time="0.002332326">
+            <system-err>
+Falha ao carregar achievements
+
+            </system-err>
+        </testcase>
+    </testsuite>
+    <testsuite name="src/hooks/__tests__/useScoreHistory.test.ts" timestamp="2026-07-10T03:28:00.004Z" hostname="devbox" tests="12" failures="0" errors="0" skipped="0" time="0.25365053">
+        <testcase classname="src/hooks/__tests__/useScoreHistory.test.ts" name="useScoreHistory &gt; should initialize with empty history" time="0.020667737">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useScoreHistory.test.ts" name="useScoreHistory &gt; should add a score entry" time="0.195429006">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useScoreHistory.test.ts" name="useScoreHistory &gt; should not add entry with score 0 or less" time="0.003552685">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useScoreHistory.test.ts" name="useScoreHistory &gt; should not add entry with negative score" time="0.003125841">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useScoreHistory.test.ts" name="useScoreHistory &gt; should limit history to 10 entries" time="0.003789477">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useScoreHistory.test.ts" name="useScoreHistory &gt; should persist history to localStorage" time="0.002577063">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useScoreHistory.test.ts" name="useScoreHistory &gt; should load history from localStorage on init" time="0.002369199">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useScoreHistory.test.ts" name="useScoreHistory &gt; should clear history" time="0.002799226">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useScoreHistory.test.ts" name="useScoreHistory &gt; should return best score" time="0.003104892">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useScoreHistory.test.ts" name="useScoreHistory &gt; should return 0 for best score when history is empty" time="0.001729251">
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useScoreHistory.test.ts" name="useScoreHistory &gt; should handle localStorage corruption gracefully" time="0.009234088">
+            <system-err>
+Falha ao carregar histórico: SyntaxError: Unexpected token &apos;b&apos;, &quot;bad-json&quot; is not valid JSON
+    at JSON.parse (&lt;anonymous&gt;)
+    at loadHistory [90m(/app/gintama-genius-web/[39msrc/hooks/useScoreHistory.ts:18:19[90m)[39m
+    at mountStateImpl [90m(/app/gintama-genius-web/[39mnode_modules/[4m.pnpm[24m/react-dom@19.2.6_react@19.2.6/node_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:8268:24[90m)[39m
+    at mountState [90m(/app/gintama-genius-web/[39mnode_modules/[4m.pnpm[24m/react-dom@19.2.6_react@19.2.6/node_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:8289:22[90m)[39m
+    at Object.useState [90m(/app/gintama-genius-web/[39mnode_modules/[4m.pnpm[24m/react-dom@19.2.6_react@19.2.6/node_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:26243:18[90m)[39m
+    at process.env.NODE_ENV.exports.useState [90m(/app/gintama-genius-web/[39mnode_modules/[4m.pnpm[24m/react@19.2.6/node_modules/[4mreact[24m/cjs/react.development.js:1263:34[90m)[39m
+    at useScoreHistory [90m(/app/gintama-genius-web/[39msrc/hooks/useScoreHistory.ts:27:33[90m)[39m
+    at [90m/app/gintama-genius-web/[39msrc/hooks/__tests__/useScoreHistory.test.ts:103:41
+    at TestComponent [90m(/app/gintama-genius-web/[39mnode_modules/[4m.pnpm[24m/@testing-library+react@16.3.2_@testing-library+dom@10.4.1_@types+react-dom@19.2.3_@type_01f2c7bab43719bd0469ec1c0554baf5/node_modules/[4m@testing-library/react[24m/dist/pure.js:330:27[90m)[39m
+    at Object.react_stack_bottom_frame [90m(/app/gintama-genius-web/[39mnode_modules/[4m.pnpm[24m/react-dom@19.2.6_react@19.2.6/node_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:25904:20[90m)[39m
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/hooks/__tests__/useScoreHistory.test.ts" name="useScoreHistory &gt; should be loaded by default" time="0.001203349">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/utils/__tests__/math.test.ts" timestamp="2026-07-10T03:28:00.012Z" hostname="devbox" tests="3" failures="0" errors="0" skipped="0" time="0.018021502">
+        <testcase classname="src/utils/__tests__/math.test.ts" name="generateEntropy &gt; should return a number between 0 (inclusive) and 1 (exclusive)" time="0.013842999">
+        </testcase>
+        <testcase classname="src/utils/__tests__/math.test.ts" name="generateEntropy &gt; should produce varying values" time="0.000896687">
+        </testcase>
+        <testcase classname="src/utils/__tests__/math.test.ts" name="generateEntropy &gt; should not return NaN" time="0.000980811">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/hooks/game/__tests__/useAppKeyboard.test.ts" timestamp="2026-07-10T03:28:00.014Z" hostname="devbox" tests="11" failures="0" errors="0" skipped="0" time="0.056190314">
+        <testcase classname="src/hooks/game/__tests__/useAppKeyboard.test.ts" name="useAppKeyboard &gt; should toggle mute on M key" time="0.022344202">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useAppKeyboard.test.ts" name="useAppKeyboard &gt; should toggle mute on m key (lowercase)" time="0.003452023">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useAppKeyboard.test.ts" name="useAppKeyboard &gt; should not toggle mute when focused on INPUT" time="0.004662987">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useAppKeyboard.test.ts" name="useAppKeyboard &gt; should toggle shortcuts on H key" time="0.002890347">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useAppKeyboard.test.ts" name="useAppKeyboard &gt; should close shortcuts with Escape" time="0.004703089">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useAppKeyboard.test.ts" name="useAppKeyboard &gt; should close history with Escape" time="0.001964312">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useAppKeyboard.test.ts" name="useAppKeyboard &gt; should toggle pause with Escape when game is PAUSED" time="0.002666221">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useAppKeyboard.test.ts" name="useAppKeyboard &gt; should toggle pause with Escape when game is active" time="0.002041455">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useAppKeyboard.test.ts" name="useAppKeyboard &gt; should not pause when game is IDLE" time="0.003745536">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useAppKeyboard.test.ts" name="useAppKeyboard &gt; should not pause when game is GAME_OVER" time="0.00185331">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useAppKeyboard.test.ts" name="useAppKeyboard &gt; should not pause during COUNTDOWN" time="0.00158987">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/hooks/game/__tests__/useAudio.test.ts" timestamp="2026-07-10T03:28:00.018Z" hostname="devbox" tests="3" failures="0" errors="0" skipped="0" time="0.04203058">
+        <testcase classname="src/hooks/game/__tests__/useAudio.test.ts" name="useAudio &gt; should initialize with default muted state" time="0.028489592">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useAudio.test.ts" name="useAudio &gt; should toggle mute state" time="0.005032842">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useAudio.test.ts" name="useAudio &gt; should call play on audioController" time="0.004816153">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/hooks/game/__tests__/useDebugActions.test.ts" timestamp="2026-07-10T03:28:00.019Z" hostname="devbox" tests="10" failures="0" errors="0" skipped="0" time="0.058528749">
+        <testcase classname="src/hooks/game/__tests__/useDebugActions.test.ts" name="useDebugActions &gt; should initialize with debug mode disabled" time="0.022259573">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useDebugActions.test.ts" name="useDebugActions &gt; should toggle debug mode" time="0.005824671">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useDebugActions.test.ts" name="useDebugActions &gt; should add score through deps" time="0.005197888">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useDebugActions.test.ts" name="useDebugActions &gt; should trigger bonus effects" time="0.003824757">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useDebugActions.test.ts" name="useDebugActions &gt; should reset kagura after 2000ms on triggerBonus" time="0.003837511">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useDebugActions.test.ts" name="useDebugActions &gt; should set game over state" time="0.002676102">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useDebugActions.test.ts" name="useDebugActions &gt; should set timer value" time="0.002643894">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useDebugActions.test.ts" name="useDebugActions &gt; winLevel should ignore when game is IDLE" time="0.00242989">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useDebugActions.test.ts" name="useDebugActions &gt; winLevel should ignore when game is GAME_OVER" time="0.003306615">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useDebugActions.test.ts" name="useDebugActions &gt; winLevel should level up when game is active" time="0.002389632">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/hooks/game/__tests__/useGameEngineHelpers.test.ts" timestamp="2026-07-10T03:28:00.023Z" hostname="devbox" tests="10" failures="0" errors="0" skipped="0" time="0.018254369">
+        <testcase classname="src/hooks/game/__tests__/useGameEngineHelpers.test.ts" name="pickMessage &gt; should return a message from the array" time="0.003179814">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameEngineHelpers.test.ts" name="pickMessage &gt; should handle empty array gracefully" time="0.000424706">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameEngineHelpers.test.ts" name="pickMessage &gt; should pick different indices based on entropy" time="0.000434055">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameEngineHelpers.test.ts" name="executeKaguraBonus &gt; should do nothing for BERSERK difficulty" time="0.003016782">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameEngineHelpers.test.ts" name="executeKaguraBonus &gt; should do nothing for HARDCORE difficulty" time="0.001364511">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameEngineHelpers.test.ts" name="executeKaguraBonus &gt; should increment counter but not trigger before 15 clicks" time="0.000872951">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameEngineHelpers.test.ts" name="executeKaguraBonus &gt; should trigger bonus after 15 clicks for NORMAL difficulty" time="0.002464653">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameEngineHelpers.test.ts" name="executeKaguraBonus &gt; should not add time for INFINITE mode" time="0.001092355">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameEngineHelpers.test.ts" name="executeKaguraBonus &gt; should reset kaguraActive after 2000ms" time="0.001821246">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameEngineHelpers.test.ts" name="MESSAGES_HARDCORE &gt; should contain hardcore messages" time="0.000560077">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/hooks/game/__tests__/useGameScore.test.ts" timestamp="2026-07-10T03:28:00.027Z" hostname="devbox" tests="4" failures="0" errors="0" skipped="0" time="0.042709056">
+        <testcase classname="src/hooks/game/__tests__/useGameScore.test.ts" name="useGameScore &gt; should initialize with 0 score and streak" time="0.022440871">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameScore.test.ts" name="useGameScore &gt; should increment score and streak" time="0.006573062">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameScore.test.ts" name="useGameScore &gt; should update highscore" time="0.00529">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameScore.test.ts" name="useGameScore &gt; should reset score and streak" time="0.004149827">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/hooks/game/__tests__/useGameSequence.test.ts" timestamp="2026-07-10T03:28:00.029Z" hostname="devbox" tests="5" failures="0" errors="0" skipped="0" time="0.049085444">
+        <testcase classname="src/hooks/game/__tests__/useGameSequence.test.ts" name="useGameSequence &gt; should initialize correctly" time="0.024258688">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameSequence.test.ts" name="useGameSequence &gt; should add to sequence" time="0.00637703">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameSequence.test.ts" name="useGameSequence &gt; should play sequence" time="0.007740571">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameSequence.test.ts" name="useGameSequence &gt; should validate input correctly" time="0.00349619">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameSequence.test.ts" name="useGameSequence &gt; should fail on wrong input" time="0.003295996">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/hooks/game/__tests__/useGameTimer.test.ts" timestamp="2026-07-10T03:28:00.032Z" hostname="devbox" tests="4" failures="0" errors="0" skipped="0" time="0.044334161">
+        <testcase classname="src/hooks/game/__tests__/useGameTimer.test.ts" name="useGameTimer &gt; should initialize with correct time" time="0.025012278">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameTimer.test.ts" name="useGameTimer &gt; should countdown" time="0.00626642">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameTimer.test.ts" name="useGameTimer &gt; should call onTimeUp when time runs out" time="0.005720694">
+        </testcase>
+        <testcase classname="src/hooks/game/__tests__/useGameTimer.test.ts" name="useGameTimer &gt; should handle countdown value" time="0.003409469">
+        </testcase>
+    </testsuite>
+</testsuites>
