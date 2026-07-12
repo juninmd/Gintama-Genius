@@ -64,10 +64,10 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
             x: { duration: 0.3 }
           }}
           style={{
-            position: 'absolute',
-            top: '25%',
-            left: 0,
-            right: 0,
+            position: 'fixed',
+            top: '30%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',

@@ -1,3 +1,25 @@
+echo "Updating AGENTS.md, ROADMAP.md, and GEMINI.md..."
+
+cat << 'INNER_EOF' > gintama-genius-web/ROADMAP.md
+# Roadmap
+
+## ToDo
+- Improve audio asset loading and error boundaries for `AudioController.ts`.
+- Expand testing coverage if new components are added.
+- Add PWA support.
+
+## In Progress
+- [None]
+
+## Done
+- HUD Mobile Layout Fixes (FeedbackOverlay and GameOver modals).
+- Integration of Portuguese slang into HUD feedback messages.
+- Centralize textual constants into `src/constants.ts`.
+- Modularize HUD components.
+- Separate game engine logic from UI hooks.
+INNER_EOF
+
+cat << 'INNER_EOF' > gintama-genius-web/GEMINI.md
 # Gemini State Memory
 
 ## Architecture
@@ -13,3 +35,4 @@
 - "Fever Mode" and "Combo" streaks change visual state (framer-motion, canvas-confetti, css variables).
 - Text feedback is heavily localized to pt-BR featuring internet and Gintama slang (e.g., "RECEBA!", "VASCO!").
 - CI runs linting, vitest, and semantic releases on the `main` branch.
+INNER_EOF

@@ -1,11 +1,16 @@
-# ROADMAP
+# Roadmap
 
-### In Progress
-- [ ] Automated Release Pipeline Generation
-- [ ] 100% test coverage verification
+## ToDo
+- Improve audio asset loading and error boundaries for `AudioController.ts`.
+- Expand testing coverage if new components are added.
+- Add PWA support.
 
-### Done
-- [x] Antigravity Audit
-- [x] Setup HUD systems and notifications
-- [x] Responsive layout refinements for mobile sizes
-- [x] Core Refactoring (< 150 LOC per file)
+## In Progress
+- [None]
+
+## Done
+- HUD Mobile Layout Fixes (FeedbackOverlay and GameOver modals).
+- Integration of Portuguese slang into HUD feedback messages.
+- Centralize textual constants into `src/constants.ts`.
+- Modularize HUD components.
+- Separate game engine logic from UI hooks.

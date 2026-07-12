@@ -40,9 +40,7 @@ const GameOver: React.FC<GameOverProps> = ({ score, highScore, onRestart }) => {
 
   return (
     <div className="game-over-overlay" style={{
-        backgroundImage: 'url(/assets/images/gameover.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
     }}>
       <motion.div
         className="game-over-content"
