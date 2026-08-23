@@ -42,20 +42,23 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
     return 'rgba(0,243,255,0.8)';
   };
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 600;
+  const mobileScaleMulti = isMobile ? 0.7 : 1;
+
   return (
     <AnimatePresence mode='wait'>
       {feedback && (
         <motion.div
           key={feedback.message + streak}
-          initial={{ opacity: 0, scale: 0.5, rotate: isError ? -10 : 10, y: 50 }}
+          initial={{ opacity: 0, scale: 0.5 * mobileScaleMulti, rotate: isError ? -10 : 10, y: 50 }}
           animate={{
             opacity: 1,
-            scale: isSuccess && !isCombo ? [1, 1.3, 1.1] : 1.2,
+            scale: (isSuccess && !isCombo ? [1 * mobileScaleMulti, 1.3 * mobileScaleMulti, 1.1 * mobileScaleMulti] : 1.2 * mobileScaleMulti),
             rotate: isCombo ? [0, -5, 5, 0] : isError ? [-10, 10, -10, 10, 0] : 0,
             y: 0,
             x: isError ? [-15, 15, -15, 15, 0] : 0
           }}
-          exit={{ opacity: 0, scale: 1.5, rotate: isError ? 10 : -10, y: -50 }}
+          exit={{ opacity: 0, scale: 1.5 * mobileScaleMulti, rotate: isError ? 10 : -10, y: -50 }}
           transition={{
             type: "spring",
             stiffness: 400,

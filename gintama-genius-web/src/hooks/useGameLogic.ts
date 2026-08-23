@@ -7,6 +7,7 @@ import { useDebugActions } from './game/useDebugActions';
 import { useGameEngine } from './game/useGameEngine';
 import { useScoreHistory } from './useScoreHistory';
 import { useAchievements } from './useAchievements';
+import { createHandleGameOver } from './game/useGameLogicHelpers';
 import {
   type Difficulty,
   type TimeMode,
@@ -132,21 +133,12 @@ export const useGameLogic = () => {
     }
   }, [gameState, countdownValue, startTimer, playSequence, showFeedback]);
 
-  const handleGameOver = useCallback((finalScore: number, finalLevel: number) => {
-    checkAchievements({
-      score: finalScore,
-      streak: streak,
-      level: finalLevel,
-      isHardcore: settings.difficulty === 'HARDCORE',
-      errors: errorCountRef.current
-    });
-    addEntry({
-      score: finalScore,
-      difficulty: settings.difficulty,
-      timeMode: settings.timeMode,
-      level: finalLevel
-    });
-  }, [checkAchievements, addEntry, streak, settings]);
+  const handleGameOver = useCallback(
+    (finalScore: number, finalLevel: number) => {
+      createHandleGameOver(checkAchievements, addEntry, settings, streak, errorCountRef)(finalScore, finalLevel);
+    },
+    [checkAchievements, addEntry, streak, settings, errorCountRef]
+  );
 
   return {
     gameState, score, level, timeLeft, activeColor, sequence, userInputIndex,

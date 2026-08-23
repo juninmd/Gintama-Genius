@@ -16,6 +16,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  /* Removing height: 100dvh because parent .app-container handles the flex height */
   z-index: 10;
   gap: 0.5rem;
   padding: 0.5rem 0;
