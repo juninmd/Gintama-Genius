@@ -1,0 +1,107 @@
+
+.pause-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.02);
+}
+
+.pause-btn.resume {
+  border-color: var(--neon-green);
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+}
+
+.pause-btn.sound { border-color: #ffc107; }
+.pause-btn.restart { border-color: var(--neon-blue); }
+.pause-btn.quit { border-color: var(--neon-red); }
+
+.btn-icon { font-size: 1.3rem; }
+
+/* Keyboard Shortcuts Help */
+.shortcuts-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 600;
+  backdrop-filter: blur(4px);
+}
+
+.shortcuts-content {
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1a 100%);
+  border: 2px solid var(--neon-purple, #9b5de5);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 90%;
+  width: 400px;
+  box-shadow: 0 0 40px rgba(155, 93, 229, 0.3);
+}
+
+.shortcuts-content h2 {
+  color: #fff;
+  text-align: center;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.5rem;
+}
+
+.shortcuts-list {
+  display: grid;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.shortcut-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.shortcut-keys {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.key {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  padding: 0.3rem 0.6rem;
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+.shortcut-action {
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.shortcuts-close {
+  width: 100%;
+  padding: 0.8rem;
+  background: rgba(155, 93, 229, 0.2);
+  border: 2px solid #9b5de5;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.shortcuts-close:hover {
+  background: rgba(155, 93, 229, 0.4);
+}
+
+/* Score History Panel */
+.history-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 600;
+  backdrop-filter: blur(4px);
+}

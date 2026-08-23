@@ -1,0 +1,100 @@
+/* HUD Items */
+.hud-item {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 0.4rem 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  pointer-events: auto;
+}
+
+.hud-value-small {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+}
+
+.streak-display {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 0.5rem 1.2rem;
+  border-radius: 30px;
+  border: 2px solid var(--neon-red);
+  box-shadow: 0 0 15px rgba(255, 0, 85, 0.3);
+  min-width: 140px;
+  justify-content: center;
+}
+
+.streak-count {
+  font-size: 1.8rem;
+  color: var(--neon-red);
+  text-shadow: 0 0 10px var(--neon-red);
+  font-family: var(--font-main);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.streak-label {
+    color: #aaa;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.pulse-neon-active {
+    animation: pulseNeon 1.5s infinite alternate;
+}
+
+@keyframes pulseNeon {
+    from {
+        filter: brightness(1);
+    }
+    to {
+        filter: brightness(1.2);
+    }
+}
+
+/* Footer */
+.hud-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: auto;
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    gap: 1rem;
+    z-index: 20;
+}
+
+/* Game Over */
+.game-over-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.5s;
+  backdrop-filter: blur(8px);
+}
+
+.game-over-content {
+    background: #000;
+    border: 2px solid var(--neon-red);
+    box-shadow: 0 0 50px rgba(255, 0, 85, 0.4);
+    color: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    max-height: 90vh;
+    overflow-y: auto;
+}

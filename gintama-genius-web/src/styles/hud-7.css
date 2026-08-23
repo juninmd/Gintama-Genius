@@ -1,0 +1,103 @@
+
+.error-boundary-content {
+  background: linear-gradient(135deg, #2d1f1f 0%, #1a1212 100%);
+  border: 2px solid var(--neon-red);
+  border-radius: 16px;
+  padding: 2rem 3rem;
+  text-align: center;
+  max-width: 90%;
+  box-shadow: 0 0 40px rgba(255, 0, 85, 0.3);
+}
+
+.error-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.error-boundary-content h2 {
+  color: var(--neon-red);
+  margin: 0 0 1rem 0;
+}
+
+.error-message {
+  color: #888;
+  margin-bottom: 1.5rem;
+}
+
+.error-actions {
+  margin-bottom: 1rem;
+}
+
+.error-reset-btn {
+  padding: 0.8rem 2rem;
+  background: var(--neon-red);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.error-reset-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 0, 85, 0.5);
+}
+
+.error-details {
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.error-details summary {
+  color: #888;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.error-details pre {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.7rem;
+  color: #666;
+  margin-top: 0.5rem;
+  max-height: 200px;
+}
+
+/* Toggle Buttons */
+.shortcuts-toggle,
+.history-toggle {
+  position: fixed;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 0.5;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  transition: all 0.2s;
+}
+
+.shortcuts-toggle {
+  top: 12px;
+  right: 60px;
+}
+
+.history-toggle {
+  top: 12px;
+  right: 12px;
+}
+
+.shortcuts-toggle:hover,
+.history-toggle:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.8);
+}

@@ -14,13 +14,13 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
             {/* Vignette Overlay */}
             <motion.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: [0.3, 0.8, 0.3] }}
+                animate={{ opacity: [0.3, 0.9, 0.3] }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.5, repeat: Infinity }}
+                transition={{ duration: 0.2, repeat: Infinity }}
                 style={{
                     position: 'fixed',
                     top: 0, left: 0, right: 0, bottom: 0,
-                    background: 'radial-gradient(circle, transparent 40%, rgba(255, 0, 0, 0.6) 90%)',
+                    background: 'radial-gradient(circle, transparent 40%, rgba(255, 0, 85, 0.6) 90%)',
                     pointerEvents: 'none',
                     zIndex: 5
                 }}
@@ -28,8 +28,8 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
 
             {/* Pulsing Border Effect on Screen */}
             <motion.div
-                animate={{ boxShadow: ['inset 0 0 0px #ff0000', 'inset 0 0 80px #ff0000', 'inset 0 0 0px #ff0000'] }}
-                transition={{ duration: 0.4, repeat: Infinity }}
+                animate={{ boxShadow: ['inset 0 0 0px #ff0055', 'inset 0 0 80px #ff0055', 'inset 0 0 0px #ff0055'] }}
+                transition={{ duration: 0.2, repeat: Infinity }}
                 style={{
                     position: 'fixed',
                     top: 0, left: 0, right: 0, bottom: 0,
@@ -43,17 +43,17 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
               initial={{ opacity: 0, scale: 0.8, y: 50, x: '-50%', rotate: 0 }}
               animate={{
                 opacity: 1,
-                scale: [1, 1.3, 1],
+                scale: [1, 1.4, 1],
                 y: 0,
                 x: ['-50%', '-56%', '-44%', '-50%'],
-                rotate: [0, -8, 8, 0]
+                rotate: [0, -10, 10, 0]
               }}
               exit={{ opacity: 0, scale: 0.8, y: 50, x: '-50%', rotate: 0 }}
               transition={{
-                scale: { repeat: Infinity, duration: 0.35 },
-                x: { repeat: Infinity, duration: 0.04 },
-                rotate: { repeat: Infinity, duration: 0.04 },
-                opacity: { duration: 0.2 }
+                scale: { repeat: Infinity, duration: 0.25 },
+                x: { repeat: Infinity, duration: 0.03 },
+                rotate: { repeat: Infinity, duration: 0.03 },
+                opacity: { duration: 0.15 }
               }}
               style={{
                 position: 'fixed',
@@ -63,7 +63,7 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
                 alignItems: 'center',
                 gap: '0.5rem',
                 color: '#ff0055',
-                fontSize: '1.8rem',
+                fontSize: 'clamp(1.5rem, 6vw, 2.5rem)',
                 fontWeight: '900',
                 textShadow: '0 0 30px #ff0055',
                 padding: '0.8rem 1.5rem',

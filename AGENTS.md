@@ -1,4 +1,3 @@
-```markdown
 # AGENTS.md Guidelines
 
 These guidelines outline the principles and rules for development of the AGENTS repository. Adherence to these principles is crucial for maintaining a robust, maintainable, and scalable codebase.
@@ -56,7 +55,7 @@ These guidelines outline the principles and rules for development of the AGENTS 
 
 ## 8. Coding Standards - Length Limit
 
-*   Maximum code length: 180 lines per file.
+*   Maximum code length: 150 lines per file.
 *   Break down large functions into smaller, well-named sub-functions.
 *   Minimize unnecessary complexity.
 
@@ -72,4 +71,3 @@ These guidelines outline the principles and rules for development of the AGENTS 
 *   Use version control (Git) for tracking changes.
 *   Conduct regular code reviews.
 *   Document changes thoroughly.
-```
