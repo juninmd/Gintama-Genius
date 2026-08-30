@@ -5,7 +5,7 @@ def run():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page(viewport={"width": 1280, "height": 720})
-        page.goto("http://localhost:5173")
+        page.goto("http://localhost:3000")
         time.sleep(2)
         page.screenshot(path="desktop.png")
 
@@ -16,7 +16,7 @@ def run():
 
         context = browser.new_context(viewport={"width": 375, "height": 667})
         page2 = context.new_page()
-        page2.goto("http://localhost:5173")
+        page2.goto("http://localhost:3000")
         time.sleep(2)
         page2.screenshot(path="mobile.png")
 

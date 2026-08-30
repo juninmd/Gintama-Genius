@@ -61,8 +61,8 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
           exit={{ opacity: 0, scale: 1.5 * mobileScaleMulti, rotate: isError ? 10 : -10, y: -50 }}
           transition={{
             type: "spring",
-            stiffness: 400,
-            damping: 15,
+            stiffness: 500,
+            damping: 10,
             rotate: { duration: 0.3 },
             x: { duration: 0.3 }
           }}
