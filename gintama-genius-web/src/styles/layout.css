@@ -83,8 +83,12 @@
     }
 
     .game-layout {
-        gap: 0.2rem;
-        padding: 0.2rem 0;
+        gap: 0;
+        padding: 0;
+    }
+
+    .hud-footer {
+        margin-bottom: 10px;
     }
 
     .indicator-area {
