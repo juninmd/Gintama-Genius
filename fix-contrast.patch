@@ -1,0 +1,12 @@
+diff --git a/gintama-genius-web/src/styles/layout.css b/gintama-genius-web/src/styles/layout.css
+index 1d7fc81..a62a901 100644
+--- a/gintama-genius-web/src/styles/layout.css
++++ b/gintama-genius-web/src/styles/layout.css
+@@ -8,6 +8,7 @@
+   pointer-events: none;
+   background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
++  color: #fff;
+ }
+
+ .game-layout {
