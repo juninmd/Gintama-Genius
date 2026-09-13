@@ -42,3 +42,19 @@ export const executeKaguraBonus = (
   setKaguraActive(true);
   setTimeout(() => setKaguraActive(false), 2000);
 };
+
+/**
+ * Checks if the user should get a speed bonus.
+ */
+export const checkSpeedBonus = (
+  currentTime: number,
+  lastInputTime: number,
+  showFeedback: (feedback: any, duration?: number) => void,
+  addScore: (score: number) => void
+): number => {
+  if (lastInputTime > 0 && currentTime - lastInputTime <= 400) {
+    addScore(1);
+    showFeedback({ message: 'RÁPIDO!', type: 'success' }, 800);
+  }
+  return currentTime;
+};
