@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { pickMessage, executeKaguraBonus, MESSAGES_HARDCORE } from '../useGameEngineHelpers';
+import { pickMessage, executeKaguraBonus, MESSAGES_HARDCORE, checkSpeedBonus } from '../useGameEngineHelpers';
 import { generateEntropy } from '../../../utils/math';
 import type { Dispatch, SetStateAction } from 'react';
 
@@ -99,5 +99,46 @@ describe('MESSAGES_HARDCORE', () => {
   it('should contain hardcore messages', () => {
     expect(MESSAGES_HARDCORE.length).toBeGreaterThan(0);
     expect(MESSAGES_HARDCORE).toContain('YATO KING!');
+  });
+});
+
+describe('checkSpeedBonus', () => {
+  it('should award bonus and show feedback if difference is <= 400ms and lastInputTime is > 0', () => {
+    const showFeedback = vi.fn();
+    const addScore = vi.fn();
+    const currentTime = 1000;
+    const lastInputTime = 650; // difference is 350ms
+
+    const result = checkSpeedBonus(currentTime, lastInputTime, showFeedback, addScore);
+
+    expect(addScore).toHaveBeenCalledWith(1);
+    expect(showFeedback).toHaveBeenCalledWith({ message: 'RÁPIDO!', type: 'success' }, 800);
+    expect(result).toBe(currentTime);
+  });
+
+  it('should not award bonus if difference is > 400ms', () => {
+    const showFeedback = vi.fn();
+    const addScore = vi.fn();
+    const currentTime = 1000;
+    const lastInputTime = 500; // difference is 500ms
+
+    const result = checkSpeedBonus(currentTime, lastInputTime, showFeedback, addScore);
+
+    expect(addScore).not.toHaveBeenCalled();
+    expect(showFeedback).not.toHaveBeenCalled();
+    expect(result).toBe(currentTime);
+  });
+
+  it('should not award bonus if lastInputTime is 0', () => {
+    const showFeedback = vi.fn();
+    const addScore = vi.fn();
+    const currentTime = 1000;
+    const lastInputTime = 0;
+
+    const result = checkSpeedBonus(currentTime, lastInputTime, showFeedback, addScore);
+
+    expect(addScore).not.toHaveBeenCalled();
+    expect(showFeedback).not.toHaveBeenCalled();
+    expect(result).toBe(currentTime);
   });
 });
