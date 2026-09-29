@@ -9,3 +9,4 @@
 
 ## To Do
 - [ ] Implement Release-Bot CI/CD Pipeline.
+- [x] Document limitations and edge cases discovered during development.
