@@ -50,21 +50,21 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
       {feedback && (
         <motion.div
           key={feedback.message + streak}
-          initial={{ opacity: 0, scale: 0.5 * mobileScaleMulti, rotate: isError ? -10 : 10, y: 50 }}
+          initial={{ opacity: 0, scale: 0.1 * mobileScaleMulti, rotate: isError ? -20 : 20, y: 100 }}
           animate={{
             opacity: 1,
-            scale: (isSuccess && !isCombo ? [1 * mobileScaleMulti, 1.3 * mobileScaleMulti, 1.1 * mobileScaleMulti] : 1.2 * mobileScaleMulti),
-            rotate: isCombo ? [0, -5, 5, 0] : isError ? [-10, 10, -10, 10, 0] : 0,
+            scale: (isSuccess && !isCombo ? [1.2 * mobileScaleMulti, 1.5 * mobileScaleMulti, 1.2 * mobileScaleMulti] : 1.3 * mobileScaleMulti),
+            rotate: isCombo ? [0, -10, 10, -5, 5, 0] : isError ? [-15, 15, -15, 15, 0] : [0, 5, -5, 0],
             y: 0,
-            x: isError ? [-15, 15, -15, 15, 0] : 0
+            x: isError ? [-20, 20, -20, 20, 0] : 0
           }}
-          exit={{ opacity: 0, scale: 1.5 * mobileScaleMulti, y: -50 }}
+          exit={{ opacity: 0, scale: 2 * mobileScaleMulti, y: -100, rotate: isError ? 20 : -20 }}
           transition={{
             type: "spring",
-            stiffness: 800,
-            damping: 15,
-            rotate: { duration: 0.2 },
-            x: { duration: 0.2 },
+            stiffness: 1000,
+            damping: 10,
+            rotate: { duration: 0.15 },
+            x: { duration: 0.15 },
             opacity: { duration: 0.1 }
           }}
           style={{
