@@ -17,13 +17,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around; /* Use space-around to better distribute elements without overlapping */
   width: 100%;
   /* Removing height: 100dvh because parent .app-container handles the flex height */
   z-index: 10;
   gap: 0.5rem;
   padding: 0.5rem 0;
   min-height: 0; /* Important for flex child scrolling/sizing */
+  overflow: hidden; /* Ensure content doesn't break out */
 }
 
 .indicator-area {
@@ -91,6 +92,7 @@
     .game-layout {
         gap: 0;
         padding: 0;
+        justify-content: space-evenly; /* Better spacing on mobile */
     }
 
     .hud-footer {

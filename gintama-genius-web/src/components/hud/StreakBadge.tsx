@@ -8,10 +8,10 @@ interface StreakBadgeProps {
 
 export const StreakBadge: React.FC<StreakBadgeProps> = ({ streak }) => {
   const getStreakConfig = (count: number) => {
-    if (count >= 15) return { color: '#bc13fe', shadow: '#bc13fe', label: 'BERSERK!', scale: [1, 1.5, 1] };
-    if (count >= 10) return { color: '#ff0055', shadow: '#ff0055', label: 'SUPER!', scale: [1, 1.4, 1] };
-    if (count >= 5) return { color: '#f9f871', shadow: '#f9f871', label: 'COMBO!', scale: [1, 1.3, 1] };
-    return { color: '#00f3ff', shadow: '#00f3ff', label: 'SEQUÊNCIA', scale: [1, 1.2, 1] };
+    if (count >= 15) return { color: '#bc13fe', shadow: '#bc13fe', label: 'BERSERK!', scale: [1, 1.8, 1], shadowDuration: 0.5, flameDuration: 0.3 };
+    if (count >= 10) return { color: '#ff0055', shadow: '#ff0055', label: 'SUPER!', scale: [1, 1.6, 1], shadowDuration: 0.8, flameDuration: 0.5 };
+    if (count >= 5) return { color: '#f9f871', shadow: '#f9f871', label: 'COMBO!', scale: [1, 1.4, 1], shadowDuration: 1.0, flameDuration: 0.6 };
+    return { color: '#00f3ff', shadow: '#00f3ff', label: 'SEQUÊNCIA', scale: [1, 1.2, 1], shadowDuration: 1.5, flameDuration: 0.8 };
   };
 
   const config = useMemo(() => getStreakConfig(streak), [streak]);
@@ -34,14 +34,14 @@ export const StreakBadge: React.FC<StreakBadgeProps> = ({ streak }) => {
             ]
           }}
           transition={{
-            boxShadow: { repeat: Infinity, duration: 1.5 }
+            boxShadow: { repeat: Infinity, duration: config.shadowDuration }
           }}
           exit={{ opacity: 0, scale: 0.5, x: -20 }}
           key="streak-display"
         >
           <motion.div
             animate={{ scale: config.scale }}
-            transition={{ repeat: Infinity, duration: 0.8 }}
+            transition={{ repeat: Infinity, duration: config.flameDuration }}
           >
             <Flame size={24} color={config.color} fill={config.color} />
           </motion.div>

@@ -1,5 +1,6 @@
 import { generateEntropy } from '../../utils/math';
 import type { TimeMode, Difficulty } from '../../constants';
+import type { Feedback } from '../useGameLogic';
 
 export const MESSAGES_HARDCORE = [
   "YATO KING!",
@@ -49,7 +50,7 @@ export const executeKaguraBonus = (
 export const checkSpeedBonus = (
   currentTime: number,
   lastInputTime: number,
-  showFeedback: (feedback: any, duration?: number) => void,
+  showFeedback: (feedback: Feedback, duration?: number) => void,
   addScore: (score: number) => void
 ): number => {
   if (lastInputTime > 0 && currentTime - lastInputTime <= 400) {

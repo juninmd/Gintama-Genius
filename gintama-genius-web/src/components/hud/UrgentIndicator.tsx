@@ -16,11 +16,11 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: [0.3, 0.9, 0.3] }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2, repeat: Infinity }}
+                transition={{ duration: 0.15, repeat: Infinity }}
                 style={{
                     position: 'fixed',
                     top: 0, left: 0, right: 0, bottom: 0,
-                    background: 'radial-gradient(circle, transparent 40%, rgba(255, 0, 85, 0.6) 90%)',
+                    background: 'radial-gradient(circle, transparent 30%, rgba(255, 0, 85, 0.8) 90%)',
                     pointerEvents: 'none',
                     zIndex: 5
                 }}
@@ -28,8 +28,8 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
 
             {/* Pulsing Border Effect on Screen */}
             <motion.div
-                animate={{ boxShadow: ['inset 0 0 0px #ff0055', 'inset 0 0 150px #ff0055', 'inset 0 0 0px #ff0055'] }}
-                transition={{ duration: 0.2, repeat: Infinity }}
+                animate={{ boxShadow: ['inset 0 0 0px #ff0055', 'inset 0 0 200px #ff0055', 'inset 0 0 0px #ff0055'] }}
+                transition={{ duration: 0.15, repeat: Infinity }}
                 style={{
                     position: 'fixed',
                     top: 0, left: 0, right: 0, bottom: 0,
@@ -43,17 +43,17 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
               initial={{ opacity: 0, scale: 0.8, y: 50, x: '-50%', rotate: 0 }}
               animate={{
                 opacity: 1,
-                scale: [1, 1.4, 1],
+                scale: [1, 1.5, 1],
                 y: 0,
-                x: ['-50%', '-56%', '-44%', '-50%'],
-                rotate: [0, -10, 10, 0]
+                x: ['-50%', '-58%', '-42%', '-50%'],
+                rotate: [0, -15, 15, 0]
               }}
               exit={{ opacity: 0, scale: 0.8, y: 50, x: '-50%', rotate: 0 }}
               transition={{
-                scale: { repeat: Infinity, duration: 0.25 },
-                x: { repeat: Infinity, duration: 0.03 },
-                rotate: { repeat: Infinity, duration: 0.03 },
-                opacity: { duration: 0.15 }
+                scale: { repeat: Infinity, duration: 0.2 },
+                x: { repeat: Infinity, duration: 0.02 },
+                rotate: { repeat: Infinity, duration: 0.02 },
+                opacity: { duration: 0.1 }
               }}
               style={{
                 position: 'fixed',
