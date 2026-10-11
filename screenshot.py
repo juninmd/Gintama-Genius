@@ -1,30 +1,17 @@
 from playwright.sync_api import sync_playwright
-import time
 
-def run():
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page(viewport={"width": 1280, "height": 720})
-        page.goto("http://localhost:3000")
-        time.sleep(2)
-        page.screenshot(path="desktop.png")
-
-        # Click start
-        page.click("button:has-text('Iniciar Missão')")
-        time.sleep(1)
-        page.screenshot(path="desktop_playing.png")
-
-        context = browser.new_context(viewport={"width": 375, "height": 667})
-        page2 = context.new_page()
-        page2.goto("http://localhost:3000")
-        time.sleep(2)
-        page2.screenshot(path="mobile.png")
-
-        page2.click("button:has-text('Iniciar Missão')")
-        time.sleep(1)
-        page2.screenshot(path="mobile_playing.png")
-
-        browser.close()
+def run_cuj(page):
+    page.goto("http://localhost:3000")
+    page.wait_for_timeout(2000)
+    page.screenshot(path="desktop.png")
 
 if __name__ == "__main__":
-    run()
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context()
+        page = context.new_page()
+        try:
+            run_cuj(page)
+        finally:
+            context.close()
+            browser.close()

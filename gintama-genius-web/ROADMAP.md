@@ -6,7 +6,7 @@
 - Add PWA support.
 
 ## In Progress
-- [None]
+- Setup Release-Bot automated validations
 
 ## Done
 - HUD Mobile Layout Fixes (FeedbackOverlay and GameOver modals).
