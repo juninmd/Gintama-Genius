@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { COLORS, COLOR_MAP, KEY_TO_COLOR } from '../constants';
-import { GameButton } from './GameButton';
+import React, { useEffect, useRef } from 'react';
+import Phaser from 'phaser';
+import { COLOR_MAP, KEY_TO_COLOR } from '../constants';
+import { BoardScene } from '../game/BoardScene';
 
 interface GameBoardProps {
   activeColor: number | null;
@@ -10,53 +10,63 @@ interface GameBoardProps {
 }
 
 const GameBoard: React.FC<GameBoardProps> = ({ activeColor, onColorClick, disabled }) => {
+  const hostRef = useRef<HTMLDivElement>(null);
+  const sceneRef = useRef<BoardScene | null>(null);
+  const latest = useRef({ onColorClick, disabled });
+
+  useEffect(() => {
+    latest.current = { onColorClick, disabled };
+  }, [onColorClick, disabled]);
+
+  useEffect(() => {
+    if (!hostRef.current) return;
+    const scene = new BoardScene({
+      onPress: (color) => latest.current.onColorClick(color),
+      isDisabled: () => latest.current.disabled,
+    });
+    sceneRef.current = scene;
+    const game = new Phaser.Game({
+      type: Phaser.AUTO,
+      parent: hostRef.current,
+      transparent: true,
+      scale: { mode: Phaser.Scale.RESIZE, width: '100%', height: '100%' },
+      scene,
+      audio: { noAudio: true },
+      banner: false,
+    });
+    return () => {
+      sceneRef.current = null;
+      game.destroy(true);
+    };
+  }, []);
+
+  useEffect(() => {
+    sceneRef.current?.setActive(activeColor);
+  }, [activeColor]);
+
   useEffect(() => {
     if (disabled) return;
-
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.repeat) return;
-
-      const target = event.target as HTMLElement | null;
-      const tag = target?.tagName;
+      const tag = (event.target as HTMLElement | null)?.tagName;
       if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
-
       const mappedColor = KEY_TO_COLOR[event.key.toLowerCase()];
       if (!mappedColor) return;
-
       event.preventDefault();
       onColorClick(mappedColor);
     };
-
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [disabled, onColorClick]);
 
   return (
     <div className="game-board">
-      <div className="simon-circle">
-        <motion.div
-            className="center-circle"
-            animate={{ rotate: activeColor ? 360 : 0 }}
-            transition={{ duration: 0.5 }}
-        >
-            <img src="/assets/images/genius.ico" alt="Logo" className="center-logo" />
-        </motion.div>
-        {COLORS.map((color) => {
-          const colorName = COLOR_MAP[color];
-          const isActive = activeColor === color;
-
-          return (
-             <GameButton
-                key={color}
-                color={color}
-                colorName={colorName}
-                isActive={isActive}
-                onClick={() => !disabled && onColorClick(color)}
-                disabled={disabled}
-             />
-          );
-        })}
-      </div>
+      <div
+        ref={hostRef}
+        className="simon-circle"
+        role="group"
+        aria-label={`Tabuleiro: ${Object.values(COLOR_MAP).join(', ')}`}
+      />
     </div>
   );
 };
