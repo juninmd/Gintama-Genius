@@ -11,11 +11,28 @@
 
 **Gintama Genius** é um web game que desafia sua memória com personagens e referências da série Gintama. Desenvolvedores com foco em animações fluidas e uma experiência de usuário divertida (e um pouco caótica, como a própria série).
 
+![Gameplay](desktop_playing.png)
+
+## 🎮 Como Jogar
+
+1. Clique em **Iniciar Missão** e escolha dificuldade e tempo.
+2. Observe a sequência de cores (verde, vermelho, azul, amarelo) e repita na mesma ordem.
+3. Cada acerto aumenta pontos, combo (streak) e nível; 10+ acertos seguidos ativam o **modo Fever**.
+4. Controles: mouse/toque no tabuleiro, teclas `1-4`, `R G B Y` ou setas; `P`/`Esc` pausa, `M` muda o som.
+
+## ✨ Novidades
+
+- **Phaser 3**: o tabuleiro agora é renderizado em um canvas Phaser (WebGL/Canvas) com fatias neon,
+  brilho em camadas, partículas aditivas a cada nota e hub giratório com o kanji 銀.
+- Tabuleiro flutuante com gradiente/glow e suporte a `prefers-reduced-motion`.
+- Animações suaves via tweens (acender rápido, apagar gradual) e toque com hit-test geométrico.
+
 ## 🛠️ Tech Stack
 
 - **Frontend**: [React 19](https://react.dev/) + [Vite](https://vite.dev/) + [TypeScript](https://www.typescriptlang.org/)
 - **Testes**: [Vitest](https://vitest.dev/) + [Testing Library](https://testing-library.com/)
-- **Animações**: [Framer Motion](https://www.framer.com/motion/)
+- **Engine de jogo**: [Phaser 3](https://phaser.io/) (tabuleiro, partículas, tweens)
+- **Animações de UI**: [Framer Motion](https://www.framer.com/motion/)
 - **Efeitos**: [Canvas Confetti](https://www.npmjs.com/package/canvas-confetti)
 - **CI/CD**: GitHub Actions + Docker + GHCR
 - **Deployment**: Nginx + Docker + Kubernetes
@@ -58,7 +75,7 @@ pnpm build
 O build gera arquivos otimizados em `dist/` com:
 - Minificação via Terser
 - Source maps para debug
-- Code splitting (vendor, motion, confetti chunks)
+- Code splitting (vendor, motion, phaser, confetti chunks)
 - Cache busting com hashes nos arquivos
 
 ## 🔍 Qualidade
@@ -105,7 +122,8 @@ Em caso de falha no deploy, o pipeline executa rollback automático via Kubernet
 ```
 gintama-genius-web/
 ├── src/
-│   ├── components/    # Componentes React
+│   ├── components/    # Componentes React (HUD, menus, GameBoard)
+│   ├── game/          # Cena Phaser (BoardScene) e geometria do tabuleiro
 │   ├── hooks/         # Custom hooks
 │   ├── utils/         # Utilitários
 │   ├── styles/        # Arquivos CSS

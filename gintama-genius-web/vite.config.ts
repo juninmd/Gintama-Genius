@@ -18,6 +18,7 @@ export default defineConfig({
         manualChunks(id: string) {
           if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) return 'vendor';
           if (id.includes('node_modules/framer-motion/')) return 'motion';
+          if (id.includes('node_modules/phaser/')) return 'phaser';
           if (id.includes('node_modules/canvas-confetti/')) return 'confetti';
         },
       },
@@ -38,6 +39,7 @@ export default defineConfig({
         'src/**/*.test.{ts,tsx}',
         'src/**/*.d.ts',
         'src/main.tsx',
+        'src/game/BoardScene.ts',
         'src/vite-env.d.ts',
       ],
       thresholds: {
