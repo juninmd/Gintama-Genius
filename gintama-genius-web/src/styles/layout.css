@@ -44,7 +44,7 @@
 /* Mobile Adjustments */
 @media (max-width: 600px) {
     .menu-container {
-        padding: 1rem;
+        padding: 0.8rem;
         width: 90vw;
     }
 

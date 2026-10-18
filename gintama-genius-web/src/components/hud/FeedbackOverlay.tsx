@@ -43,7 +43,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
   };
 
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 600;
-  const mobileScaleMulti = isMobile ? 0.7 : 1;
+  const mobileScaleMulti = isMobile ? 0.85 : 1;
 
   return (
     <AnimatePresence mode='wait'>
@@ -100,7 +100,9 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
                 textShadow: isCombo ? 'none' : `0 0 20px ${getBorderColor()}`,
                 whiteSpace: 'nowrap',
                 fontFamily: "'Space Grotesk', sans-serif",
-                display: 'block'
+                display: 'block',
+                letterSpacing: '2px',
+                WebkitTextStroke: '1px black'
             }}>
                 {feedback.message}
             </span>

@@ -1,8 +1,8 @@
 /* Game Board (Phaser canvas lives inside .simon-circle) */
 .game-board {
   position: relative;
-  width: clamp(240px, 90vw, 40dvh); /* Prevent board overlapping with hud on mobile */
-  height: clamp(240px, 90vw, 40dvh);
+  width: clamp(220px, 85vw, 38dvh); /* Prevent board overlapping with hud on mobile */
+  height: clamp(220px, 85vw, 38dvh);
   border-radius: 50%;
   background: radial-gradient(circle at 30% 25%, #1b1f3a 0%, #07070f 70%);
   box-shadow: 0 0 60px rgba(0, 243, 255, 0.18), 0 0 120px rgba(255, 0, 85, 0.1), inset 0 0 24px rgba(0, 0, 0, 0.9);
