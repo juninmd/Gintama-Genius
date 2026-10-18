@@ -43,7 +43,7 @@ export const UrgentIndicator: React.FC<UrgentIndicatorProps> = ({ visible }) => 
               initial={{ opacity: 0, scale: 0.8, y: 50, x: '-50%', rotate: 0 }}
               animate={{
                 opacity: 1,
-                scale: [1, 1.5, 1],
+                scale: [1, 1.8, 1],
                 y: 0,
                 x: ['-50%', '-58%', '-42%', '-50%'],
                 rotate: [0, -15, 15, 0]
