@@ -43,7 +43,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
   };
 
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 600;
-  const mobileScaleMulti = isMobile ? 0.85 : 1;
+  const mobileScaleMulti = isMobile ? 0.95 : 1;
 
   return (
     <AnimatePresence mode='wait'>
@@ -58,7 +58,7 @@ export const FeedbackOverlay: React.FC<FeedbackOverlayProps> = ({ feedback, stre
             y: 0,
             x: isError ? [-20, 20, -20, 20, 0] : 0
           }}
-          exit={{ opacity: 0, scale: 2 * mobileScaleMulti, y: -100, rotate: isError ? 20 : -20 }}
+          exit={{ opacity: 0, scale: 1.5 * mobileScaleMulti, y: -50, rotate: isError ? 10 : -10 }}
           transition={{
             type: "spring",
             stiffness: 1000,

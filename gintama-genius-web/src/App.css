@@ -77,9 +77,9 @@ body {
 }
 
 @keyframes feverPulse {
-  0% { box-shadow: inset 0 0 0px var(--neon-red); filter: saturate(1.2) hue-rotate(0deg); }
-  50% { box-shadow: inset 0 0 50px var(--neon-red); filter: saturate(1.5) hue-rotate(15deg); }
-  100% { box-shadow: inset 0 0 0px var(--neon-red); filter: saturate(1.2) hue-rotate(0deg); }
+  0% { box-shadow: inset 0 0 0px var(--neon-red); filter: saturate(1.2) hue-rotate(0deg); transform: scale(1); }
+  50% { box-shadow: inset 0 0 50px var(--neon-red); filter: saturate(1.5) hue-rotate(15deg); transform: scale(1.02); }
+  100% { box-shadow: inset 0 0 0px var(--neon-red); filter: saturate(1.2) hue-rotate(0deg); transform: scale(1); }
 }
 
 /* Digital Rain / Grid Overlay */

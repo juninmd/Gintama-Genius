@@ -90,13 +90,14 @@
     }
 
     .game-layout {
-        gap: 0;
+        gap: 1rem;
         padding: 0;
-        justify-content: space-evenly; /* Better spacing on mobile */
+        justify-content: space-between; /* Better spacing on mobile */
     }
 
     .hud-footer {
-        margin-bottom: 10px;
+        margin-bottom: 20px;
+        padding-bottom: env(safe-area-inset-bottom, 20px);
     }
 
     .indicator-area {

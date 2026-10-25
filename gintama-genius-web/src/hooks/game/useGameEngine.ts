@@ -112,6 +112,8 @@ export const useGameEngine = (
              setGameState('PLAYING_SEQUENCE');
              playSequence();
         }, 1500);
+     } else if (result === 'correct') {
+         showFeedback({ message: pickMessage(['BOA!', 'ISSO!', 'BEM!', 'VAI!']), type: 'success' }, 400);
      }
   }, [
     gameState, validateInput, playSound, clearTimer, streak,
