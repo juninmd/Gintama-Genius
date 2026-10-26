@@ -11,11 +11,24 @@ export interface ScoreEntry {
 const STORAGE_KEY = 'gintama_genius_history';
 const MAX_ENTRIES = 10;
 
+const isScoreEntry = (x: unknown): x is ScoreEntry => {
+  if (typeof x !== 'object' || x === null) return false;
+  const e = x as Record<string, unknown>;
+  return (
+    typeof e.score === 'number' && Number.isFinite(e.score) && e.score >= 0 &&
+    typeof e.level === 'number' && Number.isFinite(e.level) &&
+    typeof e.date === 'string' &&
+    typeof e.difficulty === 'string' &&
+    typeof e.timeMode === 'string'
+  );
+};
+
 const loadHistory = (): ScoreEntry[] => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-      return JSON.parse(stored);
+      const parsed: unknown = JSON.parse(stored);
+      if (Array.isArray(parsed)) return parsed.filter(isScoreEntry).slice(0, MAX_ENTRIES);
     }
   } catch (e) {
     console.warn('Falha ao carregar histórico:', e);
