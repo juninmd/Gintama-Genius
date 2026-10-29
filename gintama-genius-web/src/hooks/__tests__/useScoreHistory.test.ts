@@ -109,3 +109,39 @@ describe('useScoreHistory', () => {
     expect(result.current.isLoaded).toBe(true);
   });
 });
+
+describe('useScoreHistory com dados corrompidos', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  it.each(['{}', '"x"', '42', 'null', '[null]', '[{"score":"abc"}]'])(
+    'ignora valor armazenado inválido %s e não quebra',
+    (raw) => {
+      localStorage.setItem('gintama_genius_history', raw);
+      const { result } = renderHook(() => useScoreHistory());
+      expect(result.current.history).toEqual([]);
+      expect(result.current.getBestScore()).toBe(0);
+    },
+  );
+
+  it('mantém apenas as entradas válidas do array armazenado', () => {
+    localStorage.setItem('gintama_genius_history', JSON.stringify([
+      null,
+      { score: 'abc', date: 'x', difficulty: 'NORMAL', timeMode: '60s', level: 1 },
+      { score: 5, date: '01/01/2025', difficulty: 'NORMAL', timeMode: '60s', level: 2 },
+    ]));
+    const { result } = renderHook(() => useScoreHistory());
+    expect(result.current.history).toHaveLength(1);
+    expect(result.current.history[0].score).toBe(5);
+  });
+
+  it('limita o histórico lido a 10 entradas', () => {
+    const many = Array.from({ length: 15 }, (_, i) => ({
+      score: i + 1, date: 'd', difficulty: 'NORMAL', timeMode: '60s', level: 1,
+    }));
+    localStorage.setItem('gintama_genius_history', JSON.stringify(many));
+    const { result } = renderHook(() => useScoreHistory());
+    expect(result.current.history).toHaveLength(10);
+  });
+});
