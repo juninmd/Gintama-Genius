@@ -18,6 +18,15 @@ export const useGameTimer = (timeMode: TimeMode, onTimeUp: () => void) => {
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Time-up is handled by the effect below, with the latest callback: the interval used to call the
+  // `onTimeUp` captured when it started (stale score/streak) from inside a state updater.
+  const onTimeUpRef = useRef(onTimeUp);
+  useEffect(() => {
+    onTimeUpRef.current = onTimeUp;
+  }, [onTimeUp]);
+
+  const tick = useCallback(() => setTimeLeft((prev) => Math.max(prev - 1, 0)), []);
+
   const clearTimer = useCallback(() => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -43,34 +52,16 @@ export const useGameTimer = (timeMode: TimeMode, onTimeUp: () => void) => {
     if (timeMode === 'INFINITE' || isPaused === false) return;
 
     setIsPaused(false);
-    timerRef.current = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearTimer();
-          onTimeUp();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  }, [timeMode, isPaused, clearTimer, onTimeUp]);
+    timerRef.current = setInterval(tick, 1000);
+  }, [timeMode, isPaused, tick]);
 
   const startTimer = useCallback(() => {
     clearTimer();
     setIsPaused(false);
     if (timeMode === 'INFINITE') return;
 
-    timerRef.current = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearTimer();
-          onTimeUp();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  }, [timeMode, clearTimer, onTimeUp]);
+    timerRef.current = setInterval(tick, 1000);
+  }, [timeMode, clearTimer, tick]);
 
   const startCountdown = useCallback((startFrom: number) => {
     setCountdownValue(startFrom);
@@ -82,6 +73,12 @@ export const useGameTimer = (timeMode: TimeMode, onTimeUp: () => void) => {
       return () => clearTimeout(timer);
     }
   }, [countdownValue]);
+
+  useEffect(() => {
+    if (timeLeft > 0 || timerRef.current === null) return;
+    clearTimer();
+    onTimeUpRef.current();
+  }, [timeLeft, clearTimer]);
 
   useEffect(() => {
     return () => clearTimer();
