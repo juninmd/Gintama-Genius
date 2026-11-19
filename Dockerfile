@@ -7,15 +7,13 @@ COPY gintama-genius-web/ .
 RUN pnpm run build
 
 # Production stage
-FROM nginx:alpine
-RUN rm -rf /usr/share/nginx/html/*
+# Imagem oficial sem privilégio: roda como usuário nginx (101), escuta em 8080 e grava pid/cache em /tmp
+FROM nginxinc/nginx-unprivileged:alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY gintama-genius-web/nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
+EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:80/ || exit 1
-CMD ["nginx", "-g", "daemon off;"]
-
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
 # executa app sem privilegio (DS-0002)
-RUN addgroup -g 10001 app && adduser -u 10001 -G app -s /bin/sh -D app
-USER app
+USER 101
+CMD ["nginx", "-g", "daemon off;"]

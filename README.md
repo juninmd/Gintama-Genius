@@ -123,7 +123,8 @@ O build gera arquivos otimizados em `dist/` com:
 docker build -t gintama-genius .
 
 # Executar container
-docker run -p 80:80 gintama-genius
+docker run -p 8080:8080 gintama-genius
+# abra http://localhost:8080 (o container roda sem root, por isso a porta 8080)
 ```
 
 ## 📦 Deployment
