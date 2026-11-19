@@ -71,4 +71,25 @@ describe('useGameTimer', () => {
 
     expect(result.current.countdownValue).toBe(2);
   });
+
+  it('calls the latest onTimeUp exactly once, not the one captured at start', () => {
+    const first = vi.fn();
+    const latest = vi.fn();
+    const { result, rerender } = renderHook(({ cb }) => useGameTimer('30s', cb), {
+      initialProps: { cb: first },
+    });
+
+    act(() => {
+      result.current.resetTimer();
+      result.current.startTimer();
+    });
+    rerender({ cb: latest });
+
+    act(() => {
+      vi.advanceTimersByTime(35000);
+    });
+
+    expect(first).not.toHaveBeenCalled();
+    expect(latest).toHaveBeenCalledTimes(1);
+  });
 });
