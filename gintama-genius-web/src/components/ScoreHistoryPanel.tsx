@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useDialogFocus } from '../hooks/useDialogFocus';
 import type { ScoreEntry } from '../hooks/useScoreHistory';
 
 interface ScoreHistoryPanelProps {
@@ -15,6 +16,7 @@ export const ScoreHistoryPanel: React.FC<ScoreHistoryPanelProps> = ({
   history,
   onClear,
 }) => {
+  const dialogRef = useDialogFocus<HTMLDivElement>(isOpen);
   if (!isOpen) return null;
 
   return (
@@ -26,12 +28,16 @@ export const ScoreHistoryPanel: React.FC<ScoreHistoryPanelProps> = ({
       onClick={onClose}
     >
       <motion.div
+        ref={dialogRef}
         className="history-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="history-title"
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         onClick={e => e.stopPropagation()}
       >
-        <h2>Histórico de Pontuações</h2>
+        <h2 id="history-title">Histórico de Pontuações</h2>
 
         {history.length === 0 ? (
           <p className="history-empty">Nenhuma partida registrada ainda.</p>
@@ -64,7 +70,7 @@ export const ScoreHistoryPanel: React.FC<ScoreHistoryPanelProps> = ({
           </>
         )}
 
-        <button onClick={onClose} className="history-close">Fechar</button>
+        <button data-autofocus onClick={onClose} className="history-close">Fechar</button>
       </motion.div>
     </motion.div>
   );

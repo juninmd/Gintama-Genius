@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useDialogFocus } from '../hooks/useDialogFocus';
 
 interface KeyboardShortcutsHelpProps {
   isOpen: boolean;
@@ -7,6 +8,7 @@ interface KeyboardShortcutsHelpProps {
 }
 
 export const KeyboardShortcutsHelp: React.FC<KeyboardShortcutsHelpProps> = ({ isOpen, onClose }) => {
+  const dialogRef = useDialogFocus<HTMLDivElement>(isOpen);
   if (!isOpen) return null;
 
   const shortcuts = [
@@ -29,12 +31,16 @@ export const KeyboardShortcutsHelp: React.FC<KeyboardShortcutsHelpProps> = ({ is
       onClick={onClose}
     >
       <motion.div
+        ref={dialogRef}
         className="shortcuts-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="shortcuts-title"
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         onClick={e => e.stopPropagation()}
       >
-        <h2>Atalhos do Teclado</h2>
+        <h2 id="shortcuts-title">Atalhos do Teclado</h2>
         <div className="shortcuts-list">
           {shortcuts.map(({ keys, action }) => (
             <div key={action} className="shortcut-item">
@@ -47,7 +53,7 @@ export const KeyboardShortcutsHelp: React.FC<KeyboardShortcutsHelpProps> = ({ is
             </div>
           ))}
         </div>
-        <button onClick={onClose} className="shortcuts-close">Fechar (ESC)</button>
+        <button data-autofocus onClick={onClose} className="shortcuts-close">Fechar (ESC)</button>
       </motion.div>
     </motion.div>
   );
