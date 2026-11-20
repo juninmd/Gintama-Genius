@@ -16,13 +16,13 @@ class AudioController {
   public muted: boolean = false;
   private buffers: { [key: string]: AudioBuffer } = {};
   private sounds: { [key: string]: string } = {
-    1: '/assets/sounds/vermelho.wav',
-    2: '/assets/sounds/verde.wav',
-    3: '/assets/sounds/azul.wav',
-    4: '/assets/sounds/amarelo.wav',
-    gameOver: '/assets/sounds/fimdejogo.wav',
-    vapo: '/assets/sounds/uow.wav',
-    novo: '/assets/sounds/novo.wav',
+    1: `${import.meta.env.BASE_URL}assets/sounds/vermelho.wav`,
+    2: `${import.meta.env.BASE_URL}assets/sounds/verde.wav`,
+    3: `${import.meta.env.BASE_URL}assets/sounds/azul.wav`,
+    4: `${import.meta.env.BASE_URL}assets/sounds/amarelo.wav`,
+    gameOver: `${import.meta.env.BASE_URL}assets/sounds/fimdejogo.wav`,
+    vapo: `${import.meta.env.BASE_URL}assets/sounds/uow.wav`,
+    novo: `${import.meta.env.BASE_URL}assets/sounds/novo.wav`,
   };
 
   constructor() {

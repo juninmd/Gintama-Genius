@@ -1,0 +1,22 @@
+name: Deploy Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  pages:
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: juninmd/base-actions/.github/workflows/reusable-pages.yml@main
+    with:
+      build-command: |
+        npm install -g pnpm@9
+        cd gintama-genius-web
+        pnpm install --frozen-lockfile
+        GH_PAGES=true pnpm run build
+        cp dist/index.html dist/404.html
+      artifact-path: gintama-genius-web/dist

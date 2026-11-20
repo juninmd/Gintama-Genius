@@ -24,7 +24,7 @@ This project follows these security practices:
 3. **Dependency Review**: Pull requests are reviewed for dependency vulnerabilities
 4. **Environment Variables**: All sensitive configuration is stored in environment variables
 5. **Input Validation**: All user inputs are validated and sanitized
-6. **Secure Headers**: Security headers (CSP, HSTS, X-Frame-Options) enforced via nginx and Netlify
+6. **Secure Headers**: Security headers (CSP, HSTS, X-Frame-Options) enforced via nginx
 7. **Container Security**: Docker containers run as non-root user
 8. **Least Privilege**: CI tokens use minimal required permissions
 
@@ -35,7 +35,7 @@ This project follows these security practices:
 - [x] Gitleaks configuration for secret scanning (CI-integrated)
 - [x] Dependency review on pull requests
 - [x] Non-root user in Docker containers
-- [x] Security headers via nginx and Netlify
+- [x] Security headers via nginx
 - [x] Environment-based configuration
 - [x] Regular security audits
 - [x] Security scanning CI workflow
