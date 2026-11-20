@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useDialogFocus } from '../hooks/useDialogFocus';
 import type { ScoreEntry } from '../hooks/useScoreHistory';
@@ -9,6 +9,21 @@ interface ScoreHistoryPanelProps {
   history: ScoreEntry[];
   onClear: () => void;
 }
+
+/** Two-step button: wiping the whole history is not undoable, so the first click only asks. */
+const ClearHistoryButton: React.FC<{ onClear: () => void }> = ({ onClear }) => {
+  const [confirming, setConfirming] = useState(false);
+  return (
+    <button
+      onClick={() => (confirming ? onClear() : setConfirming(true))}
+      onBlur={() => setConfirming(false)}
+      className="history-clear"
+      aria-live="polite"
+    >
+      {confirming ? 'Clique de novo para apagar tudo' : 'Limpar Histórico'}
+    </button>
+  );
+};
 
 export const ScoreHistoryPanel: React.FC<ScoreHistoryPanelProps> = ({
   isOpen,
@@ -64,9 +79,7 @@ export const ScoreHistoryPanel: React.FC<ScoreHistoryPanelProps> = ({
               ))}
             </div>
 
-            <button onClick={onClear} className="history-clear">
-              Limpar Histórico
-            </button>
+            <ClearHistoryButton onClear={onClear} />
           </>
         )}
 
