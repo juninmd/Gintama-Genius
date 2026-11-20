@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useDialogFocus } from '../hooks/useDialogFocus';
 import type { ScoreEntry } from '../hooks/useScoreHistory';
 
 interface ScoreHistoryPanelProps {
@@ -9,12 +10,28 @@ interface ScoreHistoryPanelProps {
   onClear: () => void;
 }
 
+/** Two-step button: wiping the whole history is not undoable, so the first click only asks. */
+const ClearHistoryButton: React.FC<{ onClear: () => void }> = ({ onClear }) => {
+  const [confirming, setConfirming] = useState(false);
+  return (
+    <button
+      onClick={() => (confirming ? onClear() : setConfirming(true))}
+      onBlur={() => setConfirming(false)}
+      className="history-clear"
+      aria-live="polite"
+    >
+      {confirming ? 'Clique de novo para apagar tudo' : 'Limpar Histórico'}
+    </button>
+  );
+};
+
 export const ScoreHistoryPanel: React.FC<ScoreHistoryPanelProps> = ({
   isOpen,
   onClose,
   history,
   onClear,
 }) => {
+  const dialogRef = useDialogFocus<HTMLDivElement>(isOpen);
   if (!isOpen) return null;
 
   return (
@@ -26,12 +43,16 @@ export const ScoreHistoryPanel: React.FC<ScoreHistoryPanelProps> = ({
       onClick={onClose}
     >
       <motion.div
+        ref={dialogRef}
         className="history-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="history-title"
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         onClick={e => e.stopPropagation()}
       >
-        <h2>Histórico de Pontuações</h2>
+        <h2 id="history-title">Histórico de Pontuações</h2>
 
         {history.length === 0 ? (
           <p className="history-empty">Nenhuma partida registrada ainda.</p>
@@ -58,13 +79,11 @@ export const ScoreHistoryPanel: React.FC<ScoreHistoryPanelProps> = ({
               ))}
             </div>
 
-            <button onClick={onClear} className="history-clear">
-              Limpar Histórico
-            </button>
+            <ClearHistoryButton onClear={onClear} />
           </>
         )}
 
-        <button onClick={onClose} className="history-close">Fechar</button>
+        <button data-autofocus onClick={onClose} className="history-close">Fechar</button>
       </motion.div>
     </motion.div>
   );
