@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import type { Difficulty, TimeMode, GameState } from '../../constants';
 import { generateEntropy } from '../../utils/math';
 import { MESSAGES_SUCCESS } from '../../constants';
@@ -33,6 +33,15 @@ export const useGameEngine = (
   const feedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const kaguraCountRef = useRef(0);
   const lastInputTimeRef = useRef(0);
+  // The next round starts 1.5 s after a completed sequence; quitting or a time-out in that window must cancel it.
+  const nextRoundRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const gameStateRef = useRef(gameState);
+  useEffect(() => { gameStateRef.current = gameState; }, [gameState]);
+
+  const cancelNextRound = useCallback(() => {
+    if (nextRoundRef.current) clearTimeout(nextRoundRef.current);
+    nextRoundRef.current = null;
+  }, []);
 
   const showFeedback = useCallback((nextFeedback: Feedback, durationMs = 0) => {
     setFeedback(nextFeedback);
@@ -41,6 +50,7 @@ export const useGameEngine = (
   }, []);
 
   const startGame = useCallback((difficulty: Difficulty, timeMode: TimeMode) => {
+    cancelNextRound();
     resetScore();
     resetSequence();
     setSettings({ difficulty, timeMode });
@@ -58,7 +68,7 @@ export const useGameEngine = (
 
     setGameState('COUNTDOWN');
     startCountdown(3);
-  }, [resetScore, resetSequence, setSettings, startCountdown, addToSequence, playSound, setGameState, errorCountRef]);
+  }, [cancelNextRound, resetScore, resetSequence, setSettings, startCountdown, addToSequence, playSound, setGameState, errorCountRef]);
 
   const handleColorClick = useCallback((color: number) => {
      if (gameState !== 'WAITING_FOR_INPUT') return;
@@ -107,7 +117,10 @@ export const useGameEngine = (
         if (settings.difficulty === 'HARDCORE') showFeedback({ message: pickMessage(MESSAGES_HARDCORE), type: 'success' }, 1000);
         else if (settings.difficulty === 'BERSERK' && generateEntropy() < 0.5) showFeedback({ message: 'INCRÍVEL!', type: 'success' }, 1500);
 
-        setTimeout(() => {
+        cancelNextRound();
+        nextRoundRef.current = setTimeout(() => {
+             nextRoundRef.current = null;
+             if (gameStateRef.current === 'GAME_OVER' || gameStateRef.current === 'IDLE') return;
              addToSequence();
              setGameState('PLAYING_SEQUENCE');
              playSequence();
@@ -118,11 +131,12 @@ export const useGameEngine = (
   }, [
     gameState, validateInput, playSound, clearTimer, streak,
     resetStreak, showFeedback, addScore, incrementStreak,
-    setIsInputLocked, addToSequence, playSequence,
+    setIsInputLocked, addToSequence, playSequence, cancelNextRound,
     settings.difficulty, settings.timeMode, setTimeLeft, setKaguraActive, setGameState, errorCountRef
   ]);
 
   const resetGame = useCallback(() => {
+    cancelNextRound();
     setGameState('IDLE');
     resetScore();
     resetSequence();
@@ -130,7 +144,7 @@ export const useGameEngine = (
     setFeedback(null);
     setKaguraActive(false);
     if (errorCountRef) errorCountRef.current = 0;
-  }, [resetScore, resetSequence, clearTimer, setGameState, errorCountRef]);
+  }, [cancelNextRound, resetScore, resetSequence, clearTimer, setGameState, errorCountRef]);
 
   return {
     level, setLevel, kaguraActive, setKaguraActive,
