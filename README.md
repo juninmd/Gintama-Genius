@@ -63,7 +63,7 @@ flowchart LR
 - **Animações de UI**: [Framer Motion](https://www.framer.com/motion/)
 - **Efeitos**: [Canvas Confetti](https://www.npmjs.com/package/canvas-confetti)
 - **CI/CD**: GitHub Actions + Docker + GHCR
-- **Deployment**: Nginx + Docker (imagem publicada no GHCR); `netlify.toml` incluso para Netlify
+- **Deployment**: Nginx + Docker (imagem publicada no GHCR); demo web no GitHub Pages: https://juninmd.github.io/Gintama-Genius/
 
 ## 🚀 Como Rodar Localmente
 

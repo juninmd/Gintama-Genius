@@ -37,7 +37,7 @@ This security audit was conducted on the gintama-genius repository to identify p
 - **Base Images**: Uses official, maintained base images
 - **Security Headers**: Comprehensive headers via nginx (CSP, HSTS, X-Frame-Options, etc.) and Netlify
 - **Error Handling**: Proper error handling without leaking sensitive information
-- **HTTPS**: Enforced for all external communications via Netlify
+- **HTTPS**: Enforced for all external communications
 
 ## OWASP Top 10 Compliance Assessment
 
@@ -100,7 +100,7 @@ This security audit was conducted on the gintama-genius repository to identify p
 - [x] Deduplicated .gitleaks.toml (removed 6 duplicate entries)
 - [x] Added security scanning CI workflow (Gitleaks + Dependency Review)
 - [x] Added Docker non-root user for container security
-- [x] Configured security headers via nginx and Netlify
+- [x] Configured security headers via nginx
 - [x] Updated Dependabot to cover Docker and GitHub Actions
 - [x] Updated Renovate to use recommended config
 - [x] Updated all dependencies to patch known vulnerabilities

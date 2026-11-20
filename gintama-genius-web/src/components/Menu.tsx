@@ -15,7 +15,7 @@ const Menu: React.FC<MenuProps> = ({ onStart }) => {
     <div className="menu-container">
       {!imageError ? (
           <img
-            src="/assets/images/splash.png"
+            src={`${import.meta.env.BASE_URL}assets/images/splash.png`}
             alt="Gintama Genius"
             className="splash-image"
             onError={() => setImageError(true)}

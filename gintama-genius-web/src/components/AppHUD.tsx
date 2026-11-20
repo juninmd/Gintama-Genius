@@ -43,7 +43,7 @@ export const AppHUD: React.FC<AppHUDProps> = ({
 
             {kaguraActive && (
                 <div className="kagura-bonus">
-                   <img src="/assets/images/uow.png" alt="Bônus Kagura" />
+                   <img src={`${import.meta.env.BASE_URL}assets/images/uow.png`} alt="Bônus Kagura" />
                 </div>
             )}
         </>
