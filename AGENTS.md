@@ -1,76 +1,47 @@
-# AGENTS.md Guidelines
+# AGENTS.md
 
-These guidelines outline the principles and rules for development of the AGENTS repository. Adherence to these principles is crucial for maintaining a robust, maintainable, and scalable codebase.
+Gintama Genius: a memory and reflex game (color-sequence board, combo, Fever mode) based on Gintama. The web app in `gintama-genius-web/` is the active product. The original VB.NET WinForms desktop app lives in `Gintama Genius/`.
 
-## 1. DRY (Don't Repeat Yourself)
+## Stack
 
-*   All code should have a single, well-defined purpose.
-*   Avoid duplication of logic, data structures, or implementation across multiple files.
-*   When a feature is reused, consider creating a reusable component or function.
-*   Document reusable components clearly.
+- Web: React 19, Vite, TypeScript, Phaser 4 (board scene), Vitest + Testing Library
+- Desktop (legacy): VB.NET WinForms, `Gintama Genius.sln`. Not built in CI
+- Node 22 (CI), pnpm (`gintama-genius-web/pnpm-lock.yaml`)
 
-## 2. KISS (Keep It Simple, Stupid)
+## Commands
 
-*   Prioritize simplicity over complexity.
-*   Strive for clear and concise code.
-*   Avoid unnecessary abstractions or convoluted logic.
-*   Make code easy to understand for yourself and others.
+All web commands run in `gintama-genius-web/`:
 
-## 3. SOLID Principles
+- Install: `pnpm install`
+- Dev: `pnpm run dev`
+- Build: `pnpm run build` (`tsc -b && vite build`)
+- Lint: `pnpm run lint` (`eslint .`)
+- Test: `pnpm run test` (Vitest). Coverage: `pnpm exec vitest run --coverage`
+- Preview: `pnpm run preview`
 
-*   **Single Responsibility Principle:** Each class/module should have one, and only one, reason to change.
-*   **Open/Closed Principle:** The system should be extensible without modifying the core implementation.
-*   **Liskov Substitution Principle:**  Subclasses should be substitutable for their base classes without altering the correctness of the program.
-*   **Interface Segregation Principle:** Clients should not be forced to implement interfaces they don’t use.
-*   **Dependency Inversion Principle:** Client code should not depend on implementation details.  Instead, they should depend on abstractions.
+CI (`.github/workflows/main.yml`) runs lint, test and build in `gintama-genius-web/`, then `npx semantic-release` on `master`.
 
-## 4. YAGNI (You Aren't Gonna Need It)
+## Structure
 
-*   Only implement features that are explicitly required for the current task.
-*   Defer non-essential functionality to later iterations.
-*   Avoid adding features based on assumptions about future requirements.
+- `gintama-genius-web/src/App.tsx`, `main.tsx`: app shell
+- `src/components/`: menus, modals, board (`GameBoard.tsx`), HUD under `components/hud/`
+- `src/game/`: `BoardScene.ts` (Phaser scene), `boardGeometry.ts` (hit-test geometry)
+- `src/hooks/`: game logic (`useGameLogic.ts`), `game/` engine hooks (sequence, timer, score, audio), history and achievements
+- `src/utils/`, `src/constants.ts`, `src/styles/`: helpers and CSS
+- `Gintama Genius/`: VB.NET desktop app (legacy)
+- `.github/workflows/`: root CI (`main.yml`), `validate.yml` (reusable from `juninmd/base-actions`), `deploy.yml`, `pages.yml`, `sast.yml`, `security.yml`
 
-## 5. Code Style & Formatting
+## Conventions
 
-*   **Indentation:** Use 2 spaces for indentation.
-*   **Line Length:** Max. 120 characters per line.
-*   **Naming Conventions:**  Follow a consistent naming convention (e.g., snake_case for variables and functions).
-*   **Comments:**  Add concise, helpful comments where necessary to explain complex logic.  Avoid over-commenting.
-*   **Whitespace:** Use whitespace consistently to improve readability.
+- Keep modules small: a file over 150 lines is split by responsibility. Current exception: `src/hooks/game/useGameEngine.ts` (156 lines).
+- Style: 2-space indent, max 120 characters per line. Follow the TypeScript style already in `src/` (camelCase).
+- DRY and SOLID: extract logic that repeats in a second place. Keep one clear responsibility per module.
+- Tests are written before the implementation (TDD). Coverage thresholds (`vite.config.ts`): statements 80, branches 75, functions 80, lines 80. Keep them.
 
-## 6. Testing Strategy
+## Gotchas
 
-*   **Unit Tests:** All code must be thoroughly tested.
-*   **Test Coverage:** Minimum 80% coverage of the code.  Tools like `coverage.py` must be used.
-*   **Test Isolation:**  Tests should be isolated and not rely on external state.
-*   **Test Driven Development:**  Tests should be written *before* implementation to ensure functionality.  No "middle man" testing.
-
-## 7. File Structure & Content Requirements
-
-*   **File Naming:** Use a consistent naming convention for all files.  (Example: `agent_data.py`, `agent_logic.py`)
-*   **Directory Structure:**  Maintain a logical directory structure for code organization.
-*   **Module Structure:**  Organize code into logical modules with well-defined responsibilities.
-*   **Documentation:**  Provide clear and concise documentation for each file and module.
-*   **Error Handling:** Implement proper error handling and logging.
-
-## 8. Coding Standards - Length Limit
-
-*   Maximum code length: 150 lines per file.
-*   Break down large functions into smaller, well-named sub-functions.
-*   Minimize unnecessary complexity.
-
-## 9.  Deliverables and Verification
-
-*   All files must be compiled and executed.
-*   Automated tests must pass.
-*   Code should be reviewed by another developer to ensure quality and adherence to standards.
-
-## 10. Development Process
-
-*   Prioritize code readability and maintainability.
-*   Use version control (Git) for tracking changes.
-*   Conduct regular code reviews.
-*   Document changes thoroughly.
+- Root `GEMINI.md` and `gintama-genius-web/GEMINI.md` are agent instruction files.
+- Do not commit `.env` or secrets. `.gitleaks.toml` is the scanner config.
 
 <!-- base-actions-main-policy -->
 ## GitHub Actions — padrão obrigatório (@main)
