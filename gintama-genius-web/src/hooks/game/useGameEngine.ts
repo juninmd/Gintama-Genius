@@ -43,6 +43,9 @@ export const useGameEngine = (
     nextRoundRef.current = null;
   }, []);
 
+  // Pausing in that window would stop the timer while the round still starts, leaving it stopped for good.
+  const isNextRoundPending = useCallback(() => nextRoundRef.current !== null, []);
+
   const showFeedback = useCallback((nextFeedback: Feedback, durationMs = 0) => {
     setFeedback(nextFeedback);
     if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current);
@@ -148,6 +151,6 @@ export const useGameEngine = (
 
   return {
     level, setLevel, kaguraActive, setKaguraActive,
-    feedback, showFeedback, startGame, handleColorClick, resetGame
+    feedback, showFeedback, startGame, handleColorClick, resetGame, isNextRoundPending
   };
 };

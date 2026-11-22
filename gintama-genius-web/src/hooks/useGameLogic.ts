@@ -73,18 +73,6 @@ export const useGameLogic = () => {
     resumeTimer
   } = useGameTimer(settings.timeMode, onTimeUp);
 
-  const togglePause = useCallback(() => {
-    if (gameState === 'WAITING_FOR_INPUT') {
-      setGameState('PAUSED');
-      pauseTimer();
-      setIsInputLocked(true);
-    } else if (gameState === 'PAUSED') {
-      setGameState('WAITING_FOR_INPUT');
-      resumeTimer();
-      setIsInputLocked(false);
-    }
-  }, [gameState, pauseTimer, resumeTimer, setIsInputLocked]);
-
   const {
     level,
     setLevel,
@@ -94,13 +82,26 @@ export const useGameLogic = () => {
     showFeedback,
     startGame,
     handleColorClick,
-    resetGame
+    resetGame,
+    isNextRoundPending
   } = useGameEngine(
     playSound, resetScore, addScore, incrementStreak, resetStreak, streak,
     resetSequence, addToSequence, playSequence, validateInput, setIsInputLocked,
     clearTimer, startCountdown, setTimeLeft,
     settings, setSettings, gameState, setGameState, errorCountRef
   );
+
+  const togglePause = useCallback(() => {
+    if (gameState === 'WAITING_FOR_INPUT' && !isNextRoundPending()) {
+      setGameState('PAUSED');
+      pauseTimer();
+      setIsInputLocked(true);
+    } else if (gameState === 'PAUSED') {
+      setGameState('WAITING_FOR_INPUT');
+      resumeTimer();
+      setIsInputLocked(false);
+    }
+  }, [gameState, isNextRoundPending, pauseTimer, resumeTimer, setIsInputLocked]);
 
   const debugActions = useDebugActions({
     gameState, addScore, setKaguraActive, playSound, setGameState, clearTimer,
