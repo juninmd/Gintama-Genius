@@ -111,11 +111,11 @@ export const useGameEngine = (
         setIsInputLocked(true);
         setLevel(prev => prev + 1);
 
+        // One message per completion: a second showFeedback would replace the streak milestone in the same tick.
         if (newStreak % 5 === 0) showFeedback({ message: 'SEQUÊNCIA DE ACERTOS!', type: 'combo' }, 2000);
-        else showFeedback({ message: generateEntropy() < 0.6 ? 'VOCÊ ACERTOU!' : pickMessage(MESSAGES_SUCCESS), type: 'success' }, 1500);
-
-        if (settings.difficulty === 'HARDCORE') showFeedback({ message: pickMessage(MESSAGES_HARDCORE), type: 'success' }, 1000);
+        else if (settings.difficulty === 'HARDCORE') showFeedback({ message: pickMessage(MESSAGES_HARDCORE), type: 'success' }, 1000);
         else if (settings.difficulty === 'BERSERK' && generateEntropy() < 0.5) showFeedback({ message: 'INCRÍVEL!', type: 'success' }, 1500);
+        else showFeedback({ message: generateEntropy() < 0.6 ? 'VOCÊ ACERTOU!' : pickMessage(MESSAGES_SUCCESS), type: 'success' }, 1500);
 
         cancelNextRound();
         nextRoundRef.current = setTimeout(() => {
