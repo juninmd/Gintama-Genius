@@ -76,9 +76,9 @@ export const useGameEngine = (
   const handleColorClick = useCallback((color: number) => {
      if (gameState !== 'WAITING_FOR_INPUT') return;
 
-     playSound(color);
-
      const result = validateInput(color);
+     if (result === 'locked') return;
+     playSound(color);
 
      if (result === 'wrong') {
         lastInputTimeRef.current = 0;
