@@ -108,8 +108,9 @@ export const useGameLogic = () => {
     setTimeLeft, setLevel, setIsInputLocked, addToSequence, playSequence
   });
 
+  // COUNTDOWN too: startGame changes settings and state in one batch, so the timer must reset there.
   useEffect(() => {
-    if (gameState === 'IDLE') {
+    if (gameState === 'IDLE' || gameState === 'COUNTDOWN') {
       resetTimer();
       errorCountRef.current = 0;
     }
