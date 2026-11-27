@@ -41,4 +41,14 @@ describe('useGameLogic pause between rounds', () => {
     act(() => { vi.advanceTimersByTime(3000); });
     expect(result.current.timeLeft).toBe(frozen);
   });
+  it('starts a new game with the full time of the newly selected mode', () => {
+    const { result } = renderHook(() => useGameLogic());
+    act(() => result.current.startGame('NORMAL', '60s'));
+    advanceUntil(() => result.current.gameState === 'WAITING_FOR_INPUT');
+    act(() => { vi.advanceTimersByTime(5000); });
+
+    act(() => result.current.startGame('NORMAL', '30s'));
+    expect(result.current.gameState).toBe('COUNTDOWN');
+    expect(result.current.timeLeft).toBe(30);
+  });
 });
